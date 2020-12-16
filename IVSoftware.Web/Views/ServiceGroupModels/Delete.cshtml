@@ -1,0 +1,188 @@
+﻿@model IVSoftware.Web.Models.ServiceGroupModel
+
+@{
+    ViewData["Title"] = "Eliminar grupo de servicios";
+}
+
+<h1>Eliminar</h1>
+
+<h3>¿Desea eliminar el grupo de servicio?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ReportDeliveryTime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ReportDeliveryTime)
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Servicios</h5>
+    <hr />
+
+    @if (Model.Services != null)
+    {
+        <table class="table table-striped table-sm" style="display:block; overflow:auto">
+            <thead style="background-color:yellowgreen; color:white">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+
+                    <th>
+                        Tipo de servicio
+                    </th>
+
+                    <th>
+                        Matriz
+                    </th>
+
+                    <th>
+                        Método de referencia
+                    </th>
+
+                    <th>
+                        Rango de trabajo
+                    </th>
+
+                    <th>
+                        Valor unitario
+                    </th>
+
+                    <th style="white-space:nowrap">
+                        Tiempo de entrega de informe (días)
+                    </th>
+
+                    <th>
+                        Acreditado por el IDEAM
+                    </th>
+
+                    <th>
+                        Autorizado INS - Min. salud
+                    </th>
+
+                    <th>
+                        Vigente @DateTime.Now.Year
+                    </th>
+
+                    <th style="white-space:nowrap">
+                        Observaciones particulares de la prestación del servicio
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Services != null)
+                {
+                    @foreach (var item in Model.Services)
+                    {
+                        <tr>
+                            <td>
+                                @item.Service.Code
+                            </td>
+                            <td style="white-space:nowrap">
+                                @item.Service.Name
+                            </td>
+                            <td style="white-space:nowrap">
+                                @item.Service.ServiceTypeName
+                            </td>
+                            <td style="white-space:nowrap">
+                                @item.Service.MatrixGroupName
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @item.Service.ReferenceMethodName
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @item.Service.WorkingRangeName
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                $ @item.Service.UnitValue
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @item.Service.ReportDeliveryTime
+                            </td>
+
+                            <td>
+                                @item.Service.GetYesNo(item.Service.AcredditedByIdeam)
+                            </td>
+
+                            <td>
+                                @item.Service.GetYesNo(item.Service.AuthorizedByINS)
+                            </td>
+
+                            <td>
+                                @item.Service.GetYesNo(item.Service.Valid)
+                            </td>
+
+                            <td>
+                                @item.Service.Description
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h6>No hay servicios asociados</h6>
+    }
+
+
+    <h5 style="color:yellowgreen">Información adicional</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegisterStatus)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RegisterStatusName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.CreationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.CreationDatetime)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ModificationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Regresar</a>
+    </form>
+</div>

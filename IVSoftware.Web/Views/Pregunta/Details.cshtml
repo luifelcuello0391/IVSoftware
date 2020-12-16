@@ -1,0 +1,87 @@
+﻿@model IVSoftware.Web.Models.Pregunta
+
+@{
+    ViewData["Title"] = "Pregunta - Detalles";
+}
+
+<h5 class="text-primary titulo">Pregunta - Detalles</h5>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Orden)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Orden)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.DescripcionTipoPregunta)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.DescripcionTipoPregunta)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Enunciado)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Enunciado)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Evaluacion)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Evaluacion.Id)
+    </dd>
+</dl>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-controller="Evaluacion" asp-action="Details" asp-route-id="@Model.EvaluacionId">Regresar</a>
+</div>
+
+<br />
+
+<h6 class="text-success titulo">Opciones de respuesta</h6>
+<table class="table">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ListRespuesta[0].Orden)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListRespuesta[0].Texto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListRespuesta[0].RespuestaCorrecta)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ListRespuesta)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Orden)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Texto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RespuestaCorrecta)
+            </td>
+            <td align="right">
+                <a asp-controller="Respuesta" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                <a asp-controller="Respuesta" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                <a asp-controller="Respuesta" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "Respuesta", new { PreguntaId = Model.Id })'"
+           class="btn btn-primary btn-sm"
+           style="margin-top:10px" />
+</div>

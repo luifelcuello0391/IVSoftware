@@ -1,0 +1,87 @@
+﻿@model IEnumerable<IVSoftware.Models.ClientModel>
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<h1>Maestro de clientes</h1>
+
+<p>
+    <a asp-action="Create">Registrar cliente</a>
+</p>
+<table class="table">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Identification)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.IsRegular)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Identification)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.IsRegularText)
+            </td>
+
+            <td  style="white-space:nowrap">
+                <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

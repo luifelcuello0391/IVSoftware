@@ -1,0 +1,108 @@
+﻿@model IVSoftware.Models.QuotationRequest
+
+@{
+    ViewData["Title"] = "Nuevo solicitud de cotización";
+}
+
+<h1>Crear</h1>
+
+<h4>Solicitud de cotización</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group form-check" style="display:none">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="HasBeenGenerated" /> @Html.DisplayNameFor(model => model.HasBeenGenerated)
+                </label>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" value="Cotización" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RequestDateTime" class="control-label"></label>
+                <input asp-for="RequestDateTime" class="form-control" value="@DateTime.Now" type="date"/>
+                <span asp-validation-for="RequestDateTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ClientIdentification" class="control-label"></label>
+                <table>
+                    <tr>
+                        <td>
+                            <input id="txtId" class="form-control" asp-for="RequestedClientId" />
+                        </td>
+                        <td>
+                            <input id="btnGet" type="Button" value="Buscar" class="btn btn-primary" style="background-color:yellowgreen; color:white; margin-left:10px" />
+                        </td>
+                    </tr>
+                </table>
+                <span asp-validation-for="ClientIdentification" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RequestedClientName" class="control-label"></label>
+                <input id="txt_client_name" asp-for="RequestedClientName" class="form-control" readonly />
+                <span asp-validation-for="RequestedClientName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ClientRequestDescription" class="control-label"></label>
+                @Html.TextAreaFor(model => model.ClientRequestDescription, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="ClientRequestDescription" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="RegisterStatus" class="control-label"></label>
+                <input asp-for="RegisterStatus" class="form-control" value="1" />
+                <span asp-validation-for="RegisterStatus" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="CreationDatetime" class="control-label"></label>
+                <input asp-for="CreationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="CreationDatetime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="ModificationDatetime" class="control-label"></label>
+                <input asp-for="ModificationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar</a>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+@section Scripts {
+    <script>
+    function getClient() {
+        var url = "@Url.Action("GetClientInfo")";
+        var id = $("#txtId").val();
+
+        $.get(url, { id: id }, function (data)
+        {
+            document.getElementById("txt_client_name").value = data;
+        });
+    }
+
+        $("#btnGet").on("click", getClient);
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

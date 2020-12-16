@@ -1,0 +1,58 @@
+﻿@model IVSoftware.Models.ReferenceMethodCondition
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ReferenceMethodCondition</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuotationCode" class="control-label"></label>
+                <input asp-for="QuotationCode" class="form-control" />
+                <span asp-validation-for="QuotationCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegisterStatus" class="control-label"></label>
+                <input asp-for="RegisterStatus" class="form-control" />
+                <span asp-validation-for="RegisterStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreationDatetime" class="control-label"></label>
+                <input asp-for="CreationDatetime" class="form-control" />
+                <span asp-validation-for="CreationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModificationDatetime" class="control-label"></label>
+                <input asp-for="ModificationDatetime" class="form-control" />
+                <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

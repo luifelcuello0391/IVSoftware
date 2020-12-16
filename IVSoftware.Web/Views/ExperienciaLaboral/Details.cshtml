@@ -1,0 +1,90 @@
+﻿@model IVSoftware.Web.Models.ExperienciaLaboral
+
+@{
+    ViewData["Title"] = "Experiecia laboral - Detalles";
+}
+
+<h5 class="text-primary titulo">Experiencia laboral - Detalles</h5>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.NombreEmpresa)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.NombreEmpresa)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.TipoEmpresa)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.TipoEmpresa)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.CorreoElectronico)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.CorreoElectronico)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Telefono)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Telefono)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.FechaIngreso)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.FechaIngreso)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.FechaRetiro)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.FechaRetiro)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.EsActual)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.EsActual)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.CargoContrato)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.CargoContrato)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Dependencia)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Dependencia)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Direccion)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Direccion)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Responsabilidades)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Responsabilidades)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.ArchivoAdjunto)
+    </dt>
+    <dd class="col-sm-9">
+        <a href="@Url.Action("DescargarArchivo", "Persona", new { file = Model.ArchivoAdjunto })">
+            Descargar
+        </a>
+    </dd>
+</dl>
+
+<div>
+    <a asp-controller="ExperienciaLaboral" asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-controller="Persona" asp-action="EditarPerfil" asp-route-userName="@Model.Persona.Email">Regresar</a>
+</div>

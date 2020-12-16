@@ -1,0 +1,83 @@
+﻿@model IVSoftware.Models.VariableModel
+
+@{
+    ViewData["Title"] = "Nueva variable";
+}
+
+<head>
+    <script>
+        function measurementUnitSelection(e) {
+
+            document.getElementById("input_measurement_uint_id").value = e.target.value
+        }
+    </script>
+</head>
+
+<h1>Crear</h1>
+
+<h4>Variable</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SelectedMeasurementUnitId" id="input_measurement_uint_id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MeasurementUnit" class="control-label"></label>
+                <select id="cbx_measurement_unit" asp-for="MeasurementUnit" class="form-control" onchange="measurementUnitSelection(event)">
+
+                    @if (@ViewBag.MeasurementUnits != null)
+                    {
+                        @foreach (var item in @ViewBag.MeasurementUnits)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="RegisterStatus" class="control-label"></label>
+                <input asp-for="RegisterStatus" class="form-control" value="1" />
+                <span asp-validation-for="RegisterStatus" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="CreationDatetime" class="control-label"></label>
+                <input asp-for="CreationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="CreationDatetime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="ModificationDatetime" class="control-label"></label>
+                <input asp-for="ModificationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

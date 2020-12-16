@@ -1,0 +1,394 @@
+﻿@model IVSoftware.Web.Models.EquipmentCheckList
+
+@{
+    ViewData["Title"] = "Editar lista de chequeo";
+}
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    .button1 {
+        border-radius: 2px;
+    }
+
+    .button2 {
+        border-radius: 4px;
+    }
+
+    .button3 {
+        border-radius: 8px;
+    }
+
+    .button4 {
+        border-radius: 12px;
+    }
+
+    .button5 {
+        border-radius: 50%;
+    }
+</style>
+
+<h1>Editar</h1>
+
+<h4>Lista de chequeo</h4>
+<hr />
+<div>
+    <div>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" id="txt_register_id" />
+
+            <div class="form-group col-md-4">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="RegisterStatus" class="control-label"></label>
+                <input asp-for="RegisterStatus" class="form-control" value="1" />
+                <span asp-validation-for="RegisterStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="CreationDatetime" class="control-label"></label>
+                <input asp-for="CreationDatetime" class="form-control" />
+                <span asp-validation-for="CreationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="ModificationDatetime" class="control-label"></label>
+                <input asp-for="ModificationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+
+            <h5 style="color:yellowgreen">Secciones</h5>
+            <hr />
+
+            <div class="form-group">
+                <button id="btnShowModalSection"
+                        type="button"
+                        style="background-color:yellowgreen; color:white"
+                        onclick="AddSection()"
+                        class="btn btn-primary">
+                    Agregar sección
+                </button>
+
+                <div class="modal fade" tabindex="-1" id="loginModalSection" data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title" style="float:left">Secciones</h5>
+                                <button type="button" class="close" data-dismiss="modal" style="color:red">
+                                    X
+                                </button>
+                            </div>
+
+                            <table class="table">
+                                <thead style="background-color:yellowgreen; color:white">
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Name)
+                                        </th>
+
+                                        <th>
+                                            Tipo de pregunta
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (@ViewBag.Sections != null)
+                                    {
+                                        foreach (var item in @ViewBag.Sections)
+                                        {
+                                            <!--Listado de secciones para asociar-->
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" class="uncheck_default_section" value=" @item.Id" />
+                                                </td>
+                                                <td>
+                                                    @item.Name
+                                                </td>
+                                                <td>
+                                                    @item.QuestionsCount
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                            <div class="form-group">
+                                <input type="button" id="btnSelectModalSection" value="Seleccionar" class="btn btn-primary" style="background-color:yellowgreen; color:white; margin-left:20px" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Listado de secciones asociadas-->
+            <table class="table">
+                <thead style="background-color:yellowgreen; color:white">
+                    <tr>
+                        <th></th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+
+                        <th>
+                            Preguntas asociadas
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Sections != null)
+                    {
+                        @foreach (var item in Model.Sections)
+                        {
+                            if (@item.Section != null)
+                            {
+                            <tr>
+                                <td>
+                                    <a asp-action="UnassignSection" asp-route-sectionId="@item.Section.Id" asp-route-_id="@Model.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                </td>
+                                <td>
+                                    @item.Section.Name
+                                </td>
+                                <td>
+                                    @item.Section.QuestionsCount
+                                </td>
+
+                            </tr>
+                            }
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+            <h5 style="color:yellowgreen">Preguntas adicionales</h5>
+            <hr />
+
+            <div class="form-group">
+                <button id="btnShowModal"
+                        type="button"
+                        style="background-color:yellowgreen; color:white"
+                        onclick="AddService()"
+                        class="btn btn-primary">
+                    Agregar pregunta
+                </button>
+
+                <div class="modal fade" tabindex="-1" id="loginModal" data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title" style="float:left">Banco de preguntas</h5>
+                                <button type="button" class="close" data-dismiss="modal" style="color:red">
+                                    X
+                                </button>
+                            </div>
+
+                            <table class="table">
+                                <thead style="background-color:yellowgreen; color:white">
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Name)
+                                        </th>
+
+                                        <th>
+                                            Tipo de pregunta
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (@ViewBag.Questions != null)
+                                    {
+                                        foreach (var item in @ViewBag.Questions)
+                                        {
+                                            <!--Listado de preguntas para asociar-->
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" class="uncheck_default" value=" @item.Id" />
+                                                </td>
+                                                <td>
+                                                    @item.Name
+                                                </td>
+                                                <td>
+                                                    @item.TypeOfQuestionName
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                            <div class="form-group">
+                                <input type="button" id="btnSelectModal" value="Seleccionar" class="btn btn-primary" style="background-color:yellowgreen; color:white; margin-left:20px" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Listado de preguntas asociadas-->
+            <table class="table">
+                <thead style="background-color:yellowgreen; color:white">
+                    <tr>
+                        <th></th>
+                        <th>
+                            Enunciado
+                        </th>
+
+                        <th>
+                            Tipo de pregunta
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Questions != null)
+                    {
+                        @foreach (var item in Model.Questions)
+                        {
+                            if (@item.Question != null)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-action="UnassignQuestion" asp-route-questionId="@item.Question.Id" asp-route-_id="@Model.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                    <td>
+                                        @item.Question.Name
+                                    </td>
+                                    <td>
+                                        @item.Question.TypeOfQuestionName
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar</a>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#btnShowModal").click(function () {
+            var inputs = document.querySelectorAll('.uncheck_default');
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].checked = false;
+            }
+
+            $("#loginModal").modal('show');
+        });
+
+        $("#btnHideModal").click(function () {
+            $("#loginModal").modal('hide');
+        });
+
+        $("#btnSelectModal").click(function () {
+            var inputs = document.querySelectorAll('.uncheck_default');
+            var ids = "";
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].checked) {
+                    ids = ids + ";" + inputs[i].value;
+                }
+            }
+
+            assignQuestions(ids, $("#txt_register_id").val());
+
+            $("#loginModal").modal('hide');
+        });
+
+
+        $("#btnShowModalSection").click(function () {
+            var inputs = document.querySelectorAll('.uncheck_default_section');
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].checked = false;
+            }
+
+            $("#loginModalSection").modal('show');
+        });
+
+        $("#btnHideModalSection").click(function () {
+            $("#loginModalSection").modal('hide');
+        });
+
+        $("#btnSelectModalSection").click(function () {
+            var inputs = document.querySelectorAll('.uncheck_default_section');
+            var ids = "";
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].checked) {
+                    ids = ids + ";" + inputs[i].value;
+                }
+            }
+
+            assignSections(ids, $("#txt_register_id").val());
+
+            $("#loginModalSection").modal('hide');
+        });
+    });
+
+</script>
+
+@section Scripts {
+
+    <script>
+        function assignQuestions() {
+            var ids = arguments[0];
+            var section_id = arguments[1];
+            var url = "@Url.Action("AssignQuestions")";
+
+            $.get(url, { questionIds: ids, _id: section_id }, function (data) {
+                location.reload();
+            });
+
+            $("#loginModal").modal('hide');
+        }
+
+        function assignSections() {
+            var ids = arguments[0];
+            var section_id = arguments[1];
+            var url = "@Url.Action("AssignSections")";
+
+            $.get(url, { sectionIds: ids, _id: section_id }, function (data) {
+                location.reload();
+            });
+
+            $("#loginModalSection").modal('hide');
+        }
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,103 @@
+﻿@model IVSoftware.Models.ClientTypeModel
+
+@{
+    ViewData["Title"] = "Detalle de tipo de clientes";
+}
+
+<h1>Detalle</h1>
+
+<div>
+    <h4 style="color:yellowgreen">Tipo de cliente</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.MustPayServices)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.MustPayServicesText)
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Incentivos</h5>
+    <hr />
+    @if (Model.Incentives != null && Model.Incentives.Count > 0)
+    {
+        <table class="table">
+            <thead style="background-color:yellowgreen; color:white">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.Raw("Valor")
+                    </th>
+                    <th style="white-space:nowrap">
+                        @Html.Raw("¿Es porcentaje?")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Incentives != null)
+                {
+                    @foreach (var item in Model.Incentives)
+                    {
+                        if (item != null)
+                        {
+                            <tr>
+                                <td style="white-space:nowrap">
+                                    @item.Incentive.Name
+                                </td>
+                                <td style="white-space:nowrap">
+                                    @item.Incentive.ValueText
+                                </td>
+                                <td style="white-space:nowrap">
+                                    @item.Incentive.IsPercentageValue
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h6>No hay incentivos asignados</h6>
+    }
+
+    <h5 style="color:yellowgreen">Información adicional</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegisterStatus)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RegisterStatusName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.CreationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.CreationDatetime)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ModificationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-action="Index">Regresar</a>
+</div>

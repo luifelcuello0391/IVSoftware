@@ -1,0 +1,143 @@
+﻿@model IEnumerable<IVSoftware.Models.QuotationModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientPhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientContactName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientContactPosition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Greetings)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Exceptions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationMessage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MeasurementSubtotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MeasurementTotalValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServicesSubtotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServicesTotalValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegisterStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDatetime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModificationDatetime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientPhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientContactName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientContactPosition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Greetings)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Exceptions)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationMessage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeasurementSubtotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeasurementTotalValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServicesSubtotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServicesTotalValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegisterStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDatetime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModificationDatetime)
+            </td>
+            <td  style="white-space:nowrap">
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

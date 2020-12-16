@@ -1,0 +1,65 @@
+﻿@model IVSoftware.Models.MeasurementUnitModel
+
+@{
+    ViewData["Title"] = "Detalle de unidad de medida";
+}
+
+<h1>Detalle</h1>
+
+<div>
+    <h4 style="color:yellowgreen">Unidad de medida</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <!--<dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegisterStatus)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegisterStatusName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.CreationDatetime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreationDatetime)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ModificationDatetime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>-->
+    </dl>
+
+    <h5 style="color:yellowgreen">Información adicional</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegisterStatus)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RegisterStatusName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.CreationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.CreationDatetime)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ModificationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-action="Index">Regresar</a>
+</div>

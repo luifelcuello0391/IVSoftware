@@ -1,0 +1,91 @@
+﻿@model IVSoftware.Web.Models.ConocimientoTecnico
+
+@{
+    ViewData["Title"] = "Conocimiento técnico - Agregar";
+    var persona = (Persona)ViewBag.persona;
+}
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <h5 class="text-primary titulo">Conocimiento técnico - Agregar</h5>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Persona.NombreCompleto):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => @persona.NombreCompleto)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Persona.NumeroIdentificacion)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => @persona.NumeroIdentificacion)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Persona.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => @persona.Email)
+        </dd>
+    </dl>
+
+    <div class="row" style="margin-top:20px">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Analisis" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Analisis" class="form-control" />
+                <span asp-validation-for="Analisis" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="TecnicaAnalitica" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="TecnicaAnalitica" class="form-control" />
+                <span asp-validation-for="TecnicaAnalitica" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Matriz" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Matriz" class="form-control" />
+                <span asp-validation-for="Matriz" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Tiempo" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Tiempo" class="form-control" />
+                <span asp-validation-for="Tiempo" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" hidden>
+        <label asp-for="PersonaId" class="control-label"></label>
+        <select asp-for="PersonaId" class="form-control" asp-items="ViewBag.PersonaId"></select>
+    </div>
+
+</form>
+    
+<div>
+    <a asp-controller="Persona" asp-action="EditarPerfil" asp-route-userName="@persona.Email">Regresar</a>
+</div>
+

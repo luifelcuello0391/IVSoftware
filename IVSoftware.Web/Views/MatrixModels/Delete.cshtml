@@ -1,0 +1,62 @@
+﻿@model IVSoftware.Models.MatrixModel
+
+@{
+    ViewData["Title"] = "Eliminar matriz";
+}
+
+<h1>Eliminar</h1>
+
+<h3>¿Desea elimina la matriz?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.OnlyForServices)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.OnlyForServicesText)
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Información adicional</h5>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegisterStatusName)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RegisterStatusName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.CreationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.CreationDatetime)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ModificationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Regresar</a>
+    </form>
+</div>

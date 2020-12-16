@@ -1,0 +1,41 @@
+﻿@model IEnumerable<IVSoftware.Web.Models.CheckListQuestion>
+
+@{
+    ViewData["Title"] = "Banco de preguntas";
+}
+
+<h1>Banco de preguntas</h1>
+
+<p>
+    <a asp-action="Create">Registrar pregunta</a>
+</p>
+<table class="table">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th>
+                Enunciado
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeOfQuestion)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeOfQuestionName)
+            </td>
+        <td style="white-space:nowrap">
+            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+            <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+        </td>
+        </tr>
+}
+    </tbody>
+</table>

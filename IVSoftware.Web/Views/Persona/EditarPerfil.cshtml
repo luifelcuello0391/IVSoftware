@@ -1,0 +1,667 @@
+﻿@model IVSoftware.Web.Models.Persona
+
+@{
+    ViewData["Title"] = "Registrar usuario";
+}
+
+<form method="post" style="font-size:small">
+    <div asp-validation-summary="ModelOnly"></div>
+    <h5 class="text-primary titulo">Editar perfil</h5>
+    <hr />
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="TipoDocumentoId" style="color:white"></label>
+                </div>
+                <select asp-for="TipoDocumentoId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.TiposDocumento)
+                    {
+                        @if (Model.TipoDocumento.Id.ToString() == item.Value)
+                        {
+                            <option value="@item.Value" selected>@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="TipoDocumentoId" class="text-danger small"></span>  
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="NumeroIdentificacion" style="color:white"></label>
+                </div>
+                <input asp-for="NumeroIdentificacion" class="form-control" />
+                <span asp-validation-for="NumeroIdentificacion" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="PrimerNombre" style="color:white"></label>
+                </div>
+                <input asp-for="PrimerNombre" class="form-control" />
+                <span asp-validation-for="PrimerNombre" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SegundoNombre" style="color:white"></label>
+                </div>
+                <input asp-for="SegundoNombre" class="form-control" />
+                <span asp-validation-for="SegundoNombre" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="PrimerApellido" style="color:white"></label>
+                </div>
+                <input asp-for="PrimerApellido" class="form-control" />
+                <span asp-validation-for="PrimerApellido" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SegundoApellido" style="color:white"></label>
+                </div>
+                <input asp-for="SegundoApellido" class="form-control" />
+                <span asp-validation-for="SegundoApellido" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Email" style="color:white"></label>
+                </div>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Telefono" style="color:white"></label>
+                </div>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="ArlId" style="color:white"></label>
+                </div>
+                <select asp-for="ArlId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.ARLs)
+                    {
+                        @if (Model.Arl == null)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                        else
+                        { 
+                            @if (Model.Arl.Id.ToString() == item.Value)
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="ArlId" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="EpsId" style="color:white"></label>
+                </div>
+                <select asp-for="EpsId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.EPSs)
+                    {
+                        @if (Model.Eps == null)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                        else
+                        {
+                            @if (Model.Eps.Id.ToString() == item.Value)
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="EpsId" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="TipoSangreId" style="color:white"></label>
+                </div>
+                <select asp-for="TipoSangreId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.TiposSangre)
+                    {
+                        @if (Model.TipoSangre == null)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                        else
+                        {
+                            @if (Model.TipoSangre.Id.ToString() == item.Value)
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="TipoSangreId" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Direccion" style="color:white"></label>
+                </div>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="TipoContrato" style="color:white"></label>
+                </div>
+                @Html.DisplayFor(model => model.TipoContrato.Nombre, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Habilidades" style="color:white"></label>
+                </div>
+                <textarea asp-for="Habilidades" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Habilidades" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px">
+        <div class="col">
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseEducacionBasica" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Educación básica
+            </a>
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseEducacionSuperior" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Educación superior
+            </a>
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseFormacion" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Formación
+            </a>
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseExperiencia" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Experiencia
+            </a>
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseConocimientoTecnico" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Conocimiento técnico específico
+            </a>
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseInducciones" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Inducciones y reinducciones
+            </a>
+
+            <div class="collapse" id="collapseEducacionBasica" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Educación básica</h6>
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionBasica[0].NombreInstitucion)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionBasica[0].UltimoGradoAprobado)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionBasica[0].TituloObtenido)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionBasica[0].FechaGrado)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ListEducacionBasica)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NombreInstitucion)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UltimoGradoAprobado)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TituloObtenido)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FechaGrado)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-controller="EducacionBasica" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="EducacionBasica" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                                        <a asp-controller="EducacionBasica" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "EducacionBasica", new { personaId = Model.Id })'"
+                               class="btn btn-primary btn-sm"
+                               style="margin-top:10px" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="collapse" id="collapseEducacionSuperior" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Educación superior</h6>
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white; vertical-align:central">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionSuperior[0].NombreInstitucion)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionSuperior[0].SemestresAprobados)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionSuperior[0].EsGraduado)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionSuperior[0].FechaGrado)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionSuperior[0].NombreEstudios)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionSuperior[0].NumeroTarjetaProfesional)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListEducacionSuperior[0].ArchivoAdjunto)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ListEducacionSuperior)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NombreInstitucion)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SemestresAprobados)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EsGraduado)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FechaGrado)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NombreEstudios)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NumeroTarjetaProfesional)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("DescargarArchivo", "Persona", new { file = item.ArchivoAdjunto })">
+                                            <i class="fas fa-file-download" style="font-size:larger; color:gray"></i>
+                                        </a>
+                                    </td>
+                                    <td align="right">
+                                        <a asp-controller="EducacionSuperior" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="EducacionSuperior" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                                        <a asp-controller="EducacionSuperior" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "EducacionSuperior", new { personaId = Model.Id })'"
+                               class="btn btn-primary btn-sm"
+                               style="margin-top:10px" />
+                    </div>
+                </div>
+            </div>
+            <div class="collapse" id="collapseFormacion" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Formación</h6>
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListFormacion[0].NombreCurso)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListFormacion[0].Tema)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListFormacion[0].TipoCertificacion.Nombre)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListFormacion[0].Entidad)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListFormacion[0].FechaFinalizacion)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListFormacion[0].NumeroHoras)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListFormacion[0].ArchivoAdjunto)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ListFormacion)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NombreCurso)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Tema)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TipoCertificacion.Nombre)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Entidad)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FechaFinalizacion)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NumeroHoras)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("DescargarArchivo", "Persona", new { file = item.ArchivoAdjunto })">
+                                            <i class="fas fa-file-download" style="font-size:larger; color:gray"></i>
+                                        </a>
+                                    </td>
+                                    <td align="right">
+                                        <a asp-controller="Formacion" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="Formacion" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                                        <a asp-controller="Formacion" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "Formacion", new { personaId = Model.Id })'"
+                               class="btn btn-primary btn-sm"
+                               style="margin-top:10px" />
+                    </div>
+                </div>
+            </div>
+            <div class="collapse" id="collapseExperiencia" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Experiencia</h6>
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListExperienciaLaboral[0].NombreEmpresa)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListExperienciaLaboral[0].TipoEmpresa.Nombre)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListExperienciaLaboral[0].FechaIngreso)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListExperienciaLaboral[0].FechaRetiro)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListExperienciaLaboral[0].CargoContrato)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ListExperienciaLaboral[0].ArchivoAdjunto)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ListExperienciaLaboral)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NombreEmpresa)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TipoEmpresa.Nombre)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FechaIngreso)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FechaRetiro)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CargoContrato)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("DescargarArchivo", "Persona", new { file = item.ArchivoAdjunto })">
+                                            <i class="fas fa-file-download" style="font-size:larger; color:gray"></i>
+                                        </a>
+                                    </td>
+                                    <td align="right">
+                                        <a asp-controller="ExperienciaLaboral" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="ExperienciaLaboral" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                                        <a asp-controller="ExperienciaLaboral" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "ExperienciaLaboral", new { personaId = Model.Id })'"
+                               class="btn btn-primary btn-sm"
+                               style="margin-top:10px" />
+                    </div>
+                </div>
+            </div>
+            <div class="collapse" id="collapseConocimientoTecnico" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Conocimiento técnico específico</h6>
+                    <div class="row">
+                        <div class="col">
+                            <table class="table">
+                                <thead style="background-color:yellowgreen; color:white">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ListConocimientoTecnico[0].Analisis)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ListConocimientoTecnico[0].TecnicaAnalitica)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ListConocimientoTecnico[0].Matriz)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ListConocimientoTecnico[0].Tiempo)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ListConocimientoTecnico)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Analisis)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TecnicaAnalitica)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Matriz)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Tiempo)
+                                            </td>
+                                            <td align="right">
+                                                <a asp-controller="ConocimientoTecnico" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                                <a asp-controller="ConocimientoTecnico" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                                                <a asp-controller="ConocimientoTecnico" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div>
+                                <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "ConocimientoTecnico", new { personaId = Model.Id })'"
+                                       class="btn btn-primary btn-sm"
+                                       style="margin-top:10px" />
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="text-success titulo" style="margin-top:20px">Otros</h6>
+                    <div class="row">
+                        <div class="col">
+                            <table class="table">
+                                <thead style="background-color:yellowgreen; color:white">
+                                <thead style="background-color:yellowgreen; color:white">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ListOtroConocimiento[0].Nombre)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ListOtroConocimiento[0].Tiempo)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ListOtroConocimiento)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Nombre)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Tiempo)
+                                            </td>
+                                            <td align="right">
+                                                <a asp-controller="OtroConocimiento" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                                <a asp-controller="OtroConocimiento" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                                                <a asp-controller="OtroConocimiento" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div>
+                                <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "OtroConocimiento", new { personaId = Model.Id })'"
+                                       class="btn btn-primary btn-sm"
+                                       style="margin-top:10px" />
+                            </div>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse" id="collapseInducciones" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Inducciones y reinducciones</h6>
+                    <div class="row">
+                        <div class="col">
+                            <table class="table">
+                                <thead style="background-color:yellowgreen; color:white">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ListPersonaInduccion[0].TipoInduccion.Nombre)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.ListPersonaInduccion[0].FechaInduccion)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ListPersonaInduccion)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TipoInduccion.Nombre)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FechaInduccion)
+                                            </td>
+                                            <td align="right">
+                                                <a asp-controller="PersonaInduccion" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                                <a asp-controller="PersonaInduccion" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                                                <a asp-controller="PersonaInduccion" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div>
+                                <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "PersonaInduccion", new { personaId = Model.Id })'"
+                                       class="btn btn-primary btn-sm"
+                                       style="margin-top:10px" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

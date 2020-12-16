@@ -1,0 +1,41 @@
+﻿@model IEnumerable<IVSoftware.Web.Models.AplicacionEvaluacion>
+
+@{
+    ViewData["Title"] = "Mis evaluaciones";
+}
+
+<h5 class="text-primary titulo">Mis evaluaciones</h5>
+
+<table class="table">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaAplicacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Evaluacion.Nombre)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaAplicacion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Evaluacion.Nombre)
+                </td>
+                <td align="right">
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p hidden>
+    <a asp-action="Create" asp-route-userName="@this.User.Identity.Name">Create New</a>
+</p>

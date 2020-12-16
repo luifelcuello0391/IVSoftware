@@ -1,0 +1,94 @@
+﻿@model IVSoftware.Web.Models.CheckListSection
+
+@{
+    ViewData["Title"] = "Eliminar sección";
+}
+
+<h1>Eliminar</h1>
+
+<h3>¿Desea eliminar la sección?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Preguntas</h5>
+    <hr />
+
+    <!--Listado de preguntas asociadas-->
+    @if (Model.QuestionSections != null)
+    {
+        <table class="table">
+            <thead style="background-color:yellowgreen; color:white">
+                <tr>
+                    <th>
+                        Enunciado
+                    </th>
+
+                    <th>
+                        Tipo de preguntas
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.QuestionSections != null)
+                {
+                    foreach (var item in Model.QuestionSections)
+                    {
+                        @if (item.CheckListQuestion != null)
+                        {
+                            <tr>
+                                <td>
+                                    @item.CheckListQuestion.Name
+                                </td>
+                                <td>
+                                    @item.CheckListQuestion.TypeOfQuestionName
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h6>No hay preguntas asignadas</h6>
+    }
+
+    <h5 style="color:yellowgreen">Información adicional</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegisterStatus)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RegisterStatusName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.CreationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.CreationDatetime)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ModificationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Regresar</a>
+    </form>
+</div>

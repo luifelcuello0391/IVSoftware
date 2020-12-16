@@ -1,0 +1,38 @@
+﻿@model IVSoftware.Web.Models.Pregunta
+
+@{
+    ViewData["Title"] = "Pregunta - Eliminar";
+}
+
+<h5 class="text-primary titulo">Pregunta - Eliminar</h5>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Orden)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Orden)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.DescripcionTipoPregunta)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.DescripcionTipoPregunta)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Enunciado)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Enunciado)
+    </dd>
+</dl>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Eliminar" class="btn btn-danger" />
+</form>
+
+<div style="margin-top:20px">
+    <a asp-controller="Evaluacion" asp-action="Details" asp-route-id="@Model.EvaluacionId">Regresar</a>
+</div>

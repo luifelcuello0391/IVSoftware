@@ -1,0 +1,207 @@
+﻿@model IEnumerable<IVSoftware.Web.Models.ChecklistResponseHeader>
+
+@{
+    ViewData["Title"] = "Lista de chequeo";
+}
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    .button1 {
+        border-radius: 2px;
+    }
+
+    .button2 {
+        border-radius: 4px;
+    }
+
+    .button3 {
+        border-radius: 8px;
+    }
+
+    .button4 {
+        border-radius: 12px;
+    }
+
+    .button5 {
+        border-radius: 50%;
+    }
+</style>
+
+@if (@ViewBag.Equipment != null && @ViewBag.Equipment.Name != null && !string.IsNullOrEmpty(@ViewBag.Equipment.Name.Replace(" ", string.Empty)))
+{
+    <h1>Lista de chequeo para @ViewBag.Equipment.Name</h1>
+}
+else
+{
+    <h1>Lista de chequeo</h1>
+}
+
+<p>
+    @if (@ViewBag.Equipment != null)
+    {
+        <a id="btnShowModal" style="color:Highlight">Registrar chequeo</a>
+    }
+
+    @if (@ViewBag.Equipment != null)
+    {
+        <input id="txt_equipment_id" hidden value="@ViewBag.Equipment.Id" />
+    }
+
+    <div class="modal fade" tabindex="-1" id="loginModal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" style="float:left">Listas de chequeo</h5>
+                    <button type="button" class="close" data-dismiss="modal" style="color:red">
+                        X
+                    </button>
+                </div>
+
+                <table class="table">
+                    <thead style="background-color:yellowgreen; color:white">
+                        <tr>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (@ViewBag.CheckLists != null)
+                        {
+                            foreach (var data in @ViewBag.CheckLists)
+                            {
+                                <tr>
+                                    <td>
+                                        @data.Name
+                                    </td>
+                                    <td>
+                                        <a asp-action="Create" asp-route-_id="@data.Id" asp-route-_equipId="@ViewBag.Equipment.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</p>
+<table class="table">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FillUpDate)
+            </th>
+
+            @if (@ViewBag.Equipment == null || @ViewBag.Equipment.Id == 0)
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.Equipment)
+                </th>
+            }
+            <th>
+                @Html.DisplayNameFor(model => model.CheckList.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValidationResult)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FillUpDate)
+                </td>
+                @if (@ViewBag.Equipment == null || @ViewBag.Equipment.Id > 0)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Equipment.Name)
+                    </td>
+                }
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckList.Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValidationResultName)
+                </td>
+
+                <td style="white-space:nowrap">
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#btnShowModal").click(function () {
+            var inputs = document.querySelectorAll('.uncheck_default');
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].checked = false;
+            }
+
+            $("#loginModal").modal('show');
+        });
+
+        $("#btnHideModal").click(function () {
+            $("#loginModal").modal('hide');
+        });
+
+        $("#btnSelectModal").click(function () {
+            var inputs = document.querySelectorAll('.uncheck_default');
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].checked) {
+
+                }
+            }
+
+            $("#loginModal").modal('hide');
+        });
+    });
+
+</script>
+
+<script>
+        function selectChecklist() {
+            var id = arguments[0];
+
+            var url = "@Url.Action("Create")";
+
+            $.get(url, { _id: id, _equipId: document.getElementById("txt_equipment_id").value }, function (data) {
+                
+            });
+
+            $("#loginModal").modal('hide');
+        }
+</script>

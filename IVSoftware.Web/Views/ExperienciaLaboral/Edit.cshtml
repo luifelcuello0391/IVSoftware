@@ -1,0 +1,174 @@
+﻿@model IVSoftware.Web.Models.ExperienciaLaboral
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <h5 class="text-primary titulo">Experiencia laboral - Editar</h5>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Persona.NombreCompleto)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Persona.NombreCompleto)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Persona.NumeroIdentificacion)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Persona.NumeroIdentificacion)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Persona.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Persona.Email)
+        </dd>
+    </dl>
+
+    <div class="row" style="margin-top:20px">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="NombreEmpresa" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="NombreEmpresa" class="form-control" />
+                <span asp-validation-for="NombreEmpresa" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="TipoEmpresaId" class="control-label" style="color:white"></label>
+                </div>
+                <select asp-for="TipoEmpresaId" class="form-control" asp-items="ViewBag.TipoEmpresaId"></select>
+                <span asp-validation-for="TipoEmpresaId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="CorreoElectronico" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="CorreoElectronico" class="form-control" />
+                <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Telefono" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="FechaIngreso" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="FechaIngreso" class="form-control" type="date" />
+                <span asp-validation-for="FechaIngreso" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="FechaRetiro" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="FechaRetiro" class="form-control" type="date" />
+                <span asp-validation-for="FechaRetiro" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="EsActual" class="control-label" style="color:white"></label>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="EsActual" />
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="CargoContrato" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="CargoContrato" class="form-control" />
+                <span asp-validation-for="CargoContrato" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Dependencia" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Dependencia" class="form-control" />
+                <span asp-validation-for="Dependencia" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Direccion" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Responsabilidades" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Responsabilidades" class="form-control" />
+                <span asp-validation-for="Responsabilidades" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h6 class="text-success titulo">Archivo adjunto</h6>
+    <div class="row">
+        <div class="col">
+            <input type="file" name="file" />
+        </div>
+        <div class="col">
+            <a href="@Url.Action("DescargarArchivo", "Persona", new { file = Model.ArchivoAdjunto })">
+                Descargar archivo actual
+            </a>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group" hidden>
+        <label asp-for="PersonaId" class="control-label"></label>
+        <select asp-for="PersonaId" class="form-control" asp-items="ViewBag.PersonaId"></select>
+        <span asp-validation-for="PersonaId" class="text-danger"></span>
+        <input asp-for="ArchivoAdjunto" class="form-control" />
+    </div>
+
+</form>
+    
+<div>
+    <a asp-controller="Persona" asp-action="EditarPerfil" asp-route-userName="@Model.Persona.Email">Regresar</a>
+</div>

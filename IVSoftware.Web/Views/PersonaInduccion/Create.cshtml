@@ -1,0 +1,42 @@
+﻿@model IVSoftware.Web.Models.PersonaInduccion
+
+@{
+    ViewData["Title"] = "Inducción y reinducción - Agregar";
+}
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <h5 class="text-primary titulo">Inducción y reinducción - Agregar</h5>
+    <hr />
+
+    <div class="row" style="margin-top:20px">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;color:white;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="FechaInduccion" class="control-label"></label>
+                </div>
+                <input asp-for="FechaInduccion" class="form-control" />
+                <span asp-validation-for="FechaInduccion" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;color:white;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="TipoInduccionId" class="control-label"></label>
+                </div>
+                <select asp-for="TipoInduccionId" class="form-control" asp-items="ViewBag.TipoInduccionId">
+                    <option value="" selected></option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top:20px">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+

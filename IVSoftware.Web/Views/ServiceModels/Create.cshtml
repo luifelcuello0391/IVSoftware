@@ -1,0 +1,200 @@
+﻿@model IVSoftware.Models.ServiceModel
+
+@{
+    ViewData["Title"] = "Nuevo servicio";
+}
+
+<head>
+    <script>
+        function serviceSelection(e) {
+            document.getElementById("input_service_type_id").value = e.target.value
+        }
+
+        function matrixSelection(e) {
+            document.getElementById("input_matrix_id").value = e.target.value
+        }
+
+        function referenceMethodSelection(e) {
+            document.getElementById("input_reference_method_id").value = e.target.value
+        }
+
+        function workingRangeSelection(e) {
+            document.getElementById("input_working_range_id").value = e.target.value
+        }
+    </script>
+</head>
+
+<h1>Crear</h1>
+
+<h4>Servicio</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TypeOfServiceId" id="input_service_type_id" />
+            <input type="hidden" asp-for="SelectedMatrixGroupId" id="input_matrix_id" />
+            <input type="hidden" asp-for="SelectedReferenceMethodId" id="input_reference_method_id" />
+            <input type="hidden" asp-for="SelectedWorkingRangeId" id="input_working_range_id" />
+
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MatrixGroup" class="control-label"></label>
+                <select id="cbx_matrix_type" asp-for="MatrixGroup" class="form-control" onchange="matrixSelection(event)">
+                    <option value="0"></option>
+                    @if (@ViewBag.Matrixes != null)
+                    {
+                        @foreach (var item in @ViewBag.Matrixes)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceType" class="control-label"></label>
+                <select id="cbx_service_type" asp-for="ServiceType" class="form-control" onchange="serviceSelection(event)">
+                    <option value="0"></option>
+                    @if (@ViewBag.ServiceTypes != null)
+                    {
+                        @foreach (var item in @ViewBag.ServiceTypes)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UnitValue" class="control-label"></label>
+                <table>
+                    <tr>
+                        <td>
+                            $
+                        </td>
+                        <td>
+                            <input asp-for="UnitValue" class="form-control" type="number" />
+                            <span asp-validation-for="UnitValue" class="text-danger"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReferenceMethod" class="control-label"></label>
+                <select id="cbx_reference_method" asp-for="ReferenceMethod" class="form-control" onchange="referenceMethodSelection(event)">
+                    <option value="0"></option>
+                    @if (@ViewBag.ReferenceMethods != null)
+                    {
+                        @foreach (var item in @ViewBag.ReferenceMethods)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="WorkingRange" class="control-label"></label>
+                <select id="cbx_service_type" asp-for="WorkingRange" class="form-control" onchange="workingRangeSelection(event)">
+                    <option value="0"></option>
+                    @if (@ViewBag.WorkingRanges != null)
+                    {
+                        @foreach (var item in @ViewBag.WorkingRanges)
+                        {
+                            <option value="@item.Id">@item.Name (@item.WorkingRange)</option>
+                        }
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 4 })
+                <!--<input asp-for="Description" class="form-control" />-->
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AcredditedByIdeam" type="checkbox" /> @Html.DisplayNameFor(model => model.AcredditedByIdeam)
+                </label>
+                    <span asp-validation-for="AcredditedByIdeam" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AuthorizedByINS" type="checkbox" /> @Html.DisplayNameFor(model => model.AuthorizedByINS)
+                </label>
+                
+                <span asp-validation-for="AuthorizedByINS" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Valid" type="checkbox" /> @Html.DisplayNameFor(model => model.Valid)
+                </label>
+                
+                <span asp-validation-for="Valid" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReportDeliveryTime" class="control-label"></label>
+                <input asp-for="ReportDeliveryTime" class="form-control" type="number" />
+                <span asp-validation-for="ReportDeliveryTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="BillingCode" class="control-label"></label>
+                <input asp-for="BillingCode" class="form-control" value="1" />
+                <span asp-validation-for="BillingCode" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="BillingName" class="control-label"></label>
+                <input asp-for="BillingName" class="form-control" value="1" />
+                <span asp-validation-for="BillingName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="RegisterStatus" class="control-label"></label>
+                <input asp-for="RegisterStatus" class="form-control" value="1" />
+                <span asp-validation-for="RegisterStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display:none">
+                <label asp-for="CreationDatetime" class="control-label"></label>
+                <input asp-for="CreationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="CreationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display:none">
+                <label asp-for="ModificationDatetime" class="control-label"></label>
+                <input asp-for="ModificationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen;color:white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

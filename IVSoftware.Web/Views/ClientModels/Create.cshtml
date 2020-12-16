@@ -1,0 +1,605 @@
+﻿@model IVSoftware.Models.ClientModel
+
+@{
+    ViewData["Title"] = "Nuevo cliente";
+}
+
+<head>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .button1 {
+            border-radius: 2px;
+        }
+
+        .button2 {
+            border-radius: 4px;
+        }
+
+        .button3 {
+            border-radius: 8px;
+        }
+
+        .button4 {
+            border-radius: 12px;
+        }
+
+        .button5 {
+            border-radius: 50%;
+        }
+    </style>
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+    <script>
+        function docTypeSelection(e) {
+            document.getElementById("input_doc_type_id").value = e.target.value
+        }
+
+        function clientTypeSelection(e) {
+            document.getElementById("input_client_type_id").value = e.target.value
+        }
+
+        function personTypeSelection(e) {
+            document.getElementById("input_person_type_id").value = e.target.value
+
+            if (e.target.value == 1) {
+                document.getElementById("lbl_name").innerHTML = "Nombre y apellidos";
+            }
+            else {
+                document.getElementById("lbl_name").innerHTML = "Nombre";
+            }
+        }
+
+        function departmentSelection(e) {
+            document.getElementById("input_department_id").value = e.target.value;
+
+            var url = "@Url.Action("GetCityByStateId")";
+
+            $.ajax({
+                url: url,
+                data: { stateid: e.target.value },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var splitted = data.split("|");
+                    var x = document.getElementById("cbx_city");
+                    x.innerHTML = "";
+                    x.innerHTML = "<option value=\"0\" disabled selected></option>";
+
+                    for (var index = 0; index < splitted.length; index++)
+                    {
+                        var data = splitted[index].split(";");
+
+                        var option = document.createElement("option");
+                        option.value = data[0];
+                        option.text = data[1];
+
+                        x.add(option);
+                    }
+                },
+                error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        }
+
+        function departmentSelectionOnContact(e) {
+            document.getElementById("cbx_department_contact").value = e.target.value;
+
+            var url = "@Url.Action("GetCityByStateId")";
+
+            $.ajax({
+                url: url,
+                data: { stateid: e.target.value },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var splitted = data.split("|");
+                    var x = document.getElementById("cbx_city_contact");
+                    x.innerHTML = "";
+                    x.innerHTML = "<option value=\"0\" disabled selected></option>";
+
+                    for (var index = 0; index < splitted.length; index++)
+                    {
+                        var data = splitted[index].split(";");
+
+                        var option = document.createElement("option");
+                        option.value = data[0];
+                        option.text = data[1];
+
+                        x.add(option);
+                    }
+                },
+                error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        }
+
+        function saveContact() {
+            var _docTypeId = document.getElementById("cbx_doc_type_contact").value;
+            var identification = document.getElementById("txt_identification_contact").value;
+            var _name = document.getElementById("txt_name_contact").value;
+            var _departmentId = document.getElementById("cbx_department_contact").value;
+            var _cityId = document.getElementById("cbx_city_contact").value;
+            var _address = document.getElementById("txt_address_contact").value;
+            var _phone = document.getElementById("txt_phone_contact").value;
+            var _extension = document.getElementById("txt_extension_contact").value;
+            var _cellphone = document.getElementById("txt_cellphone_contact").value;
+            var _jobDepartment = document.getElementById("txt_job_department_contact").value;
+            var _job = document.getElementById("txt_job_contact").value;
+            var _email = document.getElementById("txt_email_contact").value;
+
+            if (_docTypeId > 0)
+            {
+                if (identification != null && identification != "" && identification.replace(" ", "") != "")
+                {
+                    if (_name != null && _name != "" && _name.replace(" ", "") != "")
+                    {
+                        if (_departmentId > 0)
+                        {
+                            if (_cityId > 0)
+                            {
+                                if (_jobDepartment != null && _jobDepartment != "" && _jobDepartment.replace(" ", "") != "")
+                                {
+                                    if (_job != null && _job != "" && _job.replace(" ", "") != "")
+                                    {
+                                        if (_email != null && _email != "" && _email.replace(" ", "") != "")
+                                        {
+                                            var url = "@Url.Action("AddContact")";
+
+                                            $.ajax({
+                                                url: url,
+                                                data: {
+                                                    docTypeId: _docTypeId, id: identification, name: _name, departmentId: _departmentId,
+                                                    cityId: _cityId, address: _address, phone: _phone, extension: _extension, cellphone: _cellphone,
+                                                    jobDepartment: _jobDepartment, job: _job, email: _email},
+                                                cache: false,
+                                                type: "POST",
+                                                success: function (data) {
+                                                    alert(data + document.getElementById('@ViewBag.Contacts').value);
+
+                                                    //var splitted = data.split("|");
+                                                    //var x = document.getElementById("cbx_city_contact");
+                                                    //x.innerHTML = "";
+                                                    //x.innerHTML = "<option value=\"0\" disabled selected></option>";
+
+                                                    //for (var index = 0; index < splitted.length; index++)
+                                                    //{
+                                                    //    var data = splitted[index].split(";");
+
+                                                    //    var option = document.createElement("option");
+                                                    //    option.value = data[0];
+                                                    //    option.text = data[1];
+
+                                                    //    x.add(option);
+                                                    //}
+                                                },
+                                                error: function (reponse) {
+                                                    alert("error : " + reponse);
+                                                }
+                                            });
+                                        }
+                                        else
+                                        {
+                                            alert("Debe especificar el correo para la entrega de resultados.");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        alert("Debe especificar el cargo del contacto.");
+                                    }
+                                }
+                                else
+                                {
+                                    alert("Debe especificar el área de trabajo del contacto.");
+                                }
+                            }
+                            else
+                            {
+                                alert("Debe seleccionar la ciudad de residencia del contacto.");
+                            }
+                        }
+                        else
+                        {
+                            alert("Debe seleccionar el departamento de residencia del contacto.");
+                        }
+                    }
+                    else
+                    {
+                        alert("Debe ingresar los nombres y apellidos del contacto.");
+                    }
+                }
+                else
+                {
+                    alert("Debe ingresar la identificación del contacto.");
+                }
+            }
+            else
+            {
+                alert("Debe seleccionar el tipo de dentificación del contacto.");
+            }
+        }
+
+        function citySelection(e) {
+            document.getElementById("input_city_id").value = e.target.value
+        }
+    </script>
+</head>
+
+<h1>Crear</h1>
+
+<h4>Cliente</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SelectedClientTypeId" id="input_client_type_id" />
+            <input type="hidden" asp-for="SelectedDocumentTypeId" id="input_doc_type_id" />
+            <input type="hidden" asp-for="PersonType" id="input_person_type_id" />
+            <input type="hidden" asp-for="DepartmentId" id="input_department_id" />
+            <input type="hidden" asp-for="CityId" id="input_city_id" />
+
+            <div class="form-group">
+                <label asp-for="PersonType" class="control-label"></label>
+                <select id="cbx_person_type" asp-for="PersonType" class="form-control" onchange="personTypeSelection(event)">
+                    <option value="0" selected disabled></option>
+                    <option value="1">Persona natural</option>
+                    <option value="2">Persona jurídica</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DocumentType" class="control-label"></label>
+                <select id="cbx_doc_type" asp-for="DocumentType" class="form-control" onchange="docTypeSelection(event)">
+                    <option value="0" selected disabled></option>
+                    @if (@ViewBag.DocTypes != null)
+                    {
+                        @foreach (var item in @ViewBag.DocTypes)
+                        {
+                            <option value="@item.Id">@item.Nombre</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Identification" class="control-label"></label>
+                <input asp-for="Identification" class="form-control" />
+                <span asp-validation-for="Identification" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label" id="lbl_name"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ClientType" class="control-label"></label>
+                <select id="cbx_client_type" asp-for="ClientType" class="form-control" onchange="clientTypeSelection(event)">
+                    <option value="0" selected disabled></option>
+                    @if (@ViewBag.ClientTypes != null)
+                    {
+                        @foreach (var item in @ViewBag.ClientTypes)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <!--Department-->
+            <div class="form-group">
+                <label asp-for="Department" class="control-label"></label>
+                <select id="cbx_department" asp-for="DepartmentId" class="form-control" onchange="departmentSelection(event)">
+                    <option value="0" disabled selected></option>
+                    @if (@ViewBag.Departments != null)
+                    {
+                        @foreach (var item in @ViewBag.Departments)
+                        {
+                            <option value="@item.Id">@item.Nombre</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <!--City-->
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <select id="cbx_city" name="cbx_city" asp-for="City" class="form-control" onchange="citySelection(event)">
+                    <option value="0" selected disabled></option>
+                    @if (@ViewBag.Cities != null)
+                    {
+                        @foreach (var item in @ViewBag.Cities)
+                        {
+                            <option value="@item.Id">@item.Nombre</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <table style="border-spacing:20px">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label asp-for="PhoneNumber" class="control-label"></label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="form-group">
+                            <label asp-for="Extension" class="control-label"></label>
+                            <input asp-for="Extension" class="form-control" />
+                            <span asp-validation-for="Extension" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="form-group">
+                <label asp-for="CellPhone" class="control-label"></label>
+                <input asp-for="CellPhone" class="form-control" />
+                <span asp-validation-for="CellPhone" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EmailAddress" class="control-label"></label>
+                <input asp-for="EmailAddress" class="form-control" />
+                <span asp-validation-for="EmailAddress" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="ContactName" class="control-label"></label>
+                <input asp-for="ContactName" class="form-control" value="Sin contacto" />
+                <span asp-validation-for="ContactName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check" style="display:none">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsRegular" /> @Html.DisplayNameFor(model => model.IsRegular)
+                </label>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="LastServiceExecutionDatetime" class="control-label"></label>
+                <input asp-for="LastServiceExecutionDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="LastServiceExecutionDatetime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="RegisterStatus" class="control-label"></label>
+                <input asp-for="RegisterStatus" class="form-control" value="1" />
+                <span asp-validation-for="RegisterStatus" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="CreationDatetime" class="control-label"></label>
+                <input asp-for="CreationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="CreationDatetime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="ModificationDatetime" class="control-label"></label>
+                <input asp-for="ModificationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button id="btnShowModal"
+                        hidden
+                        type="button"
+                        style="background-color:yellowgreen; color:white"
+                        class="btn btn-primary">
+                    Agregar contacto
+                </button>
+
+                <div class="modal fade" tabindex="-1" id="loginModal" data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title" style="float:left; color:yellowgreen">Agregar contacto</h5>
+                                <button type="button" class="close" data-dismiss="modal" style="color:red; margin-right:5px">
+                                    X
+                                </button>
+                            </div>
+
+                            <div class="row" style="margin-left:20px; margin-right:5px">
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Tipo de identificación</label>
+                                        <select id="cbx_doc_type_contact" class="form-control" >
+                                            <option value="0" selected disabled></option>
+                                            @if (@ViewBag.DocTypes != null)
+                                            {
+                                                @foreach (var item in @ViewBag.DocTypes)
+                                                {
+                                                    <option value="@item.Id">@item.Nombre</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Identificación</label>
+                                        <input id="txt_identification_contact" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Nombre y apellidos</label>
+                                        <input id="txt_name_contact" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Departamento de residencia</label>
+                                        <select id="cbx_department_contact" class="form-control" onchange="departmentSelectionOnContact(event)">
+                                            <option value="0" selected disabled></option>
+                                            @if (@ViewBag.Departments != null)
+                                            {
+                                                @foreach (var item in @ViewBag.Departments)
+                                                {
+                                                    <option value="@item.Id">@item.Nombre</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Ciudad de residencia</label>
+                                        <select id="cbx_city_contact" class="form-control">
+                                            <!--<option value="0" selected disabled></option>
+                                            if (ViewBag.Cities != null)
+                                            {
+                                                foreach (var item in ViewBag.Cities)
+                                                {
+                                                    <option value="item.Id">item.Nombre</option>
+                                                }
+                                            }-->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Dirección</label>
+                                        <input id="txt_address_contact" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">teléfono fijo</label>
+                                        <input id="txt_phone_contact" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Extensión</label>
+                                        <input id="txt_extension_contact" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Celular</label>
+                                        <input id="txt_cellphone_contact" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Área de trabajo</label>
+                                        <input id="txt_job_department_contact" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Cargo</label>
+                                        <input id="txt_job_contact" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Correo (entrega de resultados)</label>
+                                        <input id="txt_email_contact" class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="button" value="Guardar" onclick="saveContact()" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
+                                </div>
+
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar</a>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#btnShowModal").click(function () {
+            $("#loginModal").modal('show');
+        });
+
+        $("#btnHideModal").click(function () {
+            $("#loginModal").modal('hide');
+        });
+
+        $("#btnSelectModal").click(function () {
+            $("#loginModal").modal('hide');
+        });
+
+        if ($("cbx_person_type").value == 1) {
+            $("lbl_name").value = "Nombres y apellidos";
+        }
+        else {
+            $("lbl_name").value = "Nombres";
+        }
+    });
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

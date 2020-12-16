@@ -1,0 +1,137 @@
+﻿@model IVSoftware.Web.Models.EquipmentCheckList
+
+@{
+    ViewData["Title"] = "Eliminar lista de chequeo";
+}
+
+<h1>Eliminar</h1>
+
+<h3>¿Desea eliminar la lista de chequeo?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Secciones</h5>
+    <hr />
+    <!--Listado de secciones asociadas-->
+    @if (Model.Sections != null)
+    {
+        <table class="table">
+            <thead style="background-color:yellowgreen; color:white">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        Preguntas asociadas
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Sections != null)
+                {
+                    foreach (var item in Model.Sections)
+                    {
+                        @if (item.Section != null)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Section.Name
+                                </td>
+                                <td>
+                                    @item.Section.QuestionsCount
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h6>No hay secciones asignadas</h6>
+    }
+
+    <h5 style="color:yellowgreen">Preguntas adicionales</h5>
+    <hr />
+    <!--Listado de preguntas adicionales asociadas-->
+    @if (Model.Questions != null)
+    {
+        <table class="table">
+            <thead style="background-color:yellowgreen; color:white">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+
+                    <th>
+                        Tipo de pregunta
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Questions != null)
+                {
+                    foreach (var item in Model.Questions)
+                    {
+                        @if (item.Question != null)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Question.Name
+                                </td>
+
+                                <td>
+                                    @item.Question.TypeOfQuestionName
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h6>No hay secciones asignadas</h6>
+    }
+
+    <h5 style="color:yellowgreen">Información adicional</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegisterStatus)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RegisterStatusName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.CreationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.CreationDatetime)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ModificationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Regresar</a>
+    </form>
+</div>

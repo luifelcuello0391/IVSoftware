@@ -1,0 +1,37 @@
+﻿@model IEnumerable<IVSoftware.Web.Models.TipoContrato>
+
+@{
+    ViewData["Title"] = "Tipos de contrato";
+}
+
+<h5 class="text-primary titulo">Tipos de contrato</h5>
+<table class="table">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td align="right" style="white-space:nowrap">
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "TipoDocumento")'"
+           class="btn btn-primary btn-sm"
+           style="margin-top:10px" />
+</div>

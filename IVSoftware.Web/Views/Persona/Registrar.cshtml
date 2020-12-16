@@ -1,0 +1,136 @@
+﻿@model IVSoftware.Web.Data.CrearUsuarioViewModel
+
+@{
+    ViewData["Title"] = "Registrar usuario";
+}
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+    <h5 class="text-primary titulo">Registrar usuario</h5>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="TipoDocumento"></label>
+                <select asp-for="TipoDocumento" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.TiposDocumento)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="TipoDocumento" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="NumeroIdentificacion"></label>
+                <input asp-for="NumeroIdentificacion" class="form-control" />
+                <span asp-validation-for="NumeroIdentificacion" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="PrimerNombre"></label>
+                <input asp-for="PrimerNombre" class="form-control" />
+                <span asp-validation-for="PrimerNombre" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="SegundoNombre"></label>
+                <input asp-for="SegundoNombre" class="form-control" />
+                <span asp-validation-for="SegundoNombre" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="PrimerApellido"></label>
+                <input asp-for="PrimerApellido" class="form-control" />
+                <span asp-validation-for="PrimerApellido" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="SegundoApellido"></label>
+                <input asp-for="SegundoApellido" class="form-control" />
+                <span asp-validation-for="SegundoApellido" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label asp-for="CorreoElectronico"></label>
+                <input asp-for="CorreoElectronico" class="form-control" />
+                <span asp-validation-for="CorreoElectronico" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label asp-for="Confirm"></label>
+                <input asp-for="Confirm" type="password" class="form-control" />
+                <span asp-validation-for="Confirm" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label asp-for="TipoContrato"></label>
+                <select asp-for="TipoContrato" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.TiposContrato)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="TipoContrato" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header text-white" style="background-color:yellowgreen">
+                    Roles y responsabilidades asignados en el sistema de gestión
+                </div>
+                <div class="card card-body">
+                    @foreach (var item in Model.AvailableTiposRolesGestion)
+                    {
+                        <div class="row">
+                            <div class="col">
+                                <label>@item.Nombre</label>
+                            </div>
+                            <div class="col">
+                                @Html.RadioButton(item.Id.ToString(), 1) Sí&nbsp;
+                                @Html.RadioButton(item.Id.ToString(), 2, true) No&nbsp;
+                                @Html.RadioButton(item.Id.ToString(), 3) En proceso
+                            </div>
+                        </div>
+                        }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Registrar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

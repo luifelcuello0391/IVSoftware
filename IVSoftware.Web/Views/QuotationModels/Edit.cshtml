@@ -1,0 +1,124 @@
+﻿@model IVSoftware.Models.QuotationModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>QuotationModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="ClientId" class="control-label"></label>
+                <input asp-for="ClientId" class="form-control" />
+                <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientName" class="control-label"></label>
+                <input asp-for="ClientName" class="form-control" />
+                <span asp-validation-for="ClientName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientAddress" class="control-label"></label>
+                <input asp-for="ClientAddress" class="form-control" />
+                <span asp-validation-for="ClientAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientPhoneNumber" class="control-label"></label>
+                <input asp-for="ClientPhoneNumber" class="form-control" />
+                <span asp-validation-for="ClientPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientContactName" class="control-label"></label>
+                <input asp-for="ClientContactName" class="form-control" />
+                <span asp-validation-for="ClientContactName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientContactPosition" class="control-label"></label>
+                <input asp-for="ClientContactPosition" class="form-control" />
+                <span asp-validation-for="ClientContactPosition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Greetings" class="control-label"></label>
+                <input asp-for="Greetings" class="form-control" />
+                <span asp-validation-for="Greetings" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Exceptions" class="control-label"></label>
+                <input asp-for="Exceptions" class="form-control" />
+                <span asp-validation-for="Exceptions" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReservationDate" class="control-label"></label>
+                <input asp-for="ReservationDate" class="form-control" />
+                <span asp-validation-for="ReservationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReservationMessage" class="control-label"></label>
+                <input asp-for="ReservationMessage" class="form-control" />
+                <span asp-validation-for="ReservationMessage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeasurementSubtotal" class="control-label"></label>
+                <input asp-for="MeasurementSubtotal" class="form-control" />
+                <span asp-validation-for="MeasurementSubtotal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeasurementTotalValue" class="control-label"></label>
+                <input asp-for="MeasurementTotalValue" class="form-control" />
+                <span asp-validation-for="MeasurementTotalValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServicesSubtotal" class="control-label"></label>
+                <input asp-for="ServicesSubtotal" class="form-control" />
+                <span asp-validation-for="ServicesSubtotal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServicesTotalValue" class="control-label"></label>
+                <input asp-for="ServicesTotalValue" class="form-control" />
+                <span asp-validation-for="ServicesTotalValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegisterStatus" class="control-label"></label>
+                <input asp-for="RegisterStatus" class="form-control" />
+                <span asp-validation-for="RegisterStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreationDatetime" class="control-label"></label>
+                <input asp-for="CreationDatetime" class="form-control" />
+                <span asp-validation-for="CreationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModificationDatetime" class="control-label"></label>
+                <input asp-for="ModificationDatetime" class="form-control" />
+                <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

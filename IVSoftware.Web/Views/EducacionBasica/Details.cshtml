@@ -1,0 +1,46 @@
+﻿@model IVSoftware.Web.Models.EducacionBasica
+
+@{
+    ViewData["Title"] = "Educación básica - Detalles";
+}
+
+<h5 class="text-primary titulo">Educación básica - Detalles</h5>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.NombreInstitucion)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.NombreInstitucion)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.UltimoGradoAprobado)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.UltimoGradoAprobado)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.TituloObtenido)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.TituloObtenido)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.FechaGrado)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.FechaGrado)
+    </dd>
+    <dt class="col-sm-3" hidden>
+        @Html.DisplayNameFor(model => model.Persona)
+    </dt>
+    <dd class="col-sm-9" hidden>
+        @Html.DisplayFor(model => model.Persona.Id)
+    </dd>
+</dl>
+
+<div>
+    <a asp-controller="EducacionBasica" asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-controller="Persona" asp-action="EditarPerfil" asp-route-userName="@Model.Persona.Email">Regresar</a>
+</div>

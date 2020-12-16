@@ -1,0 +1,69 @@
+﻿@model IVSoftware.Web.Models.EducacionSuperior
+
+@{
+    ViewData["Title"] = "Educación superior - Detalles";
+}
+
+<dl class="row">
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.NombreInstitucion)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.NombreInstitucion)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.SemestresAprobados)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.SemestresAprobados)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.EsGraduado)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.EsGraduado)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.FechaGrado)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.FechaGrado)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.NombreEstudios)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.NombreEstudios)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.NumeroTarjetaProfesional)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.NumeroTarjetaProfesional)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.ModalidadAcademica)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.ModalidadAcademica.Nombre)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.ArchivoAdjunto)
+    </dt>
+    <dd class="col-sm-9">
+        <a href="@Url.Action("DescargarArchivo", "Persona", new { file = Model.ArchivoAdjunto })">
+            Descargar
+        </a>
+    </dd>
+    <dt class="col-sm-3" hidden>
+        @Html.DisplayNameFor(model => model.Persona)
+    </dt>
+    <dd class="col-sm-9" hidden>
+        @Html.DisplayFor(model => model.Persona.Id)
+    </dd>
+</dl>
+
+<div>
+    <a asp-controller="EducacionSuperior" asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-controller="Persona" asp-action="EditarPerfil" asp-route-userName="@Model.Persona.Email">Regresar</a>
+</div>

@@ -1,0 +1,84 @@
+﻿@model IVSoftware.Models.QuotationRequest
+
+@{
+    ViewData["Title"] = "Cancelar solicitud de cotización";
+}
+
+<h1>Cancelar</h1>
+
+<h3>¿Desea cancelar la solicitud de cotización # @Html.DisplayFor(model => model.Id)?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RequestDateTime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RequestDateTime)
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ClientRequestDescription)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ClientRequestDescription)
+        </dd>
+
+        @if (Model.HasBeenGenerated)
+        {
+            <dt class="col-sm-2" style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.LastGenerationDate)
+            </dt>
+            <dd class="col-sm-10" style="margin-left:5px">
+                @Html.DisplayFor(model => model.LastGenerationDate)
+            </dd>
+        }
+    </dl>
+
+    <h5 style="color:yellowgreen">Información del cliente</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ClientIdentification)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ClientIdentification)
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ClientName)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ClientName)
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Información adicional</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegisterStatus)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RegisterStatusName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.CreationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.CreationDatetime)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ModificationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Cancelar solicitud" class="btn btn-danger" /> |
+        <a asp-action="Index">Regresar</a>
+    </form>
+</div>

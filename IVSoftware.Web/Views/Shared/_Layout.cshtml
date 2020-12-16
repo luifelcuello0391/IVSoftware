@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - IVSoftware</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://kit.fontawesome.com/bf2b070ac3.js" crossorigin="anonymous"></script>
+    <style>
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown_menu:hover .dropdown-content {
+            display: block;
+        }
+
+    </style>
+
+</head>
+<body>
+    <header>
+        <div style="background-color:yellowgreen;height:10px"></div>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/Logo.jpg" /></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+
+                        @if (this.User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Ofertas y contratos
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                            <ul class="navbar-nav mr-auto">
+                                                <li class="nav-item active">
+                                                    <ul class="navbar-nav mr-auto">
+
+                                                        <li class="nav-item dropdown dropdown_menu">
+                                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Servicios
+                                                            </a>
+
+                                                            <div class="dropdown-content" aria-labelledby="navbarDropdown">
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="ServiceGroupModels" asp-action="Index">Grupos de servicio</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="ServiceModels" asp-action="Index">Maestro de servicios</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="TypeOfServices" asp-action="Index">Tipos de servicio</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="MatrixModels" asp-action="Index">Matriz</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="ReferenceMethodModels" asp-action="Index">Métodos de referencia</a>
+                                                                <!--<a class="dropdown-item btn-sm" asp-area="" asp-controller="VariableModels" asp-action="Index">Variables</a>-->
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="WorkingRangeModels" asp-action="Index">Rangos de trabajo</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="MeasurementUnitModels" asp-action="Index">Unidades de medida</a>
+                                                            </div>
+                                                        </li>
+
+                                                        <li class="nav-item dropdown dropdown_menu">
+                                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Clientes
+                                                            </a>
+
+                                                            <div class="dropdown-content" aria-labelledby="navbarDropdown">
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="ClientModels" asp-action="Index">Maestro de clientes</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="ClientTypeModels" asp-action="Index">Tipos de cliente</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="IncentiveModels" asp-action="Index">Incentivos</a>
+                                                            </div>
+                                                        </li>
+
+                                                        <li class="nav-item dropdown dropdown_menu">
+                                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Cotizaciones
+                                                            </a>
+
+                                                            <div class="dropdown-content" aria-labelledby="navbarDropdown">
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="QuotationRequests" asp-action="Index">Solicitudes de cotización</a>
+                                                            </div>
+                                                        </li>
+
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Mantenimiento y equipos
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                            <ul class="navbar-nav mr-auto">
+                                                <li class="nav-item active">
+                                                    <ul class="navbar-nav mr-auto">
+
+                                                        <li class="nav-item dropdown dropdown_menu">
+                                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Equipos
+                                                            </a>
+
+                                                            <div class="dropdown-content" aria-labelledby="navbarDropdown">
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="Equipments" asp-action="Index">Listado de equipos</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="Brands" asp-action="Index">Marcas</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="Providers" asp-action="Index">Proveedores</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="EquipmentCheckLists" asp-action="Index">Listas de chequeo</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="CheckListSections" asp-action="Index">Secciones de preguntas</a>
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="CheckListQuestions" asp-action="Index">Banco de preguntas</a>
+                                                            </div>
+                                                        </li>
+
+                                                        <!--<li class="nav-item dropdown dropdown_menu">
+                                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Mantenimientos
+                                                            </a>
+
+                                                            <div class="dropdown-content" aria-labelledby="navbarDropdown">
+                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="ClientModels" asp-action="Index">Listado de mantenimientos</a>
+                                                            </div>
+                                                        </li>-->
+
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Gestión humana
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="Persona" asp-action="Index">Lista de usuarios</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="Persona" asp-action="Registrar">Registrar usuario</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="Evaluacion" asp-action="Index">Evaluaciones</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Configuración
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="Arl" asp-action="Index">ARL</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="Eps" asp-action="Index">EPS</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="ModalidadAcademica" asp-action="Index">Modalidades académicas</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="TiposRolesGestion" asp-action="Index">Roles y responsabilidades</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="TipoCertificacion" asp-action="Index">Tipos de certificación</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="TipoContrato" asp-action="Index">Tipos de contrato</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="TipoDocumento" asp-action="Index">Tipos de documento</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="TipoInduccion" asp-action="Index">Tipos de inducción</a>
+                                </div>
+                            </li>
+                        }
+
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <ul class="navbar-nav mr-auto">
+                            @if (this.User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">@this.User.Identity.Name</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item btn-sm" asp-area="" asp-controller="Persona" asp-action="EditarPerfil" asp-route-userName="@this.User.Identity.Name">Editar hoja de vida</a>
+                                        <a class="dropdown-item btn-sm" asp-area="" asp-controller="AplicacionEvaluacion" asp-action="Index" asp-route-userName="@this.User.Identity.Name">Mis evaluaciones</a>
+                                        <a class="dropdown-item btn-sm" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar sesión</a>
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Iniciar sesión</a>
+                                </li>
+                            }
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - IVSoftware.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,287 @@
+﻿@model IVSoftware.Web.Models.Equipment
+
+@{
+    ViewData["Title"] = "Nuevo equipo";
+}
+
+<head>
+    <script>
+        function brandSelection(e) {
+            document.getElementById("txt_brand_id").value = e.target.value
+        }
+    </script>
+</head>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    .button1 {
+        border-radius: 2px;
+    }
+
+    .button2 {
+        border-radius: 4px;
+    }
+
+    .button3 {
+        border-radius: 8px;
+    }
+
+    .button4 {
+        border-radius: 12px;
+    }
+
+    .button5 {
+        border-radius: 50%;
+    }
+</style>
+
+<h1>Crear</h1>
+
+<h4>Ficha técnica</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="SelectedBrandId" id="txt_brand_id" hidden value="0" />
+            <input asp-for="RequestedProviderId" id="txt_provider_id" hidden value="0"/>
+
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <!--Marcas-->
+            <div class="form-group">
+                <label asp-for="EquipBrand" class="control-label"></label>
+                <select id="cbx_brand" asp-for="EquipBrand" class="form-control" onchange="brandSelection(event)">
+                    <option value="0" selected disabled/>
+                    @if (@ViewBag.Brands != null)
+                    {
+                        @foreach (var item in @ViewBag.Brands)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Model" class="control-label"></label>
+                <input asp-for="Model" class="form-control" />
+                <span asp-validation-for="Model" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Serie" class="control-label"></label>
+                <input asp-for="Serie" class="form-control" />
+                <span asp-validation-for="Serie" class="text-danger"></span>
+            </div>
+
+            <!--Proveedor-->
+            <div>
+                <label asp-for="EquipProvider" class="control-label"></label>
+                <table>
+                    <tr>
+                        <td>
+                            <input asp-for="EquipProvider" class="form-control" id="txt_provider_name" readonly />
+                        </td>
+                        <td>
+                            <input id="btnShowModal" type="Button" value="Seleccionar" class="btn btn-primary" style="background-color:yellowgreen; color:white; margin-left:10px" />
+
+                            <div class="modal fade" tabindex="-1" id="loginModal" data-keyboard="false" data-backdrop="static">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" style="float:left">Listado de proveedores</h5>
+                                            <button type="button" class="close" data-dismiss="modal" style="color:red">
+                                                X
+                                            </button>
+                                        </div>
+
+                                        <table class="table">
+                                            <thead style="background-color:yellowgreen; color:white">
+                                                <tr>
+                                                    <th>
+                                                        Identificación
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Name)
+                                                    </th>
+                                                    <th>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (@ViewBag.Providers != null)
+                                                {
+                                                    foreach (var provider in @ViewBag.Providers)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @provider.Identification
+                                                            </td>
+                                                            <td>
+                                                                @provider.Name
+                                                            </td>
+                                                            <td>
+                                                                <a onclick="getProvider(@provider.Id, @provider.Identification)"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                
+                <span asp-validation-for="EquipProvider" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PurchaseDate" class="control-label"></label>
+                <input asp-for="PurchaseDate" class="form-control" type="date" />
+                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Magnitude" class="control-label"></label>
+                <input asp-for="Magnitude" class="form-control" />
+                <span asp-validation-for="Magnitude" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Range" class="control-label"></label>
+                <input asp-for="Range" class="form-control" />
+                <span asp-validation-for="Range" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinimumRead" class="control-label"></label>
+                <input asp-for="MinimumRead" class="form-control" />
+                <span asp-validation-for="MinimumRead" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Accuracy" class="control-label"></label>
+                <input asp-for="Accuracy" class="form-control" />
+                <span asp-validation-for="Accuracy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PowerSupply" class="control-label"></label>
+                <input asp-for="PowerSupply" class="form-control" />
+                <span asp-validation-for="PowerSupply" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observation" class="control-label"></label>
+                @Html.TextAreaFor(model => model.Observation, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="Observation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OtherRecomendation" class="control-label"></label>
+                @Html.TextAreaFor(model => model.OtherRecomendation, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="OtherRecomendation" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="display:none">
+                <label asp-for="RegisterStatus" class="control-label"></label>
+                <input asp-for="RegisterStatus" class="form-control" value="1" />
+                <span asp-validation-for="RegisterStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display:none">
+                <label asp-for="CreationDatetime" class="control-label"></label>
+                <input asp-for="CreationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="CreationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display:none">
+                <label asp-for="ModificationDatetime" class="control-label"></label>
+                <input asp-for="ModificationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar</a>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#btnShowModal").click(function () {
+            var inputs = document.querySelectorAll('.uncheck_default');
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].checked = false;
+            }
+
+            $("#loginModal").modal('show');
+        });
+
+        $("#btnHideModal").click(function () {
+            $("#loginModal").modal('hide');
+        });
+
+        $("#btnSelectModal").click(function () {
+            var inputs = document.querySelectorAll('.uncheck_default');
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].checked) {
+
+                }
+            }
+
+            $("#loginModal").modal('hide');
+        });
+    });
+
+</script>
+
+@section Scripts {
+    <script>
+        function getProvider() {
+            var id = arguments[0];
+            var identification = arguments[1];
+            var url = "@Url.Action("GetProviderName")";
+
+            document.getElementById("txt_provider_id").value = id;
+
+            $.get(url, { id: id }, function (data) {
+                document.getElementById("txt_provider_name").value = data;
+            });
+
+            $("#loginModal").modal('hide');
+        }
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

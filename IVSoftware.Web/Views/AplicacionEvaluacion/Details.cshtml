@@ -1,0 +1,68 @@
+﻿@model IVSoftware.Web.Models.AplicacionEvaluacion
+
+@{
+    ViewData["Title"] = "Mis evaluaciones - Detalle";
+}
+
+<h5 class="text-primary titulo">Mis evaluaciones - Detalle</h5>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.FechaAplicacion)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.FechaAplicacion)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Evaluacion.Nombre)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Evaluacion.Nombre)
+    </dd>
+</dl>
+
+@foreach (var pregunta in ViewBag.Preguntas)
+{
+<div class="row" style="margin-top: 20px">
+   
+    <div class="col">
+        <div class="card-header text-white" style="background-color: yellowgreen">
+            @pregunta.Orden. @pregunta.Enunciado
+        </div>
+        <div class="card-body">
+            @foreach (var respuesta in ViewBag.Respuestas)
+            {
+                @if (respuesta.PreguntaId == pregunta.Id)
+                {
+                    string preguntaId = respuesta.Pregunta.Id + "";
+
+                    @if (respuesta.Pregunta.TipoPregunta == 1)
+                    {
+                        @Html.RadioButton(preguntaId, (int)respuesta.Id)
+                        @:&nbsp;
+                        @respuesta.Texto<br />
+                    }
+
+                    @if (respuesta.Pregunta.TipoPregunta == 2)
+                    {
+                        @Html.CheckBox(preguntaId, (int)respuesta.Id)
+                        @:&nbsp;
+                        @respuesta.Texto<br />
+                    }
+                }
+            }
+            @if (pregunta.TipoPregunta == 3)
+            {
+                <input class="form-control" /><br />
+            }
+        </div>
+
+    </div>
+</div>
+}
+
+<div>
+    <a asp-action="Editar" hidden asp-route-id="@Model.Id">Edit</a> 
+    <a asp-action="Index">Regresar</a>
+</div>

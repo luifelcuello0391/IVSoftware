@@ -1,0 +1,50 @@
+﻿@model IVSoftware.Web.Models.EducacionBasica
+
+@{
+    ViewData["Title"] = "Educación básica - Eliminar";
+}
+
+<h5 class="text-primary titulo">Educación básica - Eliminar</h5>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.NombreInstitucion)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.NombreInstitucion)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.UltimoGradoAprobado)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.UltimoGradoAprobado)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.TituloObtenido)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.TituloObtenido)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.FechaGrado)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.FechaGrado)
+    </dd>
+    <dt class="col-sm-3" hidden>
+        @Html.DisplayNameFor(model => model.Persona)
+    </dt>
+    <dd class="col-sm-9" hidden>
+        @Html.DisplayFor(model => model.Persona.Id)
+    </dd>
+</dl>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Eliminar" class="btn btn-danger" />
+</form>
+
+<div style="margin-top:20px">
+    <a asp-controller="Persona" asp-action="EditarPerfil" asp-route-userName="@Model.Persona.Email">Regresar</a>
+</div>
