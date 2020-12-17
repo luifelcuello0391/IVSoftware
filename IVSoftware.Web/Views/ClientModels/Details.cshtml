@@ -137,8 +137,151 @@
         </dd>
     </dl>
 
+    <h5 style="color:yellowgreen">Contactos</h5>
+    <hr />
+
+    @if (Model.Contacts != null && Model.Contacts.Count > 0)
+    {
+        <table class="table">
+            <thead style="background-color:yellowgreen; color:white">
+                <tr>
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Tipo de identificación")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Identificación")
+                    </th>
+
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Nombres y apellidos")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Departamento")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Ciudad")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Dirección")
+                    </th>
+
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Teléfono fijo")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Celular")
+                    </th>
+
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Área de trabajo")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Cargo")
+                    </th>
+
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Correo (entrega de resultados)")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Contacts != null && Model.Contacts.Count > 0)
+                {
+                    @foreach (var item in Model.Contacts)
+                    {
+                        <tr>
+                            <td style="white-space:nowrap">
+                                @if (item.DocumentType != null)
+                                {
+                                    @Html.DisplayFor(modelItem => item.DocumentType.Nombre)
+                                }
+                                else
+                                {
+                                    @Html.Raw("No asignado");
+                                }
+
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.Identification)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @if (item.AddressDepartment != null)
+                                {
+                                    @Html.DisplayFor(modelItem => item.AddressDepartment.Nombre)
+                                }
+                                else
+                                {
+                                    @Html.Raw("No asignado");
+                                }
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @if (item.City != null)
+                                {
+                                    @Html.DisplayFor(modelItem => item.City.Nombre)
+                                }
+                                else
+                                {
+                                    @Html.Raw("No asignada");
+                                }
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @if (item.Extension != null && !string.IsNullOrEmpty(item.Extension.Replace(" ", string.Empty)))
+                                {
+                                    @Html.Raw(string.Format("{0} Ext. {1}", item.PhoneNumber, item.Extension))
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                }
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.CellPhone)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.Department)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.Position)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.ReportDeliveryEmail)
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h6>No hay contactos asignados</h6>
+        <br />
+    }
+
     <h5 style="color:yellowgreen">Información adicional</h5>
-    <hr/>
+    <hr />
     <dl class="row">
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.RegisterStatus)

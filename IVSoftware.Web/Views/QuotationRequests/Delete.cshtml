@@ -52,6 +52,122 @@
             @Html.DisplayFor(model => model.ClientName)
         </dd>
     </dl>
+    <h5 style="color:yellowgreen">Servicios</h5>
+    <hr />
+    <!--Listado de servicios asignados-->
+    @if (Model.Services != null && Model.Services.Count > 0)
+    {
+        <table class="table table-striped table-sm" style="display:block; overflow:auto">
+            <thead style="background-color:yellowgreen; color:white">
+                <tr>
+                    <th>
+                        @Html.Raw("Código")
+                    </th>
+                    <th>
+                        @Html.Raw("Nombre")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Tipo de servicio")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Matriz")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Método de referencia")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Rango de trabajo")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Valor unitario")
+                    </th>
+
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Tiempo de entrega de informe (días)")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Acreditado por el IDEAM")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Autorizado INS - Min. Salud")
+                    </th>
+
+                    <th>
+                        @Html.Raw("Vigente")
+                    </th>
+
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Observaciones particulares de la prestación del servicio")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var service in @Model.Services)
+                {
+                    if (service.Service != null)
+                    {
+                        var item = service.Service;
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(model => item.ServiceTypeName)
+                            </td>
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(model => item.MatrixGroupName)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.ReferenceMethodName)
+                            </td>
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.WorkingRangeName)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                $ @Html.DisplayFor(modelItem => item.UnitValue)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.ReportDeliveryTime)
+                            </td>
+
+                            <td>
+                                @item.GetYesNo(item.AcredditedByIdeam)
+                            </td>
+                            <td>
+                                @item.GetYesNo(item.AuthorizedByINS)
+                            </td>
+                            <td>
+                                @item.GetYesNo(item.Valid)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h6>No hay servicios asignados</h6>
+        <br />
+    }
 
     <h5 style="color:yellowgreen">Información adicional</h5>
     <hr />

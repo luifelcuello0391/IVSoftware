@@ -46,5 +46,8 @@ namespace IVSoftware.Models
         public string LastGenerationDateString { get { return LastGenerationDate != null && HasBeenGenerated ? LastGenerationDate.Value.ToString("dd/MM/yyyy hh:mm:ss tt") : "---"; } }
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public bool HasBeenCanceled { get { return Status != null ? Status.Id == 4 : false; } }
+        public virtual ICollection<ServicesIntoQuotation> Services { get; set; }
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public int ManageQuotation { get; set; }
     }
 }
