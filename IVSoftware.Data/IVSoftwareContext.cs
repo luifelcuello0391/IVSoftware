@@ -1,4 +1,5 @@
-﻿using IVSoftware.Data.Models;
+﻿using IVSoftware.Data.Configurations;
+using IVSoftware.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,8 @@ namespace IVSoftware.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            new ArlConfiguration("Arl", "Id").Map(modelBuilder);
+
             base.OnModelCreating(modelBuilder);
         }
     }
