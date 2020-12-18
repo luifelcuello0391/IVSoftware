@@ -1,5 +1,6 @@
 ﻿using IVSoftware.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -20,6 +21,7 @@ namespace IVSoftware.Web.Data
         {
             try
             {
+                context.Database.Migrate();
                 var persona = await this.userManager.FindByEmailAsync("admin@fkconsultores.com");
 
                 if (persona == null)
