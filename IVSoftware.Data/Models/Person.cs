@@ -18,7 +18,7 @@ namespace IVSoftware.Data.Models
 
         public int GenderId { get; set; }
 
-        public Gender Gender { get; set; }
+        public virtual Gender Gender { get; set; }
 
         public bool IsColombian { get; set; }
 
