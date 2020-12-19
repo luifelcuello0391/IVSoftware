@@ -1,4 +1,5 @@
 ﻿using IVSoftware.Data.Models.Core;
+using System.Collections.Generic;
 
 namespace IVSoftware.Data.Models
 {
@@ -7,5 +8,9 @@ namespace IVSoftware.Data.Models
         public string Name { get; set; }
 
         public string Code { get; set; }
+
+        public virtual ICollection<Person> PeopleCorrespondence { get; set; }
+
+        public virtual ICollection<Person> PeopleBirth { get; set; }
     }
 }
