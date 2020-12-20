@@ -2,7 +2,10 @@
 using IVSoftware.Data.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace IVSoftware.Web.Controllers
@@ -10,9 +13,25 @@ namespace IVSoftware.Web.Controllers
     public class PeopleController : Controller
     {
         private readonly IEntityService<Person, Guid> _personService;
-        public PeopleController(IEntityService<Person, Guid> personService)
+        private readonly IEntityService<IdentificationType, int> _identificationTypeService;
+        private readonly IEntityService<Arl, int> _arlService;
+        private readonly IEntityService<Eps, int> _epsService;
+        private readonly IEntityService<BloodType, int> _bloodTypeService;
+        private readonly IEntityService<ContractType, int> _contractTypeService;
+
+        public PeopleController(IEntityService<Person, Guid> personService,
+            IEntityService<IdentificationType, int> identificationTypeService,
+            IEntityService<Arl, int> arlService,
+            IEntityService<Eps, int> epsService,
+            IEntityService<BloodType, int> bloodTypeService,
+            IEntityService<ContractType, int> contractTypeService)
         {
             _personService = personService;
+            _identificationTypeService = identificationTypeService;
+            _arlService = arlService;
+            _epsService = epsService;
+            _bloodTypeService = bloodTypeService;
+            _contractTypeService = contractTypeService;
         }
 
         // GET: PeopleController
@@ -28,19 +47,31 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: PeopleController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            ViewBag.IdentificationTypes = await GetIdentificationTypeSelectList();
+            ViewBag.ARLs = await GetArlSelectList();
+            ViewBag.EPSs = await GetEpsSelectList();
+            ViewBag.BloodTypes = await GetBloodTypeSelectList();
+            ViewBag.ContractTypes = await GetContractTypeSelectList();
+
             return View();
         }
 
         // POST: PeopleController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(Person model)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    await _personService.CreateAsync(model);
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(model);
             }
             catch
             {
@@ -88,6 +119,66 @@ namespace IVSoftware.Web.Controllers
             {
                 return View();
             }
+        }
+
+        private async Task<List<SelectListItem>> GetIdentificationTypeSelectList()
+        {
+            var identificationTypes = new List<SelectListItem>();
+            identificationTypes = (await _identificationTypeService.GetAllAsync()).Select(t => new SelectListItem()
+            {
+                Text = t.Name,
+                Value = t.Id.ToString()
+            }).ToList();
+
+            return identificationTypes;
+        }
+
+        private async Task<List<SelectListItem>> GetArlSelectList()
+        {
+            var ARLs = new List<SelectListItem>();
+            ARLs = (await _arlService.GetAllAsync()).Select(t => new SelectListItem()
+            {
+                Text = t.Name,
+                Value = t.Id.ToString()
+            }).ToList();
+
+            return ARLs;
+        }
+
+        private async Task<List<SelectListItem>> GetEpsSelectList()
+        {
+            var EPSs = new List<SelectListItem>();
+            EPSs = (await _epsService.GetAllAsync()).Select(t => new SelectListItem()
+            {
+                Text = t.Name,
+                Value = t.Id.ToString()
+            }).ToList();
+
+            return EPSs;
+        }
+
+        private async Task<List<SelectListItem>> GetBloodTypeSelectList()
+        {
+            var bloodTypes = new List<SelectListItem>();
+            bloodTypes = (await _bloodTypeService.GetAllAsync()).Select(t => new SelectListItem()
+            {
+                Text = t.Name,
+                Value = t.Id.ToString()
+            }).ToList();
+
+            return bloodTypes;
+        }
+
+        private async Task<List<SelectListItem>> GetContractTypeSelectList()
+        {
+            var contractTypes = new List<SelectListItem>();
+            contractTypes = (await _contractTypeService.GetAllAsync()).Select(t => new SelectListItem()
+            {
+                Text = t.Name,
+                Value = t.Id.ToString()
+            }).ToList();
+
+            return contractTypes;
         }
     }
 }

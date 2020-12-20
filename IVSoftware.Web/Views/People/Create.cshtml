@@ -1,0 +1,195 @@
+﻿@model Person
+@{
+    ViewData["Title"] = "Registrar usuario";
+}
+
+<form method="post" style="font-size:small">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <h5 class="text-primary titulo">Registrar usuario</h5>
+    </div>
+    <hr />
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="IdentificationTypeId" style="color:white"></label>
+                </div>
+                <select asp-for="IdentificationTypeId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.IdentificationTypes)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="IdentificationTypeId" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="IdentificationNumber" style="color:white"></label>
+                </div>
+                <input asp-for="IdentificationNumber" class="form-control" />
+                <span asp-validation-for="IdentificationNumber" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="FirstName" style="color:white"></label>
+                </div>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="MiddleName" style="color:white"></label>
+                </div>
+                <input asp-for="MiddleName" class="form-control" />
+                <span asp-validation-for="MiddleName" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="FirstLastName" style="color:white"></label>
+                </div>
+                <input asp-for="FirstLastName" class="form-control" />
+                <span asp-validation-for="FirstLastName" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SecondLastName" style="color:white"></label>
+                </div>
+                <input asp-for="SecondLastName" class="form-control" />
+                <span asp-validation-for="SecondLastName" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Email" style="color:white"></label>
+                </div>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="PhoneNumber" style="color:white"></label>
+                </div>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="ArlId" style="color:white"></label>
+                </div>
+                <select asp-for="ArlId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.ARLs)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="ArlId" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="EpsId" style="color:white"></label>
+                </div>
+                <select asp-for="EpsId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.EPSs)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="EpsId" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="BloodTypeId" style="color:white"></label>
+                </div>
+                <select asp-for="BloodTypeId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.BloodTypes)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="BloodTypeId" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Address" style="color:white"></label>
+                </div>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="ContractTypeId" style="color:white"></label>
+                </div>
+                <select asp-for="ContractTypeId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.ContractTypes)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="ContractTypeId" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Skills" style="color:white"></label>
+                </div>
+                <textarea asp-for="Skills" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Skills" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
