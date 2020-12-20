@@ -70,19 +70,19 @@ namespace IVSoftware.Web.Controllers
                 var persona = await this.userHelper.GetUserByEmailAsync(model.CorreoElectronico);
                 if (persona == null)
                 {
-                    persona = new Persona
-                    {
-                        TipoDocumento = context.TipoDocumento.FirstOrDefault(t => t.Id.ToString() == model.TipoDocumento),
-                        NumeroIdentificacion = model.NumeroIdentificacion,
-                        PrimerNombre = model.PrimerNombre,
-                        SegundoNombre = model.SegundoNombre,
-                        PrimerApellido = model.PrimerApellido,
-                        SegundoApellido = model.SegundoApellido,
-                        Email = model.CorreoElectronico,
-                        UserName = model.CorreoElectronico,
-                        Sexo = "M",
-                        TipoContratoId = context.TipoContrato.FirstOrDefault(t => t.Id.ToString() == model.TipoContrato).Id,
-                    };
+                    //persona = new Persona
+                    //{
+                    //    TipoDocumento = context.TipoDocumento.FirstOrDefault(t => t.Id.ToString() == model.TipoDocumento),
+                    //    NumeroIdentificacion = model.NumeroIdentificacion,
+                    //    PrimerNombre = model.PrimerNombre,
+                    //    SegundoNombre = model.SegundoNombre,
+                    //    PrimerApellido = model.PrimerApellido,
+                    //    SegundoApellido = model.SegundoApellido,
+                    //    Email = model.CorreoElectronico,
+                    //    UserName = model.CorreoElectronico,
+                    //    Sexo = "M",
+                    //    TipoContratoId = context.TipoContrato.FirstOrDefault(t => t.Id.ToString() == model.TipoContrato).Id,
+                    //};
 
                     var result = await this.userHelper.AdduserAsync(persona, model.Password);
                     if (result != IdentityResult.Success)
@@ -96,7 +96,7 @@ namespace IVSoftware.Web.Controllers
                         var rolSistemaGestion = new RolSistemaGestion
                         {
                             IndicadorAutorizacion = Convert.ToInt32(Request.Form[item.Id.ToString()]),
-                            Persona = persona,
+                            //Persona = persona,
                             TipoRolGestion = item
                         };
 

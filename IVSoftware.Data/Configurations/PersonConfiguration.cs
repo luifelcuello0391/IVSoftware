@@ -58,8 +58,7 @@ namespace IVSoftware.Data.Configurations
 
             builder
                 .Property(x => x.IsColombian)
-                .IsRequired()
-                .HasDefaultValueSql("1");
+                .IsRequired();
 
             builder
                 .Property(x => x.MilitaryCardType)
@@ -173,7 +172,7 @@ namespace IVSoftware.Data.Configurations
 
             builder
                 .Property(x => x.IdentificationTypeId)
-                .IsRequired(false);
+                .IsRequired();
 
             builder
                 .HasOne(g => g.IdentificationType)
@@ -191,7 +190,7 @@ namespace IVSoftware.Data.Configurations
 
             builder
                 .Property(x => x.ContractTypeId)
-                .IsRequired(false);
+                .IsRequired();
 
             builder
                 .HasOne(g => g.ContractType)

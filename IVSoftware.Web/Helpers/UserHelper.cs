@@ -1,5 +1,5 @@
-﻿using IVSoftware.Web.Data;
-using IVSoftware.Web.Models;
+﻿using IVSoftware.Data.Models;
+using IVSoftware.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
@@ -7,21 +7,21 @@ namespace IVSoftware.Web.Helpers
 {
     public class UserHelper : IUserHelper
     {
-        private readonly UserManager<Persona> userManager;
-        private readonly SignInManager<Persona> signInManager;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
 
-        public UserHelper(UserManager<Persona> userManager, SignInManager<Persona> signInManager)
+        public UserHelper(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
 
-        public async Task<IdentityResult> AdduserAsync(Persona persona, string password)
+        public async Task<IdentityResult> AdduserAsync(User persona, string password)
         {
             return await this.userManager.CreateAsync(persona, password);
         }
 
-        public async Task<Persona> GetUserByEmailAsync(string email)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
             return await this.userManager.FindByNameAsync(email);
         }

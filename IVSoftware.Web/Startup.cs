@@ -1,3 +1,6 @@
+using IVSoftware.Data;
+using IVSoftware.Data.Models;
+using IVSoftware.Data.Service;
 using IVSoftware.Web.Data;
 using IVSoftware.Web.Helpers;
 using IVSoftware.Web.Models;
@@ -22,7 +25,7 @@ namespace IVSoftware.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<Persona, IdentityRole>(cfg =>
+            services.AddIdentity<User, IdentityRole>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;
                 cfg.Password.RequireDigit = false;
@@ -32,16 +35,16 @@ namespace IVSoftware.Web
                 cfg.Password.RequireUppercase = false;
                 cfg.Password.RequiredLength = 6;
             })
-            .AddEntityFrameworkStores<IVSoftwareContext>();
+            .AddEntityFrameworkStores<IVSoftwareContextNew>();
 
             services.AddControllersWithViews();
 
-            services.AddDbContext<IVSoftwareContext>(
+            services.AddDbContext<IVSoftwareContextNew>(
                 options => options.UseSqlServer(Configuration["ConnectionString:IVSoftware"]));
 
             services.AddTransient<SeedDb>();
-
             services.AddScoped<IUserHelper, UserHelper>();
+            services.AddScoped(typeof(IEntityService<,>), typeof(EntityService<,>));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

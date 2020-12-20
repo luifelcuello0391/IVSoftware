@@ -1,4 +1,6 @@
-﻿using IVSoftware.Web.Models;
+﻿using IVSoftware.Data;
+using IVSoftware.Data.Models;
+using IVSoftware.Data.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,50 +10,65 @@ namespace IVSoftware.Web.Data
 {
     public class SeedDb
     {
-        private readonly IVSoftwareContext context;
-        private readonly UserManager<Persona> userManager;
+        private readonly IVSoftwareContextNew _context;
+        private readonly UserManager<User> _userManager;
+        private readonly IEntityService<Person, Guid> _personService;
 
-        public SeedDb(IVSoftwareContext context, UserManager<Persona> userManager)
+        public SeedDb(IVSoftwareContextNew context, UserManager<User> userManager, IEntityService<Person, Guid> personService)
         {
-            this.context = context;
-            this.userManager = userManager;
+            _context = context;
+            _userManager = userManager;
+            _personService = personService;
         }
 
         public async Task SeedAsync()
         {
             try
             {
-                context.Database.Migrate();
-                var persona = await this.userManager.FindByEmailAsync("admin@fkconsultores.com");
+                _context.Database.Migrate();
+                var user = await _userManager.FindByEmailAsync("admin@fkconsultores.com");
 
-                if (persona == null)
+                if (user == null)
                 {
-                    persona = new Persona
+                    user = new User
                     {
                         Email = "admin@fkconsultores.com",
-                        UserName = "admin@fkconsultores.com",
-                        PrimerNombre = "FK",
-                        SegundoNombre = string.Empty,
-                        PrimerApellido = "Consultores",
-                        SegundoApellido = string.Empty,
-                        Sexo = "M",
-                        EsColombiano = true,
-                        Direccion = "No hay datos",
-                        Telefono = "Sin datos",
-                        FechaDiligenciamiento = DateTime.Today,
-                        NumeroIdentificacion = "8055",
-                        TipoDocumentoId = 1,
-                        TipoContratoId = 1
+                        UserName = "admin@fkconsultores.com"
                     };
 
-                    var result = await this.userManager.CreateAsync(persona, ClsCipher.Encrypt("adminfk8055", ClsCipher.PasswordKey));
+                    var result = await _userManager.CreateAsync(user, ClsCipher.Encrypt("adminfk8055", ClsCipher.PasswordKey));
                     if (result != IdentityResult.Success)
                     {
                         throw new InvalidOperationException("No se pudo crear el usuario en el Seed.");
                     }
+                    else
+                    {
+                        var userCreated = await _userManager.FindByEmailAsync("admin@fkconsultores.com");
+                        var person = new Person
+                        {
+                            Email = "admin@fkconsultores.com",
+                            FirstName = "FK",
+                            FirstLastName = "Consultores",
+                            GenderId = 1,
+                            IsColombian = true,
+                            Address = "No hay datos",
+                            PhoneNumber = "Sin datos",
+                            CompletionDateTime = DateTime.Today,
+                            IdentificationNumber = "8055",
+                            IdentificationTypeId = 1,
+                            ContractTypeId = 1,
+                            UserId = userCreated.Id
+                        };
+
+                        var personCreated = await _personService.CreateAsync(person);
+                        if (personCreated == null)
+                        {
+                            throw new InvalidOperationException("No se pudo crear la persona en el Seed.");
+                        }
+                    }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }

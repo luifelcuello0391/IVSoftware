@@ -12,9 +12,9 @@ namespace IVSoftware.Data.Service
         where TEntity : BaseModel<TKey>
         where TKey : struct
     {
-        private readonly IVSoftwareContext _context;
+        private readonly IVSoftwareContextNew _context;
 
-        public EntityService(IVSoftwareContext context)
+        public EntityService(IVSoftwareContextNew context)
             : base(context)
         {
             _context = context;

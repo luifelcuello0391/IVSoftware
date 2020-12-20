@@ -10,9 +10,9 @@ namespace IVSoftware.Data.Repository
         where TEntity : BaseModel<TKey>
         where TKey : struct
     {
-        protected IVSoftwareContext RepositoryContext { get; set; }
+        protected IVSoftwareContextNew RepositoryContext { get; set; }
 
-        public EntityRepository(IVSoftwareContext repositoryContext)
+        public EntityRepository(IVSoftwareContextNew repositoryContext)
         {
             RepositoryContext = repositoryContext;
         }

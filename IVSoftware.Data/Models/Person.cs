@@ -16,7 +16,7 @@ namespace IVSoftware.Data.Models
 
         public string SecondLastName { get; set; }
 
-        public int GenderId { get; set; }
+        public int? GenderId { get; set; }
 
         public virtual Gender Gender { get; set; }
 
@@ -40,19 +40,19 @@ namespace IVSoftware.Data.Models
 
         public string Photo { get; set; }
 
-        public int CorrespondenceMunicipalityId { get; set; }
+        public int? CorrespondenceMunicipalityId { get; set; }
 
         public virtual Municipality CorrespondenceMunicipality { get; set; }
 
-        public int BirthMunicipalityId { get; set; }
+        public int? BirthMunicipalityId { get; set; }
 
         public virtual Municipality BirthMunicipality { get; set; }
 
-        public int CorrespondenceCountryId { get; set; }
+        public int? CorrespondenceCountryId { get; set; }
 
         public virtual Country CorrespondenceCountry { get; set; }
 
-        public int BirthCountryId { get; set; }
+        public int? BirthCountryId { get; set; }
 
         public virtual Country BirthCountry { get; set; }
 
