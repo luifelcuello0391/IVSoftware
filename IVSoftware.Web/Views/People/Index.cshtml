@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Person>
+
+@{
+    ViewData["Title"] = "Lista de usuarios";
+}
+
+<h5 class="text-primary titulo">Lista de usuarios</h5>
+
+<table class="table">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdentificationNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdentificationNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td align="right">
+                    <a asp-action="EditarPerfil" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

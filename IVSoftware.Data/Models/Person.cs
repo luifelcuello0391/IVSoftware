@@ -83,7 +83,7 @@ namespace IVSoftware.Data.Models
         public virtual User User { get; set; }
 
         [NotMapped]
-        public string NombreCompleto
+        public string FullName
         {
             get
             {
