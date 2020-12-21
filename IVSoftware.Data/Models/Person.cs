@@ -101,7 +101,7 @@ namespace IVSoftware.Data.Models
         public virtual BloodType BloodType { get; set; }
 
         [DisplayName("Tipo de contrato")]
-        [Required(ErrorMessage = "El {0} es requerido.")]
+        [Required(ErrorMessage = "El {0} es requerido.")]   
         public int ContractTypeId { get; set; }
 
         public virtual ContractType ContractType { get; set; }

@@ -1,0 +1,145 @@
+﻿@model Person
+@{
+    ViewData["Title"] = "Detalle usuario";
+}
+
+@Html.HiddenFor(m => m.Id)
+<div>
+    <h5 class="text-primary titulo">Detalle de usuario</h5>
+</div>
+<hr />
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="IdentificationTypeId" style="color:white"></label>
+            </div>
+            <input asp-for="IdentificationType.Name" class="form-control" readonly="readonly"/>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="IdentificationNumber" style="color:white"></label>
+            </div>
+            <input asp-for="IdentificationNumber" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="FirstName" style="color:white"></label>
+            </div>
+            <input asp-for="FirstName" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="MiddleName" style="color:white"></label>
+            </div>
+            <input asp-for="MiddleName" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="FirstLastName" style="color:white"></label>
+            </div>
+            <input asp-for="FirstLastName" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="SecondLastName" style="color:white"></label>
+            </div>
+            <input asp-for="SecondLastName" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="Email" style="color:white"></label>
+            </div>
+            <input asp-for="Email" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="PhoneNumber" style="color:white"></label>
+            </div>
+            <input asp-for="PhoneNumber" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="ArlId" style="color:white"></label>
+            </div>
+            <input asp-for="Arl.Name" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="EpsId" style="color:white"></label>
+            </div>
+            <input asp-for="Eps.Name" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="BloodTypeId" style="color:white"></label>
+            </div>
+            <input asp-for="BloodType.Name" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="Address" style="color:white"></label>
+            </div>
+            <input asp-for="Address" class="form-control" readonly="readonly"/>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="ContractTypeId" style="color:white"></label>
+            </div>
+            <input asp-for="ContractType.Name" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="Skills" style="color:white"></label>
+            </div>
+            <textarea asp-for="Skills" class="form-control" rows="3" readonly="readonly"></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <a asp-action="Index" class="btn btn-primary"> Atrás </a>
+        </div>
+    </div>
+</div>

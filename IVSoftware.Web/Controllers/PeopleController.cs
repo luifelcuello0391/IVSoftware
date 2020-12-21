@@ -41,9 +41,25 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: PeopleController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(Guid id)
         {
-            return View();
+            var person = await _personService.GetByIdAndIncludeAsync(id, 
+                i => i.IdentificationType, a => a.Arl, 
+                e => e.Eps, bt => bt.BloodType, 
+                ct => ct.ContractType);
+
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.IdentificationTypes = await GetIdentificationTypeSelectList();
+            ViewBag.ARLs = await GetArlSelectList();
+            ViewBag.EPSs = await GetEpsSelectList();
+            ViewBag.BloodTypes = await GetBloodTypeSelectList();
+            ViewBag.ContractTypes = await GetContractTypeSelectList();
+
+            return View(person);
         }
 
         // GET: PeopleController/Create
@@ -71,6 +87,12 @@ namespace IVSoftware.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
+                ViewBag.IdentificationTypes = await GetIdentificationTypeSelectList();
+                ViewBag.ARLs = await GetArlSelectList();
+                ViewBag.EPSs = await GetEpsSelectList();
+                ViewBag.BloodTypes = await GetBloodTypeSelectList();
+                ViewBag.ContractTypes = await GetContractTypeSelectList();
+
                 return View(model);
             }
             catch
@@ -80,19 +102,43 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: PeopleController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            return View();
+            var person = await _personService.GetByIdAsync(id);
+            if(person == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.IdentificationTypes = await GetIdentificationTypeSelectList();
+            ViewBag.ARLs = await GetArlSelectList();
+            ViewBag.EPSs = await GetEpsSelectList();
+            ViewBag.BloodTypes = await GetBloodTypeSelectList();
+            ViewBag.ContractTypes = await GetContractTypeSelectList();
+
+            return View(person);
         }
 
         // POST: PeopleController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(Guid id, Person model)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    await _personService.UpdateAsync(model);
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ViewBag.IdentificationTypes = await GetIdentificationTypeSelectList();
+                ViewBag.ARLs = await GetArlSelectList();
+                ViewBag.EPSs = await GetEpsSelectList();
+                ViewBag.BloodTypes = await GetBloodTypeSelectList();
+                ViewBag.ContractTypes = await GetContractTypeSelectList();
+
+                return View(model);
             }
             catch
             {
