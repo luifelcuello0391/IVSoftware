@@ -147,18 +147,35 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: PeopleController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            return View();
+            var person = await _personService.GetByIdAndIncludeAsync(id,
+                i => i.IdentificationType, a => a.Arl,
+                e => e.Eps, bt => bt.BloodType,
+                ct => ct.ContractType);
+
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            return View(person);
         }
 
         // POST: PeopleController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
             try
             {
+                var person = await _personService.GetByIdAsync(id);
+                if (person == null)
+                {
+                    return NotFound();
+                }
+
+                await _personService.DeleteAsync(person);
                 return RedirectToAction(nameof(Index));
             }
             catch
