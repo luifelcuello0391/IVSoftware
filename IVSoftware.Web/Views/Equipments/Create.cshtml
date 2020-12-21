@@ -269,9 +269,13 @@
 @section Scripts {
     <script>
         function getProvider() {
+            alert("invocado");
+
             var id = arguments[0];
             var identification = arguments[1];
             var url = "@Url.Action("GetProviderName")";
+
+            alert("id: " + id + " >> Identification: " + identification);
 
             document.getElementById("txt_provider_id").value = id;
 
