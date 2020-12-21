@@ -33,6 +33,7 @@ namespace IVSoftware.Models
         [DisplayName("Nombre del cliente")]
         public string ClientName { get { return Client != null && Client.Name != null && !string.IsNullOrEmpty(Client.Name.Replace(" ", string.Empty)) ? Client.Name : "No asignado"; } }
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        [DisplayName("Cliente que cotiza")]
         public string RequestedClientName { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
