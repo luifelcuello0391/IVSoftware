@@ -417,6 +417,8 @@ namespace IVSoftware.Web.Models
                 .HasForeignKey(um => um.SectionsId)
                 .OnDelete(DeleteBehavior.ClientCascade);
 
+
+
             base.OnModelCreating(modelBuilder);
         }
 
