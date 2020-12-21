@@ -102,9 +102,11 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: PeopleController/Edit/5
-        public async Task<ActionResult> Edit(Guid id)
+        public async Task<ActionResult> Edit(Guid? id, string email)
         {
-            var person = await _personService.GetByIdAsync(id);
+            var person = id.HasValue ? await _personService.GetByIdAsync(id.Value) 
+                : (await _personService.FindByConditionAsync(p => p.Email == email)).FirstOrDefault();
+
             if(person == null)
             {
                 return NotFound();

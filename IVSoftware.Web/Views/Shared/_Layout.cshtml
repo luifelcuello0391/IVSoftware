@@ -163,8 +163,8 @@
                                     Gestión humana
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="Persona" asp-action="Index">Lista de usuarios</a>
-                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="Persona" asp-action="Registrar">Registrar usuario</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="people" asp-action="Index">Lista de usuarios</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="people" asp-action="Create">Registrar usuario</a>
                                     <a class="dropdown-item btn-sm" asp-area="" asp-controller="Evaluacion" asp-action="Index">Evaluaciones</a>
                                 </div>
                             </li>
@@ -194,7 +194,7 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">@this.User.Identity.Name</a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item btn-sm" asp-area="" asp-controller="Persona" asp-action="EditarPerfil" asp-route-userName="@this.User.Identity.Name">Editar hoja de vida</a>
+                                        <a class="dropdown-item btn-sm" asp-area="" asp-controller="people" asp-action="Edit" asp-route-email="@this.User.Identity.Name">Editar hoja de vida</a>
                                         <a class="dropdown-item btn-sm" asp-area="" asp-controller="AplicacionEvaluacion" asp-action="Index" asp-route-userName="@this.User.Identity.Name">Mis evaluaciones</a>
                                         <a class="dropdown-item btn-sm" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar sesión</a>
                                     </div>
