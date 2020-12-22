@@ -1,6 +1,8 @@
 ﻿using IVSoftware.Data.Models;
+using IVSoftware.Web.Data;
 using IVSoftware.Web.Service;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -19,13 +21,15 @@ namespace IVSoftware.Web.Controllers
         private readonly IEntityService<Eps, int> _epsService;
         private readonly IEntityService<BloodType, int> _bloodTypeService;
         private readonly IEntityService<ContractType, int> _contractTypeService;
+        private readonly UserManager<User> _userManager;
 
         public PeopleController(IEntityService<Person, Guid> personService,
             IEntityService<IdentificationType, int> identificationTypeService,
             IEntityService<Arl, int> arlService,
             IEntityService<Eps, int> epsService,
             IEntityService<BloodType, int> bloodTypeService,
-            IEntityService<ContractType, int> contractTypeService)
+            IEntityService<ContractType, int> contractTypeService,
+            UserManager<User> userManager)
         {
             _personService = personService;
             _identificationTypeService = identificationTypeService;
@@ -33,6 +37,7 @@ namespace IVSoftware.Web.Controllers
             _epsService = epsService;
             _bloodTypeService = bloodTypeService;
             _contractTypeService = contractTypeService;
+            _userManager = userManager;
         }
 
         // GET: PeopleController
@@ -102,11 +107,64 @@ namespace IVSoftware.Web.Controllers
             }
         }
 
+        
+        public async Task<ActionResult> CreateUser(Guid id)
+        {
+            var person = await _personService.GetByIdAsync(id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            CreateUserVM createUserVM = new CreateUserVM
+            {
+                Id = person.Id,
+                Email = person.Email
+            };
+
+            return PartialView("_ModalCreateUser", createUserVM);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateUser(CreateUserVM model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    User user = new User
+                    {
+                        Email = model.Email,
+                        UserName = model.Email
+                    };
+
+                    var result = await _userManager.CreateAsync(user, ClsCipher.Encrypt(model.Password, ClsCipher.PasswordKey));
+                    if (result == IdentityResult.Success)
+                    {
+                        var userCreated = await _userManager.FindByEmailAsync(model.Email);
+                        var person = await _personService.GetByIdAsync(model.Id);
+                        if (person != null)
+                        {
+                            person.UserId = userCreated.Id;
+                            await _personService.UpdateAsync(person);
+                        }
+                        return RedirectToAction(nameof(Edit), new { id = model.Id });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return PartialView("_ModalCreateUser", model);
+            }
+
+            return PartialView("_ModalCreateUser", model);
+        }
+
         // GET: PeopleController/Edit/5
         public async Task<ActionResult> Edit(Guid? id, string email)
         {
-            var person = id.HasValue ? await _personService.GetByIdAsync(id.Value)
-                : (await _personService.FindByConditionAsync(p => p.Email == email)).FirstOrDefault();
+            var person = id.HasValue ? await _personService.GetByIdAndIncludeAsync(id.Value, p => p.User)
+                : (await _personService.FindByConditionAndIncludeAsync(p => p.Email == email, p => p.User)).FirstOrDefault();
 
             if (person == null)
             {
@@ -118,6 +176,7 @@ namespace IVSoftware.Web.Controllers
             ViewBag.EPSs = await GetEpsSelectList();
             ViewBag.BloodTypes = await GetBloodTypeSelectList();
             ViewBag.ContractTypes = await GetContractTypeSelectList();
+            ViewBag.HasUser = (person.User != null);
 
             return View(person);
         }

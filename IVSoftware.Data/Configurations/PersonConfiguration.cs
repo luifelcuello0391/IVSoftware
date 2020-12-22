@@ -97,7 +97,7 @@ namespace IVSoftware.Data.Configurations
 
             builder
                 .Property(x => x.Email)
-                .IsRequired(false)
+                .IsRequired()
                 .IsUnicode()
                 .HasMaxLength(250);
 

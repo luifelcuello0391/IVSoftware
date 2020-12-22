@@ -53,6 +53,7 @@ namespace IVSoftware.Data.Models
         public string PhoneNumber { get; set; }
 
         [DisplayName("Correo electrónico")]
+        [Required(ErrorMessage = "El {0} es requerido.")]
         public string Email { get; set; }
 
         [DisplayName("Fecha de diligenciamiento")]
