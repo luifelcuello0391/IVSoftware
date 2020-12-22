@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IVSoftware.Data.Migrations
@@ -485,6 +487,9 @@ namespace IVSoftware.Data.Migrations
                 column: "UserId",
                 unique: true,
                 filter: "[UserId] IS NOT NULL");
+
+            var sqlFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"InitialScripts\InitialScriptData.sql");
+            migrationBuilder.Sql(File.ReadAllText(sqlFile, Encoding.GetEncoding(28591)));
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
