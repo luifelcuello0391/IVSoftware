@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IVSoftware.Web.Models.Eps>
+﻿@model IEnumerable<Eps>
 
 @{
     ViewData["Title"] = "EPS";
@@ -9,7 +9,7 @@
     <thead style="background-color:yellowgreen; color:white">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th></th>
         </tr>
@@ -18,7 +18,7 @@
     @foreach (var item in Model) {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td align="right" style="white-space:nowrap">
                     <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;

@@ -145,7 +145,7 @@ namespace IVSoftware.Web.Controllers
             var itemsARL = new List<SelectListItem>();
             itemsARL = context.Arl.Select(t => new SelectListItem()
             {
-                Text = t.Nombre,
+                Text = t.Name,
                 Value = t.Id.ToString()
             }).ToList();
             ViewBag.ARLs = itemsARL;
@@ -153,7 +153,7 @@ namespace IVSoftware.Web.Controllers
             var itemsEPS = new List<SelectListItem>();
             itemsEPS = context.Eps.Select(t => new SelectListItem()
             {
-                Text = t.Nombre,
+                Text = t.Name,
                 Value = t.Id.ToString()
             }).ToList();
             ViewBag.EPSs = itemsEPS;

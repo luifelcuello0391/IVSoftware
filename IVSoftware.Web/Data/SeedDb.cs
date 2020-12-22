@@ -1,6 +1,7 @@
 ﻿using IVSoftware.Data;
 using IVSoftware.Data.Models;
-using IVSoftware.Data.Service;
+using IVSoftware.Web.Service;
+using IVSoftware.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,11 +11,11 @@ namespace IVSoftware.Web.Data
 {
     public class SeedDb
     {
-        private readonly IVSoftwareContextNew _context;
+        private readonly IVSoftwareContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IEntityService<Person, Guid> _personService;
 
-        public SeedDb(IVSoftwareContextNew context, UserManager<User> userManager, IEntityService<Person, Guid> personService)
+        public SeedDb(IVSoftwareContext context, UserManager<User> userManager, IEntityService<Person, Guid> personService)
         {
             _context = context;
             _userManager = userManager;

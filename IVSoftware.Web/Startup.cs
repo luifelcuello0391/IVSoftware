@@ -1,9 +1,8 @@
-using IVSoftware.Data;
 using IVSoftware.Data.Models;
-using IVSoftware.Data.Service;
 using IVSoftware.Web.Data;
 using IVSoftware.Web.Helpers;
 using IVSoftware.Web.Models;
+using IVSoftware.Web.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -35,11 +34,11 @@ namespace IVSoftware.Web
                 cfg.Password.RequireUppercase = false;
                 cfg.Password.RequiredLength = 6;
             })
-            .AddEntityFrameworkStores<IVSoftwareContextNew>();
+            .AddEntityFrameworkStores<IVSoftwareContext>();
 
             services.AddControllersWithViews();
 
-            services.AddDbContext<IVSoftwareContextNew>(
+            services.AddDbContext<IVSoftwareContext>(
                 options => options.UseSqlServer(Configuration["ConnectionString:IVSoftware"]));
 
             services.AddTransient<SeedDb>();

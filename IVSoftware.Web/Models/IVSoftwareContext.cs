@@ -1,14 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using IVSoftware.Data.Configurations;
+using IVSoftware.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using IVSoftware.Models;
-using IVSoftware.Web.Models;
+using System.Linq;
 
 namespace IVSoftware.Web.Models
 {
-    public partial class IVSoftwareContext : IdentityDbContext<Persona>
+    public partial class IVSoftwareContext : IdentityDbContext<User>
     {
         public IVSoftwareContext()
         {
@@ -17,7 +15,6 @@ namespace IVSoftware.Web.Models
         public IVSoftwareContext(DbContextOptions<IVSoftwareContext> options)
             : base(options)
         {
-
         }
 
         public virtual DbSet<AplicacionEvaluacion> AplicacionEvaluacion { get; set; }
@@ -47,7 +44,7 @@ namespace IVSoftware.Web.Models
         public virtual DbSet<TipoDocumento> TipoDocumento { get; set; }
         public virtual DbSet<TipoEmpresa> TipoEmpresa { get; set; }
         public virtual DbSet<TipoIdioma> TipoIdioma { get; set; }
-        public virtual DbSet<TipoInduccion> TipoInduccion{ get; set; }
+        public virtual DbSet<TipoInduccion> TipoInduccion { get; set; }
         public virtual DbSet<TipoRolGestion> TipoRolGestion { get; set; }
         public virtual DbSet<TipoSangre> TipoSangre { get; set; }
 
@@ -76,13 +73,14 @@ namespace IVSoftware.Web.Models
 
             // Arl **************************************************************************************************************
 
-            modelBuilder.Entity<Arl>(entity =>
-            {
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
+            //modelBuilder.Entity<Arl>(entity =>
+            //{
+            //    entity.Property(e => e.Nombre)
+            //        .IsRequired()
+            //        .HasMaxLength(100)
+            //        .IsUnicode(false);
+            //});
+            new ArlConfiguration("Arl", "Id").Map(modelBuilder);
 
             // ConocimientoTecnico **************************************************************************************************************
 
@@ -109,19 +107,19 @@ namespace IVSoftware.Web.Models
 
             // Departamento **************************************************************************************************************
 
-            modelBuilder.Entity<Departamento>(entity =>
-            {
-                entity.Property(e => e.Codigo)
-                    .IsRequired()
-                    .HasMaxLength(2)
-                    .IsUnicode(false);
+            //modelBuilder.Entity<Departamento>(entity =>
+            //{
+            //    entity.Property(e => e.Codigo)
+            //        .IsRequired()
+            //        .HasMaxLength(2)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
-
+            //    entity.Property(e => e.Nombre)
+            //        .IsRequired()
+            //        .HasMaxLength(100)
+            //        .IsUnicode(false);
+            //});
+            new DepartmentConfiguration("Department", "Id").Map(modelBuilder);
 
             // EducacionBasica **************************************************************************************************************
 
@@ -169,13 +167,14 @@ namespace IVSoftware.Web.Models
 
             // Eps **************************************************************************************************************
 
-            modelBuilder.Entity<Eps>(entity =>
-            {
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
+            //modelBuilder.Entity<Eps>(entity =>
+            //{
+            //    entity.Property(e => e.Nombre)
+            //        .IsRequired()
+            //        .HasMaxLength(100)
+            //        .IsUnicode(false);
+            //});
+            new EpsConfiguration("Eps", "Id").Map(modelBuilder);
 
             // ExperienciaLaboral **************************************************************************************************************
 
@@ -258,18 +257,19 @@ namespace IVSoftware.Web.Models
 
             // Municipio **************************************************************************************************************
 
-            modelBuilder.Entity<Municipio>(entity =>
-            {
-                entity.Property(e => e.Codigo)
-                    .IsRequired()
-                    .HasMaxLength(5)
-                    .IsUnicode(false);
+            //modelBuilder.Entity<Municipio>(entity =>
+            //{
+            //    entity.Property(e => e.Codigo)
+            //        .IsRequired()
+            //        .HasMaxLength(5)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-            });
+            //    entity.Property(e => e.Nombre)
+            //        .IsRequired()
+            //        .HasMaxLength(30)
+            //        .IsUnicode(false);
+            //});
+            new MunicipalityConfiguration("Municipality", "Id").Map(modelBuilder);
 
             // OtroConocimiento **************************************************************************************************************
 
@@ -286,73 +286,75 @@ namespace IVSoftware.Web.Models
 
             // Pais **************************************************************************************************************
 
-            modelBuilder.Entity<Pais>(entity =>
-            {
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
+            //modelBuilder.Entity<Pais>(entity =>
+            //{
+            //    entity.Property(e => e.Nombre)
+            //        .IsRequired()
+            //        .HasMaxLength(50)
+            //        .IsUnicode(false);
+            //});
+            new CountryConfiguration("Country", "Id").Map(modelBuilder);
 
             // Persona **************************************************************************************************************
 
-            modelBuilder.Entity<Persona>(entity =>
-            {
-                entity.Property(e => e.Direccion)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+            //modelBuilder.Entity<Persona>(entity =>
+            //{
+            //    entity.Property(e => e.Direccion)
+            //        .HasMaxLength(50)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.DistritoMilitar)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.DistritoMilitar)
+            //        .HasMaxLength(10)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.FechaDiligenciamiento).HasColumnType("datetime");
+            //    entity.Property(e => e.FechaDiligenciamiento).HasColumnType("datetime");
 
-                entity.Property(e => e.FechaNacimiento).HasColumnType("datetime");
+            //    entity.Property(e => e.FechaNacimiento).HasColumnType("datetime");
 
-                entity.Property(e => e.Foto)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.Foto)
+            //        .HasMaxLength(255)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.NumeroIdentificacion)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.NumeroIdentificacion)
+            //        .IsRequired()
+            //        .HasMaxLength(20)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.NumeroLibretaMilitar)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.NumeroLibretaMilitar)
+            //        .HasMaxLength(20)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.PrimerApellido)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.PrimerApellido)
+            //        .IsRequired()
+            //        .HasMaxLength(30)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.PrimerNombre)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.PrimerNombre)
+            //        .IsRequired()
+            //        .HasMaxLength(30)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.SegundoApellido)
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.SegundoApellido)
+            //        .HasMaxLength(30)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.SegundoNombre)
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.SegundoNombre)
+            //        .HasMaxLength(30)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.Sexo)
-                    .HasMaxLength(1)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.Sexo)
+            //        .HasMaxLength(1)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.Telefono)
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
+            //    entity.Property(e => e.Telefono)
+            //        .HasMaxLength(30)
+            //        .IsUnicode(false);
 
-                entity.Property(e => e.TipoLibretaMilitar)
-                    .HasMaxLength(1)
-                    .IsUnicode(false);
-            });
+            //    entity.Property(e => e.TipoLibretaMilitar)
+            //        .HasMaxLength(1)
+            //        .IsUnicode(false);
+            //});
+            new PersonConfiguration("Person", "Id").Map(modelBuilder);
 
             // PersonaInduccion **************************************************************************************************************
 
@@ -364,16 +366,17 @@ namespace IVSoftware.Web.Models
 
             // TipoDocumento **************************************************************************************************************
 
-            modelBuilder.Entity<TipoDocumento>(entity =>
-            {
-                entity.Property(e => e.Codigo)
-                    .IsRequired()
-                    .HasMaxLength(3);
+            //modelBuilder.Entity<TipoDocumento>(entity =>
+            //{
+            //    entity.Property(e => e.Codigo)
+            //        .IsRequired()
+            //        .HasMaxLength(3);
 
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(255);
-            });
+            //    entity.Property(e => e.Nombre)
+            //        .IsRequired()
+            //        .HasMaxLength(255);
+            //});
+            new IdentificationTypeConfiguration("IdentificationType", "Id").Map(modelBuilder);
 
             // TipoIdioma **************************************************************************************************************
 
@@ -397,14 +400,14 @@ namespace IVSoftware.Web.Models
 
             // TipoSangre **************************************************************************************************************
 
-            modelBuilder.Entity<TipoSangre>(entity =>
-            {
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(3)
-                    .IsUnicode(false);
-            });
-
+            //modelBuilder.Entity<TipoSangre>(entity =>
+            //{
+            //    entity.Property(e => e.Nombre)
+            //        .IsRequired()
+            //        .HasMaxLength(3)
+            //        .IsUnicode(false);
+            //});
+            new BloodTypeConfiguration("BloodType", "Id").Map(modelBuilder);
 
             // CheckListQuestionSection Relationship ***********************************************************************************
             modelBuilder.Entity<CheckListQuestionCheckListSection>()
@@ -416,6 +419,12 @@ namespace IVSoftware.Web.Models
                 .HasOne(um => um.CheckListSection).WithMany(g => g.QuestionSections)
                 .HasForeignKey(um => um.SectionsId)
                 .OnDelete(DeleteBehavior.ClientCascade);
+
+            // Gender
+            new GenderConfiguration("Gender", "Id").Map(modelBuilder);
+
+            // Contract Type
+            new ContractTypeConfiguration("ContractType", "Id").Map(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -467,6 +476,5 @@ namespace IVSoftware.Web.Models
         public DbSet<IVSoftware.Web.Models.IncentiveModel> IncentiveModel { get; set; }
 
         public DbSet<IVSoftware.Web.Models.ClientContact> ClientContact { get; set; }
-
     }
 }
