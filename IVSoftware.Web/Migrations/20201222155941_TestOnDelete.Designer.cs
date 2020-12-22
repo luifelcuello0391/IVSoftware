@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20201222155941_TestOnDelete")]
+    partial class TestOnDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2562,7 +2564,7 @@ namespace IVSoftware.Web.Migrations
                     b.HasOne("IVSoftware.Data.Models.Arl", "Arl")
                         .WithMany("People")
                         .HasForeignKey("ArlId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("IVSoftware.Data.Models.Country", "BirthCountry")
                         .WithMany("PeopleBirth")
@@ -2575,7 +2577,7 @@ namespace IVSoftware.Web.Migrations
                     b.HasOne("IVSoftware.Data.Models.BloodType", "BloodType")
                         .WithMany("People")
                         .HasForeignKey("BloodTypeId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("IVSoftware.Data.Models.ContractType", "ContractType")
                         .WithMany("People")
@@ -2594,7 +2596,7 @@ namespace IVSoftware.Web.Migrations
                     b.HasOne("IVSoftware.Data.Models.Eps", "Eps")
                         .WithMany("People")
                         .HasForeignKey("EpsId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("IVSoftware.Data.Models.Gender", "Gender")
                         .WithMany("Persons")

@@ -54,7 +54,8 @@ namespace IVSoftware.Data.Configurations
             builder
                 .HasOne(g => g.Gender)
                 .WithMany(p => p.Persons)
-                .HasForeignKey(g => g.GenderId);
+                .HasForeignKey(g => g.GenderId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder
                 .Property(x => x.IsColombian)
@@ -159,7 +160,8 @@ namespace IVSoftware.Data.Configurations
             builder
                 .HasOne(g => g.Arl)
                 .WithMany(p => p.People)
-                .HasForeignKey(g => g.ArlId);
+                .HasForeignKey(g => g.ArlId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder
                 .Property(x => x.EpsId)
@@ -168,7 +170,8 @@ namespace IVSoftware.Data.Configurations
             builder
                 .HasOne(g => g.Eps)
                 .WithMany(p => p.People)
-                .HasForeignKey(g => g.EpsId);
+                .HasForeignKey(g => g.EpsId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder
                 .Property(x => x.IdentificationTypeId)
@@ -186,7 +189,8 @@ namespace IVSoftware.Data.Configurations
             builder
                 .HasOne(g => g.BloodType)
                 .WithMany(p => p.People)
-                .HasForeignKey(g => g.BloodTypeId);
+                .HasForeignKey(g => g.BloodTypeId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder
                 .Property(x => x.ContractTypeId)
