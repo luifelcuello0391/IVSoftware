@@ -1452,3 +1452,316 @@ INSERT INTO Gender VALUES ('M')
 INSERT INTO Gender VALUES ('F')
 GO
 
+Insert Into TipoRolGestion Values ('Analista área fisicoquímica');
+Insert Into TipoRolGestion Values ('Analista área Microbiológica');
+Insert Into TipoRolGestion Values ('Analista área Instrumental');
+Insert Into TipoRolGestion Values ('Analista área Suelos');
+Insert Into TipoRolGestion Values ('Personal de Trabajo de Campo - Muestreo Agua');
+Insert Into TipoRolGestion Values ('Personal de Trabajo de Campo - Medición Ruido');
+Insert Into TipoRolGestion Values ('Coordinador Laboratorio');
+Insert Into TipoRolGestion Values ('Coordinador Grupo Recurso Aire');
+Insert Into TipoRolGestion Values ('Gestor de Calidad');
+Insert Into TipoRolGestion Values ('Gestor de Ofertas y Contratos');
+Insert Into TipoRolGestion Values ('Gestor de Manipulación Ítems de Ensayo');
+Insert Into TipoRolGestion Values ('Gestor de Trabajo de Campo y Muestreo');
+Insert Into TipoRolGestion Values ('Gestor de Aseguramiento de la Validez de los Resultados');
+Insert Into TipoRolGestion Values ('Auxiliar Laboratorio');
+Insert Into TipoRolGestion Values ('Responsable Facturación');
+GO
+
+Insert Into TipoIdioma Values ('ESPAÑOL');
+Insert Into TipoIdioma Values ('INGLÉS');
+Insert Into TipoIdioma Values ('FRANCÉS');
+Insert Into TipoIdioma Values ('CHINO');
+Insert Into TipoIdioma Values ('ALEMÁN');
+Insert Into TipoIdioma Values ('JAPONÉS');
+Insert Into TipoIdioma Values ('PORTUGUÉS');
+Insert Into TipoIdioma Values ('RUSO');
+Insert Into TipoIdioma Values ('ITALIANO');
+Insert Into TipoIdioma Values ('ARABE');
+Insert Into TipoIdioma Values ('HINDÚ');
+GO
+
+INSERT INTO TipoEmpresa VALUES ('PÚBLICA');
+INSERT INTO TipoEmpresa VALUES ('PRIVADA');
+GO
+
+INSERT INTO dbo.ModalidadAcademica (Nombre) VALUES ('TÉCNICA')
+INSERT INTO dbo.ModalidadAcademica (Nombre) VALUES ('TECNOLÓGICA')
+INSERT INTO dbo.ModalidadAcademica (Nombre) VALUES ('TECNOLÓGICA ESPECIALIZADA')
+INSERT INTO dbo.ModalidadAcademica (Nombre) VALUES ('UNIVERSITARIA')
+INSERT INTO dbo.ModalidadAcademica (Nombre) VALUES ('ESPECIALIZACIÓN')
+INSERT INTO dbo.ModalidadAcademica (Nombre) VALUES ('MAESTRÍA O MAGISTER')
+INSERT INTO dbo.ModalidadAcademica (Nombre) VALUES ('DOCTORADO O PHD')
+GO
+
+Insert Into TipoCertificacion Values ('Aprobado');
+Insert Into TipoCertificacion Values ('Asistencia');
+Insert Into TipoCertificacion Values ('No aplica');
+GO
+
+INSERT INTO dbo.QuotationStatus ([Name], [RegisterStatus], [CreationDatetime], [ModificationDatetime]) 
+VALUES ('Registrada', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), 
+('Generada', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), 
+('Enviada', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), 
+('Cancelada', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+GO
+
+/* To prevent any potential data loss issues, you should review this script in detail before running it outside the context of the database designer.*/
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ServiceModel
+	DROP CONSTRAINT FK_ServiceModel_MatrixModel_MatrixGroupId
+GO
+ALTER TABLE dbo.MatrixModel SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ServiceModel
+	DROP CONSTRAINT FK_ServiceModel_TypeOfService_ServiceTypeId
+GO
+ALTER TABLE dbo.TypeOfService SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ServiceModel
+	DROP CONSTRAINT FK_ServiceModel_WorkingRangeModel_WorkingRangeId
+GO
+ALTER TABLE dbo.WorkingRangeModel SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ServiceModel
+	DROP CONSTRAINT FK_ServiceModel_ReferenceMethodModel_ReferenceMethodId
+GO
+ALTER TABLE dbo.ReferenceMethodModel SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ServiceGroupServicesRelation
+	DROP CONSTRAINT FK_ServiceGroupServicesRelation_ServiceModel_ServiceId
+GO
+ALTER TABLE dbo.ServiceGroupModel
+	DROP CONSTRAINT FK_ServiceGroupModel_ServiceModel_ServiceModelId
+GO
+ALTER TABLE dbo.ServiceModel ADD CONSTRAINT
+	FK_ServiceModel_ReferenceMethodModel_ReferenceMethodId FOREIGN KEY
+	(
+	ReferenceMethodId
+	) REFERENCES dbo.ReferenceMethodModel
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  SET NULL 
+	
+GO
+ALTER TABLE dbo.ServiceModel ADD CONSTRAINT
+	FK_ServiceModel_WorkingRangeModel_WorkingRangeId FOREIGN KEY
+	(
+	WorkingRangeId
+	) REFERENCES dbo.WorkingRangeModel
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  SET NULL 
+	
+GO
+ALTER TABLE dbo.ServiceModel ADD CONSTRAINT
+	FK_ServiceModel_TypeOfService_ServiceTypeId FOREIGN KEY
+	(
+	ServiceTypeId
+	) REFERENCES dbo.TypeOfService
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  SET NULL 
+	
+GO
+ALTER TABLE dbo.ServiceModel ADD CONSTRAINT
+	FK_ServiceModel_MatrixModel_MatrixGroupId FOREIGN KEY
+	(
+	MatrixGroupId
+	) REFERENCES dbo.MatrixModel
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  SET NULL 
+	
+GO
+ALTER TABLE dbo.ServiceModel SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ServiceGroupModel ADD CONSTRAINT
+	FK_ServiceGroupModel_ServiceModel_ServiceModelId FOREIGN KEY
+	(
+	ServiceModelId
+	) REFERENCES dbo.ServiceModel
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  SET NULL 
+	
+GO
+ALTER TABLE dbo.ServiceGroupModel SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ServiceGroupServicesRelation ADD CONSTRAINT
+	FK_ServiceGroupServicesRelation_ServiceModel_ServiceId FOREIGN KEY
+	(
+	ServiceId
+	) REFERENCES dbo.ServiceModel
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  SET NULL 
+	
+GO
+ALTER TABLE dbo.ServiceGroupServicesRelation SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+COMMIT
+
+
+
+/* To prevent any potential data loss issues, you should review this script in detail before running it outside the context of the database designer.*/
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ClientTypeIncentiveRelation
+	DROP CONSTRAINT FK_ClientTypeIncentiveRelation_IncentiveModel_IncentiveId
+GO
+ALTER TABLE dbo.IncentiveModel SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ClientTypeIncentiveRelation
+	DROP CONSTRAINT FK_ClientTypeIncentiveRelation_ClientTypeModel_ClientTypeId
+GO
+ALTER TABLE dbo.ClientTypeModel SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ClientTypeIncentiveRelation ADD CONSTRAINT
+	FK_ClientTypeIncentiveRelation_ClientTypeModel_ClientTypeId FOREIGN KEY
+	(
+	ClientTypeId
+	) REFERENCES dbo.ClientTypeModel
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.ClientTypeIncentiveRelation ADD CONSTRAINT
+	FK_ClientTypeIncentiveRelation_IncentiveModel_IncentiveId FOREIGN KEY
+	(
+	IncentiveId
+	) REFERENCES dbo.IncentiveModel
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.ClientTypeIncentiveRelation SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+
+/* To prevent any potential data loss issues, you should review this script in detail before running it outside the context of the database designer.*/
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ClientModel
+	DROP CONSTRAINT FK_ClientModel_ClientTypeModel_ClientTypeId
+GO
+ALTER TABLE dbo.ClientTypeModel SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ClientModel ADD CONSTRAINT
+	FK_ClientModel_ClientTypeModel_ClientTypeId FOREIGN KEY
+	(
+	ClientTypeId
+	) REFERENCES dbo.ClientTypeModel
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  SET NULL 
+	
+GO
+ALTER TABLE dbo.ClientModel SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+
+/* To prevent any potential data loss issues, you should review this script in detail before running it outside the context of the database designer.*/
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ClientContact
+	DROP CONSTRAINT FK_ClientContact_ClientModel_ClientModelId
+GO
+ALTER TABLE dbo.ClientModel SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ClientContact ADD CONSTRAINT
+	FK_ClientContact_ClientModel_ClientModelId FOREIGN KEY
+	(
+	ClientModelId
+	) REFERENCES dbo.ClientModel
+	(
+	Id
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.ClientContact SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
