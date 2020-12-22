@@ -16,12 +16,14 @@ namespace IVSoftware.Models
         public string Description { get; set; }
         [DisplayName("Valor unitario")]
         public float UnitValue { get; set; }
+        public int? ServiceTypeId { get; set; }
         [DisplayName("Tipo de servicio")]
         public virtual TypeOfService ServiceType { get; set; }
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public string ServiceTypeName { get { return ServiceType != null && ServiceType.Name != null && !string.IsNullOrEmpty(ServiceType.Name.Replace(" ", string.Empty)) ? ServiceType.Name : "No definido"; } }
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public int TypeOfServiceId { get; set; }
+        public int? MatrixGroupId { get; set; }
         [DisplayName("Matriz")]
         public virtual MatrixModel MatrixGroup { get; set; }
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
@@ -30,12 +32,14 @@ namespace IVSoftware.Models
         public int SelectedMatrixGroupId { get; set; }
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public int SelectedVariableId { get; set; }
+        public int? ReferenceMethodId { get; set; }
         [DisplayName("Método de referencia")]
         public virtual ReferenceMethodModel ReferenceMethod { get; set; }
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public string ReferenceMethodName { get { return ReferenceMethod != null && ReferenceMethod.Name != null && !string.IsNullOrEmpty(ReferenceMethod.Name.Replace(" ", string.Empty)) ? ReferenceMethod.Name : "No definido"; }}
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public int SelectedReferenceMethodId { get; set; }
+        public int? WorkingRangeId { get; set; }
         [DisplayName("Rango de trabajo")]
         public virtual WorkingRangeModel WorkingRange { get; set; }
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]

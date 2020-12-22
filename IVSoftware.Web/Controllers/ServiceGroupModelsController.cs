@@ -278,6 +278,22 @@ namespace IVSoftware.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var serviceGroupModel = await _context.ServiceGroupModel.FindAsync(id);
+
+            try
+            {
+                if (serviceGroupModel != null)
+                {
+                    foreach (var m in _context.ServiceGroupServicesRelation.Where(r => r.ServiceGroupId == serviceGroupModel.Id))
+                    {
+                        _context.ServiceGroupServicesRelation.Remove(m);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on ServiceGroupModelController.DeleteConfirmed >> " + ex.ToString());
+            }
+
             _context.ServiceGroupModel.Remove(serviceGroupModel);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

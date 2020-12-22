@@ -201,6 +201,11 @@
 
     $(document).ready(function () {
         $("#btnShowModal").click(function () {
+            var inputs = document.querySelectorAll('.uncheck_default');
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].checked = false;
+            }
+
             $("#loginModal").modal('show');
         });
 
@@ -209,6 +214,16 @@
         });
 
         $("#btnSelectModal").click(function () {
+
+            var inputs = document.querySelectorAll('.uncheck_default');
+            var ids = "";
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].checked) {
+                    ids = ids + ";" + inputs[i].value;
+                }
+            }
+
+            assignQuestions(ids, $("#txt_register_id").val());
 
             $("#loginModal").modal('hide');
         });

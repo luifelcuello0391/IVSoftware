@@ -476,5 +476,8 @@ namespace IVSoftware.Web.Models
         public DbSet<IVSoftware.Web.Models.IncentiveModel> IncentiveModel { get; set; }
 
         public DbSet<IVSoftware.Web.Models.ClientContact> ClientContact { get; set; }
+
+        public DbSet<IVSoftware.Web.Models.ServiceGroupServicesRelation> ServiceGroupServicesRelation { get; set; }
+
     }
 }

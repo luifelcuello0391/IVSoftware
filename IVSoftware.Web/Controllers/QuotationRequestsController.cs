@@ -50,9 +50,9 @@ namespace IVSoftware.Web.Controllers
             return View();
         }
 
-        public async Task<string> GetClientInfo (string id)
+        public async Task<string> GetClientInfo(string id)
         {
-            if(id != null && !string.IsNullOrEmpty(id.Replace(" ", string.Empty)))
+            if (id != null && !string.IsNullOrEmpty(id.Replace(" ", string.Empty)))
             {
                 ClientModel client = null;
                 try
@@ -80,7 +80,7 @@ namespace IVSoftware.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                quotationRequest.Client = await _context.ClientModel.FirstOrDefaultAsync<ClientModel>(x=> x.Identification != null && x.Identification.Equals(quotationRequest.RequestedClientId));
+                quotationRequest.Client = await _context.ClientModel.FirstOrDefaultAsync<ClientModel>(x => x.Identification != null && x.Identification.Equals(quotationRequest.RequestedClientId));
                 quotationRequest.Status = await _context.QuotationStatus.FirstOrDefaultAsync<QuotationStatus>(x => x.Id == 1);
 
                 _context.Add(quotationRequest);
@@ -89,6 +89,7 @@ namespace IVSoftware.Web.Controllers
             }
             return View(quotationRequest);
         }
+
 
         public async Task<IActionResult> AddService (int serviceId, int quotationId, int isForManagement)
         {
