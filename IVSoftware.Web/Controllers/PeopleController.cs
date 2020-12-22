@@ -1,6 +1,6 @@
 ﻿using IVSoftware.Data.Models;
 using IVSoftware.Web.Service;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace IVSoftware.Web.Controllers
 {
+    [Authorize]
     public class PeopleController : Controller
     {
         private readonly IEntityService<Person, Guid> _personService;
@@ -43,9 +44,9 @@ namespace IVSoftware.Web.Controllers
         // GET: PeopleController/Details/5
         public async Task<ActionResult> Details(Guid id)
         {
-            var person = await _personService.GetByIdAndIncludeAsync(id, 
-                i => i.IdentificationType, a => a.Arl, 
-                e => e.Eps, bt => bt.BloodType, 
+            var person = await _personService.GetByIdAndIncludeAsync(id,
+                i => i.IdentificationType, a => a.Arl,
+                e => e.Eps, bt => bt.BloodType,
                 ct => ct.ContractType);
 
             if (person == null)
@@ -104,10 +105,10 @@ namespace IVSoftware.Web.Controllers
         // GET: PeopleController/Edit/5
         public async Task<ActionResult> Edit(Guid? id, string email)
         {
-            var person = id.HasValue ? await _personService.GetByIdAsync(id.Value) 
+            var person = id.HasValue ? await _personService.GetByIdAsync(id.Value)
                 : (await _personService.FindByConditionAsync(p => p.Email == email)).FirstOrDefault();
 
-            if(person == null)
+            if (person == null)
             {
                 return NotFound();
             }
