@@ -14,7 +14,6 @@ namespace IVSoftware.Models
     public class ClientModel : BaseModel
     {
         public int Id { get; set; }
-        //[Required(ErrorMessage ="Este campo es obligatorio")]
         [DisplayName("Tipo de documento")]
         public virtual TipoDocumento  DocumentType { get; set; } // Código del tipo de documento
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
@@ -33,7 +32,6 @@ namespace IVSoftware.Models
         [DisplayName("Correo electrónico para entrega de facturación")]
         public string EmailAddress { get; set; } // Dirección de correo electrónico del cliente
         [DisplayName("Tipo de cliente")]
-        //[Required(ErrorMessage = "Este campo es obligatorio")]
         public virtual ClientTypeModel ClientType { get; set; } = null; // Tipo de cliente
         
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
