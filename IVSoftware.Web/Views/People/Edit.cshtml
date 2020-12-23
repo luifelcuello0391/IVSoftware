@@ -272,9 +272,8 @@
                                         @Html.DisplayFor(modelItem => item.DegreeDate)
                                     </td>
                                     <td align="right">
-                                        <a asp-controller="EducacionBasica" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
-                                        <a asp-controller="EducacionBasica" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
-                                        <a asp-controller="EducacionBasica" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                        <a asp-controller="BasicEducations" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="BasicEducations" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
                                     </td>
                                 </tr>
                             }

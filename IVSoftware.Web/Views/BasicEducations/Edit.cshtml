@@ -1,0 +1,81 @@
+﻿@model BasicEducation
+@{
+    ViewData["Title"] = "Educación básica - Editar";
+}
+
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="PersonId" type="hidden" />
+    <input asp-for="Id" type="hidden" />
+    <h5 class="text-primary titulo">Educación básica - Editar</h5>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Person.FullName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Person.FullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Person.IdentificationNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Person.IdentificationNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Person.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Person.Email)
+        </dd>
+    </dl>
+
+    <div class="row" style="margin-top:20px">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="InstitutionName" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="InstitutionName" class="form-control" />
+                <span asp-validation-for="InstitutionName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="LastGradeApproved" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="LastGradeApproved" min="0" class="form-control" />
+                <span asp-validation-for="LastGradeApproved" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SpecialtyName" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="SpecialtyName" class="form-control" />
+                <span asp-validation-for="SpecialtyName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="DegreeDate" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="DegreeDate" class="form-control" type="date" />
+                <span asp-validation-for="DegreeDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <a asp-controller="People" asp-action="Edit" asp-route-id="@Model.PersonId" class="btn btn-primary"> Cancelar </a>
+            </div>
+        </div>
+    </div>
+</form>

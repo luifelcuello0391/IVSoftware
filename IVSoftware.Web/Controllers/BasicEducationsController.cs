@@ -19,18 +19,6 @@ namespace IVSoftware.Web.Controllers
             _personService = personService;
         }
 
-        // GET: BasicEducationsController
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        // GET: BasicEducationsController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
         // GET: BasicEducationsController/Create
         public async Task<ActionResult> Create(Guid personId)
         {
@@ -72,44 +60,63 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: BasicEducationsController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            return View();
+            var basicEducation = await _basicEducationService.GetByIdAndIncludeAsync(id, be => be.Person);
+            if(basicEducation == null) { return NotFound(); }
+
+            return View(basicEducation);
         }
 
         // POST: BasicEducationsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(Guid id, BasicEducation model)
         {
+            if (id != model.Id){ return NotFound(); }
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    await _basicEducationService.UpdateAsync(model);
+                    return RedirectToAction("Edit", "People", new { id = model.PersonId });
+                }
+
+                return View(model);
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
 
         // GET: BasicEducationsController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            return View();
+            var basicEducation = await _basicEducationService.GetByIdAndIncludeAsync(id, be => be.Person);
+            if (basicEducation == null) { return NotFound(); }
+
+            return View(basicEducation);
         }
 
         // POST: BasicEducationsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(Guid id, BasicEducation model)
         {
+            if (id != model.Id) { return NotFound(); }
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                var basicEducation = await _basicEducationService.GetByIdAndIncludeAsync(id, be => be.Person);
+                if (basicEducation == null) { return NotFound(); }
+                await _basicEducationService.DeleteAsync(basicEducation);
+                return RedirectToAction("Edit", "People", new { id = model.PersonId });
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
     }
