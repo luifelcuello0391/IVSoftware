@@ -227,6 +227,69 @@
             </div>
         </div>
     </div>
+
+    <div class="row" style="margin-top: 20px">
+        <div class="col">
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseEducacionBasica" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Educación básica
+            </a>
+            
+            <div class="collapse" id="collapseEducacionBasica" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Educación básica</h6>
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.BasicEducations.FirstOrDefault().InstitutionName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.BasicEducations.FirstOrDefault().LastGradeApproved)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.BasicEducations.FirstOrDefault().SpecialtyName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.BasicEducations.FirstOrDefault().DegreeDate)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.BasicEducations)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.InstitutionName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LastGradeApproved)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SpecialtyName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DegreeDate)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-controller="EducacionBasica" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="EducacionBasica" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                                        <a asp-controller="EducacionBasica" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <a asp-action="Create" asp-controller="BasicEducations" asp-route-personId="@Model.Id"
+                           class="btn btn-primary btn-sm"
+                           style="margin-top:10px">Agregar</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </form>
 
 <!-- Modal -->

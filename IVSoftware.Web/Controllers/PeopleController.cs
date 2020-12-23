@@ -163,8 +163,8 @@ namespace IVSoftware.Web.Controllers
         // GET: PeopleController/Edit/5
         public async Task<ActionResult> Edit(Guid? id, string email)
         {
-            var person = id.HasValue ? await _personService.GetByIdAndIncludeAsync(id.Value, p => p.User)
-                : (await _personService.FindByConditionAndIncludeAsync(p => p.Email == email, p => p.User)).FirstOrDefault();
+            var person = id.HasValue ? await _personService.GetByIdAndIncludeAsync(id.Value, p => p.User, p => p.BasicEducations)
+                : (await _personService.FindByConditionAndIncludeAsync(p => p.Email == email, p => p.User, p => p.BasicEducations)).FirstOrDefault();
 
             if (person == null)
             {

@@ -40,11 +40,11 @@
             </td>
             <td align="right">
                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a> <span> | </span>
-                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle" style="font-size:larger"></i></a>
+                <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
                 @if (item.Email != this.User.Identity.Name)
                 {
                     <span> | </span>
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash-alt" style="font-size:larger"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
                 }
             </td>
         </tr>
