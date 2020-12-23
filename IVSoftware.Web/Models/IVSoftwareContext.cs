@@ -425,6 +425,7 @@ namespace IVSoftware.Web.Models
 
             // Contract Type
             new ContractTypeConfiguration("ContractType", "Id").Map(modelBuilder);
+            new BasicEducationConfiguration("BasicEducation", "Id").Map(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
