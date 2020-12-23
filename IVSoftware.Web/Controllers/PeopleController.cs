@@ -21,6 +21,7 @@ namespace IVSoftware.Web.Controllers
         private readonly IEntityService<Eps, int> _epsService;
         private readonly IEntityService<BloodType, int> _bloodTypeService;
         private readonly IEntityService<ContractType, int> _contractTypeService;
+        private readonly IEntityService<Gender, int> _genderService;
         private readonly UserManager<User> _userManager;
 
         public PeopleController(IEntityService<Person, Guid> personService,
@@ -29,6 +30,7 @@ namespace IVSoftware.Web.Controllers
             IEntityService<Eps, int> epsService,
             IEntityService<BloodType, int> bloodTypeService,
             IEntityService<ContractType, int> contractTypeService,
+            IEntityService<Gender, int> genderService,
             UserManager<User> userManager)
         {
             _personService = personService;
@@ -38,6 +40,7 @@ namespace IVSoftware.Web.Controllers
             _bloodTypeService = bloodTypeService;
             _contractTypeService = contractTypeService;
             _userManager = userManager;
+            _genderService = genderService;
         }
 
         // GET: PeopleController
@@ -52,18 +55,13 @@ namespace IVSoftware.Web.Controllers
             var person = await _personService.GetByIdAndIncludeAsync(id,
                 i => i.IdentificationType, a => a.Arl,
                 e => e.Eps, bt => bt.BloodType,
-                ct => ct.ContractType);
+                ct => ct.ContractType,
+                g => g.Gender);
 
             if (person == null)
             {
                 return NotFound();
             }
-
-            ViewBag.IdentificationTypes = await GetIdentificationTypeSelectList();
-            ViewBag.ARLs = await GetArlSelectList();
-            ViewBag.EPSs = await GetEpsSelectList();
-            ViewBag.BloodTypes = await GetBloodTypeSelectList();
-            ViewBag.ContractTypes = await GetContractTypeSelectList();
 
             return View(person);
         }
@@ -76,6 +74,7 @@ namespace IVSoftware.Web.Controllers
             ViewBag.EPSs = await GetEpsSelectList();
             ViewBag.BloodTypes = await GetBloodTypeSelectList();
             ViewBag.ContractTypes = await GetContractTypeSelectList();
+            ViewBag.Genders = await GetGenderSelectList();
 
             return View();
         }
@@ -98,6 +97,7 @@ namespace IVSoftware.Web.Controllers
                 ViewBag.EPSs = await GetEpsSelectList();
                 ViewBag.BloodTypes = await GetBloodTypeSelectList();
                 ViewBag.ContractTypes = await GetContractTypeSelectList();
+                ViewBag.Genders = await GetGenderSelectList();
 
                 return View(model);
             }
@@ -176,6 +176,7 @@ namespace IVSoftware.Web.Controllers
             ViewBag.EPSs = await GetEpsSelectList();
             ViewBag.BloodTypes = await GetBloodTypeSelectList();
             ViewBag.ContractTypes = await GetContractTypeSelectList();
+            ViewBag.Genders = await GetGenderSelectList();
             ViewBag.HasUser = (person.User != null);
 
             return View(person);
@@ -199,6 +200,8 @@ namespace IVSoftware.Web.Controllers
                 ViewBag.EPSs = await GetEpsSelectList();
                 ViewBag.BloodTypes = await GetBloodTypeSelectList();
                 ViewBag.ContractTypes = await GetContractTypeSelectList();
+                ViewBag.Genders = await GetGenderSelectList();
+                ViewBag.HasUser = (!string.IsNullOrEmpty(model.UserId));
 
                 return View(model);
             }
@@ -214,7 +217,8 @@ namespace IVSoftware.Web.Controllers
             var person = await _personService.GetByIdAndIncludeAsync(id,
                 i => i.IdentificationType, a => a.Arl,
                 e => e.Eps, bt => bt.BloodType,
-                ct => ct.ContractType);
+                ct => ct.ContractType,
+                g => g.Gender);
 
             if (person == null)
             {
@@ -304,6 +308,18 @@ namespace IVSoftware.Web.Controllers
             }).ToList();
 
             return contractTypes;
+        }
+
+        private async Task<List<SelectListItem>> GetGenderSelectList()
+        {
+            var genders = new List<SelectListItem>();
+            genders = (await _genderService.GetAllAsync()).Select(t => new SelectListItem()
+            {
+                Text = t.Name,
+                Value = t.Id.ToString()
+            }).ToList();
+
+            return genders;
         }
     }
 }

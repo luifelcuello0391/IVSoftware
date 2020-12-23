@@ -15,7 +15,7 @@
             <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                 <label asp-for="IdentificationTypeId" style="color:white"></label>
             </div>
-            <input asp-for="IdentificationType.Name" class="form-control" readonly="readonly"/>
+            <input asp-for="IdentificationType.Name" class="form-control" readonly="readonly" />
         </div>
     </div>
     <div class="col">
@@ -83,6 +83,41 @@
     <div class="col">
         <div class="form-group">
             <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="GenderId" style="color:white"></label>
+            </div>
+            <input asp-for="Gender.Name" class="form-control"  readonly="readonly" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="BloodTypeId" style="color:white"></label>
+            </div>
+            <input asp-for="BloodType.Name" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="Birthdate" style="color:white"></label>
+            </div>
+            <input asp-for="Birthdate" type="date" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="Address" style="color:white"></label>
+            </div>
+            <input asp-for="Address" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                 <label asp-for="ArlId" style="color:white"></label>
             </div>
             <input asp-for="Arl.Name" class="form-control" readonly="readonly" />
@@ -94,25 +129,6 @@
                 <label asp-for="EpsId" style="color:white"></label>
             </div>
             <input asp-for="Eps.Name" class="form-control" readonly="readonly" />
-        </div>
-    </div>
-    <div class="col">
-        <div class="form-group">
-            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                <label asp-for="BloodTypeId" style="color:white"></label>
-            </div>
-            <input asp-for="BloodType.Name" class="form-control" readonly="readonly" />
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-3">
-        <div class="form-group">
-            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                <label asp-for="Address" style="color:white"></label>
-            </div>
-            <input asp-for="Address" class="form-control" readonly="readonly"/>
         </div>
     </div>
     <div class="col-sm-3">

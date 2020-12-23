@@ -5,7 +5,9 @@
 
 <form method="post" style="font-size:small">
     <div asp-validation-summary="ModelOnly"></div>
-    @Html.HiddenFor(m => m.Id)
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="UserId" />
+    <input type="hidden" asp-for="User" />
     <div>
         <h5 class="text-primary titulo">Editar usuario</h5>
     </div>
@@ -110,6 +112,57 @@
         <div class="col">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="GenderId" style="color:white"></label>
+                </div>
+                <select asp-for="GenderId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.Genders)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="GenderId" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="BloodTypeId" style="color:white"></label>
+                </div>
+                <select asp-for="BloodTypeId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.BloodTypes)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="BloodTypeId" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Birthdate" style="color:white"></label>
+                </div>
+                <input asp-for="Birthdate" type="date" class="form-control" />
+                <span asp-validation-for="Birthdate" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Address" style="color:white"></label>
+                </div>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                     <label asp-for="ArlId" style="color:white"></label>
                 </div>
                 <select asp-for="ArlId" class="form-control">
@@ -135,33 +188,6 @@
                     }
                 </select>
                 <span asp-validation-for="EpsId" class="text-danger small"></span>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="BloodTypeId" style="color:white"></label>
-                </div>
-                <select asp-for="BloodTypeId" class="form-control">
-                    <option value=""></option>
-                    @foreach (var item in ViewBag.BloodTypes)
-                    {
-                        <option value="@item.Value">@item.Text</option>
-                    }
-                </select>
-                <span asp-validation-for="BloodTypeId" class="text-danger small"></span>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-3">
-            <div class="form-group">
-                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="Address" style="color:white"></label>
-                </div>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger small"></span>
             </div>
         </div>
         <div class="col-sm-3">
