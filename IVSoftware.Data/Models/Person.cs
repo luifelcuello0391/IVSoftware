@@ -1,5 +1,6 @@
 ﻿using IVSoftware.Data.Models.Core;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -126,7 +127,7 @@ namespace IVSoftware.Data.Models
 
         //public virtual List<AplicacionEvaluacion> ListAplicacionEvaluacion { get; set; }
         //public virtual List<ConocimientoTecnico> ListConocimientoTecnico { get; set; }
-        //public virtual List<EducacionBasica> ListEducacionBasica { get; set; }
+        public virtual List<BasicEducation> BasicEducations { get; set; }
         //public virtual List<EducacionSuperior> ListEducacionSuperior { get; set; }
         //public virtual List<ExperienciaLaboral> ListExperienciaLaboral { get; set; }
         //public virtual List<Formacion> ListFormacion { get; set; }
