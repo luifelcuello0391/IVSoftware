@@ -47,14 +47,13 @@ namespace IVSoftware.Data.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder
-                .Property(x => x.PersonId)
+                .Property(x => x.AcademicLevelId)
                 .IsRequired();
 
             builder
                 .HasOne(g => g.AcademicLevel)
                 .WithMany(p => p.HigherEducations)
-                .HasForeignKey(g => g.AcademicLevelId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey(g => g.AcademicLevelId);
         }
     }
 }

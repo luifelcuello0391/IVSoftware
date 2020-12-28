@@ -27,6 +27,6 @@ namespace IVSoftware.Data.Models
         public int AcademicLevelId { get; set; }
 
         public virtual Person Person { get; set; }
-        public string PersonId { get; set; }
+        public Guid PersonId { get; set; }
     }
 }
