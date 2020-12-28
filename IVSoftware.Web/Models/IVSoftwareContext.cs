@@ -60,11 +60,7 @@ namespace IVSoftware.Web.Models
 
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<ClientModel>()
-            //    .HasOptional(t => t.ClientType);
-
             // AplicacionEvaluacion **************************************************************************************************************
-
             modelBuilder.Entity<AplicacionEvaluacion>(entity =>
             {
                 entity.Property(e => e.PersonaId)
@@ -72,14 +68,6 @@ namespace IVSoftware.Web.Models
             });
 
             // Arl **************************************************************************************************************
-
-            //modelBuilder.Entity<Arl>(entity =>
-            //{
-            //    entity.Property(e => e.Nombre)
-            //        .IsRequired()
-            //        .HasMaxLength(100)
-            //        .IsUnicode(false);
-            //});
             new ArlConfiguration("Arl", "Id").Map(modelBuilder);
 
             // ConocimientoTecnico **************************************************************************************************************
@@ -106,74 +94,15 @@ namespace IVSoftware.Web.Models
             });
 
             // Departamento **************************************************************************************************************
-
-            //modelBuilder.Entity<Departamento>(entity =>
-            //{
-            //    entity.Property(e => e.Codigo)
-            //        .IsRequired()
-            //        .HasMaxLength(2)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.Nombre)
-            //        .IsRequired()
-            //        .HasMaxLength(100)
-            //        .IsUnicode(false);
-            //});
             new DepartmentConfiguration("Department", "Id").Map(modelBuilder);
 
             // EducacionBasica **************************************************************************************************************
-
-            modelBuilder.Entity<EducacionBasica>(entity =>
-            {
-                entity.Property(e => e.FechaGrado).HasColumnType("datetime");
-
-                entity.Property(e => e.NombreInstitucion)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.TituloObtenido)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PersonaId)
-                    .IsRequired();
-            });
+            new BasicEducationConfiguration("BasicEducation", "Id").Map(modelBuilder);
 
             // EducacionSuperior **************************************************************************************************************
-
-            modelBuilder.Entity<EducacionSuperior>(entity =>
-            {
-                entity.Property(e => e.FechaGrado).HasColumnType("datetime");
-
-                entity.Property(e => e.NombreEstudios)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.NombreInstitucion)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.NumeroTarjetaProfesional)
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PersonaId)
-                    .IsRequired();
-            });
+            new HigherEducationConfiguration("HigherEducation", "Id").Map(modelBuilder);
 
             // Eps **************************************************************************************************************
-
-            //modelBuilder.Entity<Eps>(entity =>
-            //{
-            //    entity.Property(e => e.Nombre)
-            //        .IsRequired()
-            //        .HasMaxLength(100)
-            //        .IsUnicode(false);
-            //});
             new EpsConfiguration("Eps", "Id").Map(modelBuilder);
 
             // ExperienciaLaboral **************************************************************************************************************
@@ -246,29 +175,9 @@ namespace IVSoftware.Web.Models
             });
 
             // ModalidadAcademica **************************************************************************************************************
-
-            modelBuilder.Entity<ModalidadAcademica>(entity =>
-            {
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
+            new AcademicLevelConfiguration("AcademicLevel", "Id").Map(modelBuilder);
 
             // Municipio **************************************************************************************************************
-
-            //modelBuilder.Entity<Municipio>(entity =>
-            //{
-            //    entity.Property(e => e.Codigo)
-            //        .IsRequired()
-            //        .HasMaxLength(5)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.Nombre)
-            //        .IsRequired()
-            //        .HasMaxLength(30)
-            //        .IsUnicode(false);
-            //});
             new MunicipalityConfiguration("Municipality", "Id").Map(modelBuilder);
 
             // OtroConocimiento **************************************************************************************************************
@@ -285,75 +194,9 @@ namespace IVSoftware.Web.Models
             });
 
             // Pais **************************************************************************************************************
-
-            //modelBuilder.Entity<Pais>(entity =>
-            //{
-            //    entity.Property(e => e.Nombre)
-            //        .IsRequired()
-            //        .HasMaxLength(50)
-            //        .IsUnicode(false);
-            //});
             new CountryConfiguration("Country", "Id").Map(modelBuilder);
 
             // Persona **************************************************************************************************************
-
-            //modelBuilder.Entity<Persona>(entity =>
-            //{
-            //    entity.Property(e => e.Direccion)
-            //        .HasMaxLength(50)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.DistritoMilitar)
-            //        .HasMaxLength(10)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.FechaDiligenciamiento).HasColumnType("datetime");
-
-            //    entity.Property(e => e.FechaNacimiento).HasColumnType("datetime");
-
-            //    entity.Property(e => e.Foto)
-            //        .HasMaxLength(255)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.NumeroIdentificacion)
-            //        .IsRequired()
-            //        .HasMaxLength(20)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.NumeroLibretaMilitar)
-            //        .HasMaxLength(20)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.PrimerApellido)
-            //        .IsRequired()
-            //        .HasMaxLength(30)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.PrimerNombre)
-            //        .IsRequired()
-            //        .HasMaxLength(30)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.SegundoApellido)
-            //        .HasMaxLength(30)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.SegundoNombre)
-            //        .HasMaxLength(30)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.Sexo)
-            //        .HasMaxLength(1)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.Telefono)
-            //        .HasMaxLength(30)
-            //        .IsUnicode(false);
-
-            //    entity.Property(e => e.TipoLibretaMilitar)
-            //        .HasMaxLength(1)
-            //        .IsUnicode(false);
-            //});
             new PersonConfiguration("Person", "Id").Map(modelBuilder);
 
             // PersonaInduccion **************************************************************************************************************
@@ -365,17 +208,6 @@ namespace IVSoftware.Web.Models
             });
 
             // TipoDocumento **************************************************************************************************************
-
-            //modelBuilder.Entity<TipoDocumento>(entity =>
-            //{
-            //    entity.Property(e => e.Codigo)
-            //        .IsRequired()
-            //        .HasMaxLength(3);
-
-            //    entity.Property(e => e.Nombre)
-            //        .IsRequired()
-            //        .HasMaxLength(255);
-            //});
             new IdentificationTypeConfiguration("IdentificationType", "Id").Map(modelBuilder);
 
             // TipoIdioma **************************************************************************************************************
@@ -399,14 +231,6 @@ namespace IVSoftware.Web.Models
             });
 
             // TipoSangre **************************************************************************************************************
-
-            //modelBuilder.Entity<TipoSangre>(entity =>
-            //{
-            //    entity.Property(e => e.Nombre)
-            //        .IsRequired()
-            //        .HasMaxLength(3)
-            //        .IsUnicode(false);
-            //});
             new BloodTypeConfiguration("BloodType", "Id").Map(modelBuilder);
 
             // CheckListQuestionSection Relationship ***********************************************************************************
@@ -425,7 +249,6 @@ namespace IVSoftware.Web.Models
 
             // Contract Type
             new ContractTypeConfiguration("ContractType", "Id").Map(modelBuilder);
-            new BasicEducationConfiguration("BasicEducation", "Id").Map(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="InitialScripts\AcademyLevelData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="InitialScripts\InitialScriptData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

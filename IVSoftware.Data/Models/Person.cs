@@ -128,7 +128,8 @@ namespace IVSoftware.Data.Models
         //public virtual List<AplicacionEvaluacion> ListAplicacionEvaluacion { get; set; }
         //public virtual List<ConocimientoTecnico> ListConocimientoTecnico { get; set; }
         public virtual List<BasicEducation> BasicEducations { get; set; }
-        //public virtual List<EducacionSuperior> ListEducacionSuperior { get; set; }
+        
+        public virtual List<HigherEducation> HigherEducations { get; set; }
         //public virtual List<ExperienciaLaboral> ListExperienciaLaboral { get; set; }
         //public virtual List<Formacion> ListFormacion { get; set; }
         //public virtual List<OtroConocimiento> ListOtroConocimiento { get; set; }
