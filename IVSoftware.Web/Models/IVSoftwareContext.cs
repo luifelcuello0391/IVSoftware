@@ -48,8 +48,8 @@ namespace IVSoftware.Web.Models
         public virtual DbSet<TipoRolGestion> TipoRolGestion { get; set; }
         public virtual DbSet<TipoSangre> TipoSangre { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder
-        .UseLazyLoadingProxies();
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder
+        //.UseLazyLoadingProxies();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

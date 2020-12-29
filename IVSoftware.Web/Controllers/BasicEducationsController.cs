@@ -41,13 +41,13 @@ namespace IVSoftware.Web.Controllers
         // POST: BasicEducationsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(BasicEducation model)
+        public async Task<ActionResult> Create(BasicEducation model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _basicEducationService.CreateAsync(model);
+                    await _basicEducationService.CreateAsync(model);
                     return RedirectToAction("Edit", "People", new { id = model.PersonId });
                 }
 

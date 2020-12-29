@@ -1,4 +1,5 @@
 ﻿using IVSoftware.Data.Models;
+using IVSoftware.Web.BusinessLogic;
 using IVSoftware.Web.Data;
 using IVSoftware.Web.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,7 @@ namespace IVSoftware.Web.Controllers
         private readonly IEntityService<ContractType, int> _contractTypeService;
         private readonly IEntityService<Gender, int> _genderService;
         private readonly UserManager<User> _userManager;
+        private readonly IEntityService<AcademicLevel, int> _academicLevelService;
 
         public PeopleController(IEntityService<Person, Guid> personService,
             IEntityService<IdentificationType, int> identificationTypeService,
@@ -31,7 +33,8 @@ namespace IVSoftware.Web.Controllers
             IEntityService<BloodType, int> bloodTypeService,
             IEntityService<ContractType, int> contractTypeService,
             IEntityService<Gender, int> genderService,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IEntityService<AcademicLevel, int> academicLevelService)
         {
             _personService = personService;
             _identificationTypeService = identificationTypeService;
@@ -41,6 +44,7 @@ namespace IVSoftware.Web.Controllers
             _contractTypeService = contractTypeService;
             _userManager = userManager;
             _genderService = genderService;
+            _academicLevelService = academicLevelService;
         }
 
         // GET: PeopleController
@@ -163,8 +167,7 @@ namespace IVSoftware.Web.Controllers
         // GET: PeopleController/Edit/5
         public async Task<ActionResult> Edit(Guid? id, string email)
         {
-            var person = id.HasValue ? await _personService.GetByIdAndIncludeAsync(id.Value, p => p.User, p => p.BasicEducations)
-                : (await _personService.FindByConditionAndIncludeAsync(p => p.Email == email, p => p.User, p => p.BasicEducations)).FirstOrDefault();
+            var person = await _personService.GetFullPerson(id, email, _academicLevelService);
 
             if (person == null)
             {

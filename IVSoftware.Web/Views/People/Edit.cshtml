@@ -233,7 +233,10 @@
             <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseEducacionBasica" role="button" aria-expanded="false" aria-controls="collapseExample">
                 Educación básica
             </a>
-            
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseEducacionSuperior" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Educación superior
+            </a>
+
             <div class="collapse" id="collapseEducacionBasica" style="margin-top:20px">
                 <div class="card card-body">
                     <h6 class="text-success titulo">Educación básica</h6>
@@ -286,6 +289,65 @@
                     </div>
                 </div>
 
+            </div>
+
+            <div class="collapse" id="collapseEducacionSuperior" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Educación superior</h6>
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white; vertical-align:central">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.HigherEducations.FirstOrDefault().InstitutionName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.HigherEducations.FirstOrDefault().StudiesName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.HigherEducations.FirstOrDefault().AcademicLevel)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.HigherEducations.FirstOrDefault().DegreeDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.HigherEducations.FirstOrDefault().ProfessionalCardNumber)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.HigherEducations)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.InstitutionName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StudiesName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AcademicLevel.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DegreeDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ProfessionalCardNumber)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-controller="HigherEducations" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="HigherEducations" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "HigherEducations", new { personId = Model.Id })'"
+                               class="btn btn-primary btn-sm"
+                               style="margin-top:10px" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
