@@ -239,6 +239,9 @@
             <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseFormacion" role="button" aria-expanded="false" aria-controls="collapseExample">
                 Formación
             </a>
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseExperiencia" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Experiencia
+            </a>
 
             <div class="collapse" id="collapseEducacionBasica" style="margin-top:20px">
                 <div class="card card-body">
@@ -412,6 +415,65 @@
                     </table>
                     <div>
                         <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "Trainings", new { personId = Model.Id })'"
+                               class="btn btn-primary btn-sm"
+                               style="margin-top:10px" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapse" id="collapseExperiencia" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Experiencia</h6>
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WorkExperiences.FirstOrDefault().CompanyName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WorkExperiences.FirstOrDefault().JobTitle)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WorkExperiences.FirstOrDefault().StartDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WorkExperiences.FirstOrDefault().EndDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WorkExperiences.FirstOrDefault().Responsibilities)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.WorkExperiences)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CompanyName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.JobTitle)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StartDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EndDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Responsibilities)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-controller="WorkExperiences" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="WorkExperiences" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "WorkExperiences", new { personId = Model.Id })'"
                                class="btn btn-primary btn-sm"
                                style="margin-top:10px" />
                     </div>
