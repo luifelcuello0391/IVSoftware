@@ -106,48 +106,7 @@ namespace IVSoftware.Web.Models
             new EpsConfiguration("Eps", "Id").Map(modelBuilder);
 
             // ExperienciaLaboral **************************************************************************************************************
-
-            modelBuilder.Entity<ExperienciaLaboral>(entity =>
-            {
-                entity.Property(e => e.CargoContrato)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CorreoElectronico)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Dependencia)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Direccion)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FechaIngreso).HasColumnType("datetime");
-
-                entity.Property(e => e.FechaRetiro).HasColumnType("datetime");
-
-                entity.Property(e => e.NombreEmpresa)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PersonaId)
-                    .IsRequired();
-
-                entity.Property(e => e.Responsabilidades)
-                    .IsRequired()
-                    .HasColumnType("text");
-
-                entity.Property(e => e.Telefono)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-            });
+            new WorkExperienceConfiguration("WorkExperience", "Id").Map(modelBuilder);
 
             // Formacion **************************************************************************************************************
             new TrainingConfiguration("Training", "Id").Map(modelBuilder);
