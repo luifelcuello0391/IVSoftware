@@ -25,6 +25,7 @@ namespace IVSoftware.Web.Controllers
         private readonly IEntityService<Gender, int> _genderService;
         private readonly UserManager<User> _userManager;
         private readonly IEntityService<AcademicLevel, int> _academicLevelService;
+        private readonly IEntityService<CertificationType, int> _certificationTypeService;
 
         public PeopleController(IEntityService<Person, Guid> personService,
             IEntityService<IdentificationType, int> identificationTypeService,
@@ -34,7 +35,8 @@ namespace IVSoftware.Web.Controllers
             IEntityService<ContractType, int> contractTypeService,
             IEntityService<Gender, int> genderService,
             UserManager<User> userManager,
-            IEntityService<AcademicLevel, int> academicLevelService)
+            IEntityService<AcademicLevel, int> academicLevelService,
+            IEntityService<CertificationType, int> certificationTypeService)
         {
             _personService = personService;
             _identificationTypeService = identificationTypeService;
@@ -45,6 +47,7 @@ namespace IVSoftware.Web.Controllers
             _userManager = userManager;
             _genderService = genderService;
             _academicLevelService = academicLevelService;
+            _certificationTypeService = certificationTypeService;
         }
 
         // GET: PeopleController
@@ -167,7 +170,7 @@ namespace IVSoftware.Web.Controllers
         // GET: PeopleController/Edit/5
         public async Task<ActionResult> Edit(Guid? id, string email)
         {
-            var person = await _personService.GetFullPerson(id, email, _academicLevelService);
+            var person = await _personService.GetFullPerson(id, email, _academicLevelService, _certificationTypeService);
 
             if (person == null)
             {
