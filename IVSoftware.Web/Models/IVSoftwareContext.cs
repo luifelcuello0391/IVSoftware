@@ -150,29 +150,8 @@ namespace IVSoftware.Web.Models
             });
 
             // Formacion **************************************************************************************************************
-
-            modelBuilder.Entity<Formacion>(entity =>
-            {
-                entity.Property(e => e.Entidad)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FechaFinalizacion).HasColumnType("datetime");
-
-                entity.Property(e => e.NombreCurso)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PersonaId)
-                    .IsRequired();
-
-                entity.Property(e => e.Tema)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
+            new TrainingConfiguration("Training", "Id").Map(modelBuilder);
+            new CertificationTypeConfiguration("CertificationType", "Id").Map(modelBuilder);
 
             // ModalidadAcademica **************************************************************************************************************
             new AcademicLevelConfiguration("AcademicLevel", "Id").Map(modelBuilder);
