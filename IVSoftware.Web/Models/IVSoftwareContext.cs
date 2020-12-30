@@ -99,17 +99,7 @@ namespace IVSoftware.Web.Models
             new MunicipalityConfiguration("Municipality", "Id").Map(modelBuilder);
 
             // OtroConocimiento **************************************************************************************************************
-
-            modelBuilder.Entity<OtroConocimiento>(entity =>
-            {
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PersonaId)
-                    .IsRequired();
-            });
+            new OtherTechnicalKnowledgeConfiguration("OtherTechnicalKnowledge", "Id").Map(modelBuilder);
 
             // Pais **************************************************************************************************************
             new CountryConfiguration("Country", "Id").Map(modelBuilder);
