@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IVSoftware.Web.Models;
 using IVSoftware.Models;
+using IVSoftware.Data.Models;
 
 namespace IVSoftware.Web.Controllers
 {

@@ -223,6 +223,13 @@ namespace IVSoftware.Web.Models
                 .HasForeignKey(um => um.SectionsId)
                 .OnDelete(DeleteBehavior.ClientCascade);
 
+            // Service - Person relationship *****************************************************************************************
+            modelBuilder.Entity<ServiceModel>()
+                .HasOne(p => p.Responsable)
+                .WithMany(s => s.Services)
+                .HasForeignKey(p => p.PersonId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             // Gender
             new GenderConfiguration("Gender", "Id").Map(modelBuilder);
 
@@ -234,53 +241,53 @@ namespace IVSoftware.Web.Models
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-        public DbSet<IVSoftware.Models.ClientModel> ClientModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.ClientModel> ClientModel { get; set; }
 
-        public DbSet<IVSoftware.Models.ClientTypeModel> ClientTypeModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.ClientTypeModel> ClientTypeModel { get; set; }
 
-        public DbSet<IVSoftware.Models.MatrixModel> MatrixModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.MatrixModel> MatrixModel { get; set; }
 
-        public DbSet<IVSoftware.Models.MeasurementUnitModel> MeasurementUnitModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.MeasurementUnitModel> MeasurementUnitModel { get; set; }
 
-        public DbSet<IVSoftware.Models.QuotationRequest> QuotationRequest { get; set; }
+        public DbSet<IVSoftware.Data.Models.QuotationRequest> QuotationRequest { get; set; }
 
-        public DbSet<IVSoftware.Models.QuotationModel> QuotationModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.QuotationModel> QuotationModel { get; set; }
 
-        public DbSet<IVSoftware.Models.ReferenceMethodCondition> ReferenceMethodCondition { get; set; }
+        public DbSet<IVSoftware.Data.Models.ReferenceMethodCondition> ReferenceMethodCondition { get; set; }
 
-        public DbSet<IVSoftware.Models.ReferenceMethodModel> ReferenceMethodModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.ReferenceMethodModel> ReferenceMethodModel { get; set; }
 
-        public DbSet<IVSoftware.Models.ServiceModel> ServiceModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.ServiceModel> ServiceModel { get; set; }
 
-        public DbSet<IVSoftware.Models.VariableModel> VariableModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.VariableModel> VariableModel { get; set; }
 
-        public DbSet<IVSoftware.Models.WorkingRangeModel> WorkingRangeModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.WorkingRangeModel> WorkingRangeModel { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.TypeOfService> TypeOfService { get; set; }
+        public DbSet<IVSoftware.Data.Models.TypeOfService> TypeOfService { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.ServiceGroupModel> ServiceGroupModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.ServiceGroupModel> ServiceGroupModel { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.QuotationStatus> QuotationStatus { get; set; }
+        public DbSet<IVSoftware.Data.Models.QuotationStatus> QuotationStatus { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.Brand> Brand { get; set; }
+        public DbSet<IVSoftware.Data.Models.Brand> Brand { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.Provider> Provider { get; set; }
+        public DbSet<IVSoftware.Data.Models.Provider> Provider { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.Equipment> Equipment { get; set; }
+        public DbSet<IVSoftware.Data.Models.Equipment> Equipment { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.CheckListQuestion> CheckListQuestion { get; set; }
+        public DbSet<IVSoftware.Data.Models.CheckListQuestion> CheckListQuestion { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.CheckListSection> CheckListSection { get; set; }
+        public DbSet<IVSoftware.Data.Models.CheckListSection> CheckListSection { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.EquipmentCheckList> EquipmentCheckList { get; set; }
+        public DbSet<IVSoftware.Data.Models.EquipmentCheckList> EquipmentCheckList { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.ChecklistResponseHeader> ChecklistResponseHeader { get; set; }
+        public DbSet<IVSoftware.Data.Models.ChecklistResponseHeader> ChecklistResponseHeader { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.IncentiveModel> IncentiveModel { get; set; }
+        public DbSet<IVSoftware.Data.Models.IncentiveModel> IncentiveModel { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.ClientContact> ClientContact { get; set; }
+        public DbSet<IVSoftware.Data.Models.ClientContact> ClientContact { get; set; }
 
-        public DbSet<IVSoftware.Web.Models.ServiceGroupServicesRelation> ServiceGroupServicesRelation { get; set; }
+        public DbSet<IVSoftware.Data.Models.ServiceGroupServicesRelation> ServiceGroupServicesRelation { get; set; }
 
     }
 }

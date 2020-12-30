@@ -134,5 +134,6 @@ namespace IVSoftware.Data.Models
         public virtual List<Training> Trainings { get; set; }
         //public virtual List<OtroConocimiento> ListOtroConocimiento { get; set; }
         //public virtual List<PersonaInduccion> ListPersonaInduccion { get; set; }
+        public virtual List<ServiceModel> Services { get; set; }
     }
 }

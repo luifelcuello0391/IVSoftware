@@ -7,15 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IVSoftware.Models;
 using IVSoftware.Web.Models;
+using IVSoftware.Data.Models;
+using IVSoftware.Web.Service;
 
 namespace IVSoftware.Web.Controllers
 {
     public class ClientModelsController : Controller
     {
+        private readonly IEntityService<IdentificationType, int> _IdentificationTypeService;
+        private readonly IEntityService<Department, int> _DepartmentService;
+        private readonly IEntityService<Municipality, int> _MunicipalityService;
         private readonly IVSoftwareContext _context;
 
-        public ClientModelsController(IVSoftwareContext context)
+        public ClientModelsController(IVSoftwareContext context, 
+            IEntityService<IdentificationType, int> identificationService,
+            IEntityService<Department, int> departmentService,
+            IEntityService<Municipality, int> municipalityService)
         {
+            _IdentificationTypeService = identificationService;
+            _DepartmentService = departmentService;
+            _MunicipalityService = municipalityService;
             _context = context;
         }
 
@@ -87,11 +98,11 @@ namespace IVSoftware.Web.Controllers
                         {
                             // The contact has not been assigned
                             ClientContact contact = new ClientContact();
-                            contact.DocumentType = await _context.TipoDocumento.FirstOrDefaultAsync(x => x.Id == docTypeId);
+                            contact.DocumentType = await _IdentificationTypeService.GetByIdAsync(docTypeId);
                             contact.Identification = id;
                             contact.Name = name;
-                            contact.AddressDepartment = await _context.Departamento.FirstOrDefaultAsync(x => x.Id == departmentId);
-                            contact.City = await _context.Municipio.FirstOrDefaultAsync(x => x.Id == cityId);
+                            contact.AddressDepartment = await _DepartmentService.GetByIdAsync(departmentId);
+                            contact.City = await _MunicipalityService.GetByIdAsync(cityId);
                             contact.Address = address;
                             contact.PhoneNumber = phone;
                             contact.Extension = extension;
@@ -272,10 +283,10 @@ namespace IVSoftware.Web.Controllers
                 }
                 clientModel.ClientType = type;
 
-                TipoDocumento docType = null;
+                IdentificationType docType = null;
                 if(clientModel.SelectedDocumentTypeId > 0)
                 {
-                    docType = await _context.TipoDocumento.FindAsync(clientModel.SelectedDocumentTypeId);
+                    docType = await _IdentificationTypeService.GetByIdAsync(clientModel.SelectedDocumentTypeId);
                 }
                 clientModel.DocumentType = docType;
 
@@ -365,26 +376,26 @@ namespace IVSoftware.Web.Controllers
                     clientModel.ClientType = type;
 
                     // Obtains the document type instance
-                    TipoDocumento docType = null;
+                    IdentificationType docType = null;
                     if (clientModel.SelectedDocumentTypeId > 0)
                     {
-                        docType = await _context.TipoDocumento.FindAsync(clientModel.SelectedDocumentTypeId);
+                        docType = await _IdentificationTypeService.GetByIdAsync(clientModel.SelectedDocumentTypeId);
                     }
                     clientModel.DocumentType = docType;
 
                     // Obtains the department instance
-                    Departamento dep = null;
+                    Department dep = null;
                     if(clientModel.DepartmentId != null && clientModel.DepartmentId.Value > 0)
                     {
-                        dep = await _context.Departamento.FindAsync(clientModel.DepartmentId.Value);
+                        dep = await _DepartmentService.GetByIdAsync(clientModel.DepartmentId.Value);
                     }
                     clientModel.Department = dep;
 
                     // Obtains the city instance
-                    Municipio city = null;
+                    Municipality city = null;
                     if(clientModel.CityId != null && clientModel.CityId.Value > 0)
                     {
-                        city = await _context.Municipio.FindAsync(clientModel.CityId.Value);
+                        city = await _MunicipalityService.GetByIdAsync(clientModel.CityId.Value);
                     }
                     clientModel.City = city;
 

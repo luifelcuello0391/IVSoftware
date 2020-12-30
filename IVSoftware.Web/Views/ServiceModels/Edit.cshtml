@@ -1,4 +1,4 @@
-﻿@model IVSoftware.Models.ServiceModel
+﻿@model IVSoftware.Data.Models.ServiceModel
 
 @{
     ViewData["Title"] = "Editar servicio";
@@ -19,9 +19,6 @@
             document.getElementById("input_reference_method_id").value = e.target.value
         }
 
-        function workingRangeSelection(e) {
-            document.getElementById("input_working_range_id").value = e.target.value
-        }
     </script>
 </head>
 
@@ -38,7 +35,6 @@
             <input type="hidden" asp-for="SelectedMatrixGroupId" id="input_matrix_id" />
             <input type="hidden" asp-for="SelectedVariableId" id="input_variable_id" />
             <input type="hidden" asp-for="SelectedReferenceMethodId" id="input_reference_method_id" />
-            <input type="hidden" asp-for="SelectedWorkingRangeId" id="input_working_range_id" />
 
             <div class="form-group">
                 <label asp-for="Code" class="control-label"></label>
@@ -132,28 +128,28 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label asp-for="WorkingRange" class="control-label"></label>
-                <select id="cbx_service_type" asp-for="WorkingRange" class="form-control" onchange="workingRangeSelection(event)">
-                    <option value="0"></option>
-                    @if (@ViewBag.WorkingRanges != null)
+            @*<div class="form-group">
+            <label asp-for="WorkingRange" class="control-label"></label>
+            <select id="cbx_service_type" asp-for="WorkingRange" class="form-control" onchange="workingRangeSelection(event)">
+                <option value="0"></option>
+                @if (@ViewBag.WorkingRanges != null)
+                {
+                    @foreach (var item in @ViewBag.WorkingRanges)
                     {
-                        @foreach (var item in @ViewBag.WorkingRanges)
+                        if (item.Id == Model.SelectedWorkingRangeId)
                         {
-                            if (item.Id == Model.SelectedWorkingRangeId)
-                            {
-                                <option value="@item.Id" selected>@item.Name (@item.WorkingRange)</option>
-                            }
-                            else
-                            {
-                                <option value="@item.Id">@item.Name (@item.WorkingRange)</option>
-                            }
-
+                            <option value="@item.Id" selected>@item.Name (@item.WorkingRange)</option>
                         }
-                    }
+                        else
+                        {
+                            <option value="@item.Id">@item.Name (@item.WorkingRange)</option>
+                        }
 
-                </select>
-            </div>
+                    }
+                }
+
+            </select>
+        </div>*@
 
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -185,10 +181,24 @@
                 <span asp-validation-for="Valid" class="text-danger"></span>
             </div>
 
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AvailableForClients" type="checkbox" checked /> @Html.DisplayNameFor(model => model.AvailableForClients)
+                </label>
+
+                <span asp-validation-for="AvailableForClients" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="ReportDeliveryTime" class="control-label"></label>
-                <input asp-for="ReportDeliveryTime" class="form-control" type="number" />
+                <input asp-for="ReportDeliveryTime" class="form-control" type="number" min="1" />
                 <span asp-validation-for="ReportDeliveryTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="WeeklyAssignmentQuantity" class="control-label"></label>
+                <input asp-for="WeeklyAssignmentQuantity" class="form-control" type="number" min="1" />
+                <span asp-validation-for="WeeklyAssignmentQuantity" class="text-danger"></span>
             </div>
 
             <div class="form-group" style="display:none">

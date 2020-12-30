@@ -1,4 +1,4 @@
-﻿@model IVSoftware.Models.QuotationRequest
+﻿@model IVSoftware.Data.Models.QuotationRequest
 
 @{
     ViewData["Title"] = "Editar solicitud de cotización";
@@ -358,7 +358,7 @@
                                         @Html.DisplayFor(modelItem => item.ReferenceMethodName)
                                     </td>
                                     <td style="white-space:nowrap">
-                                        @Html.DisplayFor(modelItem => item.WorkingRangeName)
+                                        @Html.DisplayFor(modelItem => item.WorkingRangeWithoutPrecondition)
                                     </td>
 
                                     <td style="white-space:nowrap">

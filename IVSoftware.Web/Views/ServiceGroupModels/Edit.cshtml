@@ -1,4 +1,4 @@
-﻿@model IVSoftware.Web.Models.ServiceGroupModel
+﻿@model IVSoftware.Data.Models.ServiceGroupModel
 
 @{
     ViewData["Title"] = "Editar grupo de servicios";
@@ -81,6 +81,14 @@
                 <label asp-for="ModificationDatetime" class="control-label"></label>
                 <input asp-for="ModificationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
                 <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AvailableForClients" type="checkbox" /> @Html.DisplayNameFor(model => model.AvailableForClients)
+                </label>
+
+                <span asp-validation-for="AvailableForClients" class="text-danger"></span>
             </div>
 
 
@@ -253,7 +261,7 @@
                                 </td>
 
                                 <td style="white-space:nowrap">
-                                    @item.Service.WorkingRangeName
+                                    @item.Service.WorkingRangeWithoutPrecondition
                                 </td>
 
                                 <td style="white-space:nowrap">

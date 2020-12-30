@@ -1,4 +1,4 @@
-﻿@model IVSoftware.Models.ServiceModel
+﻿@model IVSoftware.Data.Models.ServiceModel
 
 @{
     ViewData["Title"] = "Detalle de servicio";
@@ -36,6 +36,12 @@
             @Html.DisplayFor(model => model.ServiceTypeName)
         </dd>
         <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.WeeklyAssignmentQuantity)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.WeeklyAssignmentQuantity)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.ReportDeliveryTime)
         </dt>
         <dd class="col-sm-10" style="margin-left:5px">
@@ -48,10 +54,10 @@
             @Html.DisplayFor(model => model.ReferenceMethodName)
         </dd>
         <dt class="col-sm-2" style="white-space:nowrap">
-            @Html.DisplayNameFor(model => model.WorkingRange)
+            @Html.Raw("Rango de trabajo")
         </dt>
         <dd class="col-sm-10" style="margin-left:5px">
-            @Html.DisplayFor(model => model.WorkingRangeName)
+            @Html.DisplayFor(model => model.WorkingRange)
         </dd>
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.UnitValue)
@@ -77,7 +83,7 @@
             @Html.DisplayNameFor(model => model.AuthorizedByINS)
         </dt>
         <dd class="col-sm-10" style="margin-left:5px">
-           @Model.GetYesNo(Model.AuthorizedByINS)
+            @Model.GetYesNo(Model.AuthorizedByINS)
         </dd>
 
         <dt class="col-sm-2" style="white-space:nowrap">
@@ -85,6 +91,13 @@
         </dt>
         <dd class="col-sm-10" style="margin-left:5px">
             @Model.GetYesNo(Model.Valid)
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            ¿@Html.DisplayNameFor(model => model.AvailableForClients)?
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Model.GetYesNo(Model.AvailableForClients)
         </dd>
 
         <dt class="col-sm-2" style="white-space:nowrap">

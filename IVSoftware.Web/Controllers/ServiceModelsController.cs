@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IVSoftware.Models;
 using IVSoftware.Web.Models;
+using IVSoftware.Data.Models;
 
 namespace IVSoftware.Web.Controllers
 {
@@ -82,15 +83,6 @@ namespace IVSoftware.Web.Controllers
                 Console.WriteLine("Error on Create.ReferenceMethods >> " + ex.ToString());
             }
 
-            try
-            {
-                ViewBag.WorkingRanges = await _context.WorkingRangeModel.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error on Create.WorkingRanges >> " + ex.ToString());
-            }
-
             return View();
         }
 
@@ -99,7 +91,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,SelectedWorkingRangeId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName")] ServiceModel serviceModel)
+        public async Task<IActionResult> Create([Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName")] ServiceModel serviceModel)
         {
             if (ModelState.IsValid)
             {
@@ -128,13 +120,13 @@ namespace IVSoftware.Web.Controllers
 
                 serviceModel.ReferenceMethod = referenceMethod;
 
-                WorkingRangeModel workingRange = null;
-                if(serviceModel.SelectedWorkingRangeId > 0)
-                {
-                    workingRange = await _context.WorkingRangeModel.FindAsync(serviceModel.SelectedWorkingRangeId);
-                }
+                //WorkingRangeModel workingRange = null;
+                //if(serviceModel.SelectedWorkingRangeId > 0)
+                //{
+                //    workingRange = await _context.WorkingRangeModel.FindAsync(serviceModel.SelectedWorkingRangeId);
+                //}
 
-                serviceModel.WorkingRange = workingRange;
+                //serviceModel.WorkingRange = workingRange;
 
                 _context.Add(serviceModel);
                 await _context.SaveChangesAsync();
@@ -173,11 +165,6 @@ namespace IVSoftware.Web.Controllers
                 serviceModel.SelectedReferenceMethodId = serviceModel.ReferenceMethod.Id;
             }
 
-            if(serviceModel.WorkingRange != null)
-            {
-                serviceModel.SelectedWorkingRangeId = serviceModel.WorkingRange.Id;
-            }
-
             try
             {
                 ViewBag.ServiceTypes = await _context.TypeOfService.ToListAsync();
@@ -214,15 +201,6 @@ namespace IVSoftware.Web.Controllers
                 Console.WriteLine("Error on Create.ReferenceMethods >> " + ex.ToString());
             }
 
-            try
-            {
-                ViewBag.WorkingRanges = await _context.WorkingRangeModel.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error on Create.WorkingRanges >> " + ex.ToString());
-            }
-
             return View(serviceModel);
         }
 
@@ -231,7 +209,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,SelectedWorkingRangeId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName")] ServiceModel serviceModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName")] ServiceModel serviceModel)
         {
             if (id != serviceModel.Id)
             {
@@ -267,13 +245,13 @@ namespace IVSoftware.Web.Controllers
 
                     serviceModel.ReferenceMethod = referenceMethod;
 
-                    WorkingRangeModel workingRange = null;
-                    if (serviceModel.SelectedWorkingRangeId > 0)
-                    {
-                        workingRange = await _context.WorkingRangeModel.FindAsync(serviceModel.SelectedWorkingRangeId);
-                    }
+                    //WorkingRangeModel workingRange = null;
+                    //if (serviceModel.SelectedWorkingRangeId > 0)
+                    //{
+                    //    workingRange = await _context.WorkingRangeModel.FindAsync(serviceModel.SelectedWorkingRangeId);
+                    //}
 
-                    serviceModel.WorkingRange = workingRange;
+                    //serviceModel.WorkingRange = workingRange;
 
                     _context.Update(serviceModel);
                     await _context.SaveChangesAsync();

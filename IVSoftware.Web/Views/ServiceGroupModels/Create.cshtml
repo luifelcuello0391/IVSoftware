@@ -1,4 +1,4 @@
-﻿@model IVSoftware.Web.Models.ServiceGroupModel
+﻿@model IVSoftware.Data.Models.ServiceGroupModel
 
 @{
     ViewData["Title"] = "Crear grupo de servicios";
@@ -26,6 +26,14 @@
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AvailableForClients" type="checkbox" checked /> @Html.DisplayNameFor(model => model.AvailableForClients)
+                </label>
+
+                <span asp-validation-for="AvailableForClients" class="text-danger"></span>
             </div>
 
             <div class="form-group" style="display:none">

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IVSoftware.Models.ServiceModel>
+﻿@model IEnumerable<IVSoftware.Data.Models.ServiceModel>
 
 @{
     ViewData["Title"] = "Servicios";
@@ -32,7 +32,7 @@
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.WorkingRange)
+                @Html.Raw("Rango de trabajo")
             </th>
 
             <th>
@@ -82,7 +82,7 @@
                 @Html.DisplayFor(modelItem => item.ReferenceMethodName)
             </td>
             <td style="white-space:nowrap">
-                @Html.DisplayFor(modelItem => item.WorkingRangeName)
+                @Html.DisplayFor(modelItem => item.WorkingRangeWithoutPrecondition)
             </td>
 
             <td style="white-space:nowrap">

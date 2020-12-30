@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using IVSoftware.Models;
 using IVSoftware.Web.Models;
 using System.Net;
+using IVSoftware.Data.Models;
 
 namespace IVSoftware.Web.Controllers
 {

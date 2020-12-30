@@ -1,4 +1,4 @@
-﻿@model IVSoftware.Models.ClientModel
+﻿@model IVSoftware.Data.Models.ClientModel
 
 @{
     ViewData["Title"] = "Eliminar cliente";
@@ -51,7 +51,7 @@
         <dd class="col-sm-10" style="margin-left:5px">
             @if (Model.Department != null)
             {
-                @Html.DisplayFor(model => model.Department.Nombre)
+                @Html.DisplayFor(model => model.Department.Name)
             }
             else
             {
@@ -65,7 +65,7 @@
         <dd class="col-sm-10" style="margin-left:5px">
             @if (Model.City != null)
             {
-                @Html.DisplayFor(model => model.City.Nombre)
+                @Html.DisplayFor(model => model.City.Name)
             }
             else
             {
@@ -199,7 +199,7 @@
                             <td style="white-space:nowrap">
                                 @if (item.DocumentType != null)
                                 {
-                                    @Html.DisplayFor(modelItem => item.DocumentType.Nombre)
+                                    @Html.DisplayFor(modelItem => item.DocumentType.Name)
                                 }
                                 else
                                 {
@@ -219,7 +219,7 @@
                             <td style="white-space:nowrap">
                                 @if (item.AddressDepartment != null)
                                 {
-                                    @Html.DisplayFor(modelItem => item.AddressDepartment.Nombre)
+                                    @Html.DisplayFor(modelItem => item.AddressDepartment.Name)
                                 }
                                 else
                                 {
@@ -230,7 +230,7 @@
                             <td style="white-space:nowrap">
                                 @if (item.City != null)
                                 {
-                                    @Html.DisplayFor(modelItem => item.City.Nombre)
+                                    @Html.DisplayFor(modelItem => item.City.Name)
                                 }
                                 else
                                 {
