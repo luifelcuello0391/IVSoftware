@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20201229214910_WorkExperience")]
+    partial class WorkExperience
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,31 +113,6 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("BloodType");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.Brand", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Brand");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.CertificationType", b =>
                 {
                     b.Property<int>("Id")
@@ -153,366 +130,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CertificationType");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.CheckListQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TypeOfQuestion")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CheckListQuestion");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.CheckListQuestionCheckListSection", b =>
-                {
-                    b.Property<int>("CheckListQuestionCheckListSectionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("QuestionsId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SectionsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CheckListQuestionCheckListSectionId");
-
-                    b.HasIndex("QuestionsId");
-
-                    b.HasIndex("SectionsId");
-
-                    b.ToTable("CheckListQuestionCheckListSection");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.CheckListResponseDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("HeaderId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Response")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HeaderId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("CheckListResponseDetail");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.CheckListSection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CheckListSection");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ChecklistResponseHeader", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("CheckListId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("EquipmentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FillUpDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Observation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("ValidatedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("ValidationResult")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CheckListId");
-
-                    b.HasIndex("EquipmentId");
-
-                    b.HasIndex("ValidatedById");
-
-                    b.ToTable("ChecklistResponseHeader");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ClientContact", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("AddressDepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CellPhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ClientModelId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Department")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DocumentTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Identification")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Position")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReportDeliveryEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressDepartmentId");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("ClientModelId");
-
-                    b.HasIndex("DocumentTypeId");
-
-                    b.ToTable("ClientContact");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ClientModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CellPhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ClientTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContactName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DocumentTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("EmailAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Identification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsRegular")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastServiceExecutionDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PersonType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("ClientTypeId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("DocumentTypeId");
-
-                    b.ToTable("ClientModel");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ClientTypeIncentiveRelation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ClientTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IncentiveId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientTypeId");
-
-                    b.HasIndex("IncentiveId");
-
-                    b.ToTable("ClientTypeIncentiveRelation");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ClientTypeModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("MustPayServices")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClientTypeModel");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.ContractType", b =>
@@ -601,149 +218,6 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("Eps");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.Equipment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<float>("Accuracy")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("EquipBrandId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EquipProviderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Magnitude")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("MinimumRead")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Model")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Observation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OtherRecomendation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("PowerSupply")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime?>("PurchaseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Range")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Serie")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EquipBrandId");
-
-                    b.HasIndex("EquipProviderId");
-
-                    b.ToTable("Equipment");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.EquipmentCheckList", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EquipmentCheckList");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.EquipmentCheckListQuestions", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("CheckListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CheckListId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("EquipmentCheckListQuestions");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.EquipmentCheckListSections", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ChecklistId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SectionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChecklistId");
-
-                    b.HasIndex("SectionId");
-
-                    b.ToTable("EquipmentCheckListSections");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.Gender", b =>
                 {
                     b.Property<int>("Id")
@@ -829,93 +303,6 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("IdentificationType");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.IncentiveModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsPercentage")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Value")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IncentiveModel");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.MatrixModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("OnlyForServices")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MatrixModel");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.MeasurementUnitModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MeasurementUnitModel");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.Municipality", b =>
                 {
                     b.Property<int>("Id")
@@ -943,35 +330,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Municipality");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.OtherTechnicalKnowledge", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Time")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("OtherTechnicalKnowledge");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.Person", b =>
@@ -1121,47 +479,6 @@ namespace IVSoftware.Web.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Person");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.TechnicalKnowledge", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
-
-                    b.Property<string>("AnalyticTechnique")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Matrix")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Service")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Time")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("TechnicalKnowledge");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.Training", b =>
@@ -1324,17 +641,42 @@ namespace IVSoftware.Web.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Contact")
+                    b.Property<string>("CellPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClientTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContactName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationDatetime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DocumentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Extension")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Identification")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRegular")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastServiceExecutionDatetime")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ModificationDatetime")
                         .HasColumnType("datetime2");
@@ -1342,6 +684,9 @@ namespace IVSoftware.Web.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PersonType")
+                        .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -1351,10 +696,102 @@ namespace IVSoftware.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Provider");
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("ClientTypeId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.ToTable("ClientModel");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.QuotationModel", b =>
+            modelBuilder.Entity("IVSoftware.Models.ClientTypeModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("MustPayServices")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClientTypeModel");
+                });
+
+            modelBuilder.Entity("IVSoftware.Models.MatrixModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("OnlyForServices")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MatrixModel");
+                });
+
+            modelBuilder.Entity("IVSoftware.Models.MeasurementUnitModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MeasurementUnitModel");
+                });
+
+            modelBuilder.Entity("IVSoftware.Models.QuotationModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1424,7 +861,7 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("QuotationModel");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.QuotationRequest", b =>
+            modelBuilder.Entity("IVSoftware.Models.QuotationRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1440,8 +877,8 @@ namespace IVSoftware.Web.Migrations
                     b.Property<DateTime>("CreationDatetime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("GenerationUsedId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("GenerationUsedId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("HasBeenGenerated")
                         .HasColumnType("bit");
@@ -1476,32 +913,7 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("QuotationRequest");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.QuotationStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("QuotationStatus");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ReferenceMethodCondition", b =>
+            modelBuilder.Entity("IVSoftware.Models.ReferenceMethodCondition", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1532,7 +944,7 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("ReferenceMethodCondition");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.ReferenceMethodModel", b =>
+            modelBuilder.Entity("IVSoftware.Models.ReferenceMethodModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1572,63 +984,7 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("ReferenceMethodModel");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.ServiceGroupModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<bool>("AvailableForClients")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServiceGroupModel");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ServiceGroupServicesRelation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("ServiceGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ServiceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ServiceGroupId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("ServiceGroupServicesRelation");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ServiceModel", b =>
+            modelBuilder.Entity("IVSoftware.Models.ServiceModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1639,9 +995,6 @@ namespace IVSoftware.Web.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("AuthorizedByINS")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("AvailableForClients")
                         .HasColumnType("bit");
 
                     b.Property<string>("BillingCode")
@@ -1662,23 +1015,11 @@ namespace IVSoftware.Web.Migrations
                     b.Property<int?>("MatrixGroupId")
                         .HasColumnType("int");
 
-                    b.Property<float>("MaximumValue")
-                        .HasColumnType("real");
-
-                    b.Property<float>("MinimumValue")
-                        .HasColumnType("real");
-
                     b.Property<DateTime?>("ModificationDatetime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("PersonId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Precondition")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ReferenceMethodId")
@@ -1699,183 +1040,23 @@ namespace IVSoftware.Web.Migrations
                     b.Property<bool>("Valid")
                         .HasColumnType("bit");
 
-                    b.Property<int>("WeeklyAssignmentQuantity")
+                    b.Property<int?>("WorkingRangeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MatrixGroupId");
 
-                    b.HasIndex("PersonId");
-
                     b.HasIndex("ReferenceMethodId");
 
                     b.HasIndex("ServiceTypeId");
 
+                    b.HasIndex("WorkingRangeId");
+
                     b.ToTable("ServiceModel");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.ServicesIntoQuotation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("QuotationRequestId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ServiceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuotationRequestId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("ServicesIntoQuotation");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.Training", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
-
-                    b.Property<int>("CertificationTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Entity")
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("NumberOfHours")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CertificationTypeId");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("Training");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.TypeOfService", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TypeOfService");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.VariableModel", b =>
+            modelBuilder.Entity("IVSoftware.Models.VariableModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1908,7 +1089,7 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("VariableModel");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.WorkingRangeModel", b =>
+            modelBuilder.Entity("IVSoftware.Models.WorkingRangeModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1971,6 +1152,287 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("AplicacionEvaluacion");
                 });
 
+            modelBuilder.Entity("IVSoftware.Web.Models.Brand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brand");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.CheckListQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeOfQuestion")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CheckListQuestion");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.CheckListQuestionCheckListSection", b =>
+                {
+                    b.Property<int>("CheckListQuestionCheckListSectionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("QuestionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SectionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CheckListQuestionCheckListSectionId");
+
+                    b.HasIndex("QuestionsId");
+
+                    b.HasIndex("SectionsId");
+
+                    b.ToTable("CheckListQuestionCheckListSection");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.CheckListResponseDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("HeaderId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Response")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HeaderId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("CheckListResponseDetail");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.CheckListSection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CheckListSection");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ChecklistResponseHeader", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("CheckListId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EquipmentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FillUpDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Observation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ValidatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("ValidationResult")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CheckListId");
+
+                    b.HasIndex("EquipmentId");
+
+                    b.HasIndex("ValidatedById");
+
+                    b.ToTable("ChecklistResponseHeader");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ClientContact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("AddressDepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CellPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClientModelId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Department")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DocumentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Identification")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Position")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReportDeliveryEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressDepartmentId");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("ClientModelId");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.ToTable("ClientContact");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ClientTypeIncentiveRelation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("ClientTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IncentiveId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientTypeId");
+
+                    b.HasIndex("IncentiveId");
+
+                    b.ToTable("ClientTypeIncentiveRelation");
+                });
+
             modelBuilder.Entity("IVSoftware.Web.Models.ConocimientoTecnico", b =>
                 {
                     b.Property<long>("Id")
@@ -1979,16 +1441,26 @@ namespace IVSoftware.Web.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Analisis")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Matriz")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("PersonaId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TecnicaAnalitica")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int>("Tiempo")
                         .HasColumnType("int");
@@ -2110,6 +1582,149 @@ namespace IVSoftware.Web.Migrations
                     b.HasIndex("PersonaId");
 
                     b.ToTable("EducacionSuperior");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.Equipment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<float>("Accuracy")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EquipBrandId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EquipProviderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Magnitude")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("MinimumRead")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Model")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Observation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherRecomendation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("PowerSupply")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime?>("PurchaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Range")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Serie")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EquipBrandId");
+
+                    b.HasIndex("EquipProviderId");
+
+                    b.ToTable("Equipment");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.EquipmentCheckList", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EquipmentCheckList");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.EquipmentCheckListQuestions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("CheckListId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CheckListId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("EquipmentCheckListQuestions");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.EquipmentCheckListSections", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("ChecklistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SectionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChecklistId");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("EquipmentCheckListSections");
                 });
 
             modelBuilder.Entity("IVSoftware.Web.Models.Evaluacion", b =>
@@ -2263,6 +1878,37 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("Idioma");
                 });
 
+            modelBuilder.Entity("IVSoftware.Web.Models.IncentiveModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPercentage")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Value")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IncentiveModel");
+                });
+
             modelBuilder.Entity("IVSoftware.Web.Models.ModalidadAcademica", b =>
                 {
                     b.Property<int>("Id")
@@ -2309,9 +1955,13 @@ namespace IVSoftware.Web.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("PersonaId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Tiempo")
@@ -2539,6 +2189,71 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("Pregunta");
                 });
 
+            modelBuilder.Entity("IVSoftware.Web.Models.Provider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Contact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Identification")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Provider");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.QuotationStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("QuotationStatus");
+                });
+
             modelBuilder.Entity("IVSoftware.Web.Models.Respuesta", b =>
                 {
                     b.Property<int>("Id")
@@ -2618,6 +2333,86 @@ namespace IVSoftware.Web.Migrations
                     b.HasIndex("TipoRolGestionId");
 
                     b.ToTable("RolSistemaGestion");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ServiceGroupModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ServiceModelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceModelId");
+
+                    b.ToTable("ServiceGroupModel");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ServiceGroupServicesRelation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("ServiceGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceGroupId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ServiceGroupServicesRelation");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ServicesIntoQuotation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("QuotationRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuotationRequestId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ServicesIntoQuotation");
                 });
 
             modelBuilder.Entity("IVSoftware.Web.Models.TipoCertificacion", b =>
@@ -2747,6 +2542,34 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TipoSangre");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.TypeOfService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModificationDatetime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TypeOfService");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -2891,192 +2714,6 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("Person");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.CheckListQuestionCheckListSection", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.CheckListQuestion", "CheckListQuestion")
-                        .WithMany("QuestionSection")
-                        .HasForeignKey("QuestionsId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
-
-                    b.HasOne("IVSoftware.Data.Models.CheckListSection", "CheckListSection")
-                        .WithMany("QuestionSections")
-                        .HasForeignKey("SectionsId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
-
-                    b.Navigation("CheckListQuestion");
-
-                    b.Navigation("CheckListSection");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.CheckListResponseDetail", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.ChecklistResponseHeader", "Header")
-                        .WithMany("Details")
-                        .HasForeignKey("HeaderId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.CheckListQuestion", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Header");
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ChecklistResponseHeader", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.EquipmentCheckList", "CheckList")
-                        .WithMany()
-                        .HasForeignKey("CheckListId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.Equipment", "Equipment")
-                        .WithMany()
-                        .HasForeignKey("EquipmentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.Person", "ValidatedBy")
-                        .WithMany()
-                        .HasForeignKey("ValidatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CheckList");
-
-                    b.Navigation("Equipment");
-
-                    b.Navigation("ValidatedBy");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ClientContact", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.Department", "AddressDepartment")
-                        .WithMany()
-                        .HasForeignKey("AddressDepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.Municipality", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.ClientModel", null)
-                        .WithMany("Contacts")
-                        .HasForeignKey("ClientModelId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.IdentificationType", "DocumentType")
-                        .WithMany()
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("AddressDepartment");
-
-                    b.Navigation("City");
-
-                    b.Navigation("DocumentType");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ClientModel", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.Municipality", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.ClientTypeModel", "ClientType")
-                        .WithMany()
-                        .HasForeignKey("ClientTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.IdentificationType", "DocumentType")
-                        .WithMany()
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("City");
-
-                    b.Navigation("ClientType");
-
-                    b.Navigation("Department");
-
-                    b.Navigation("DocumentType");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ClientTypeIncentiveRelation", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.ClientTypeModel", "ClientType")
-                        .WithMany("Incentives")
-                        .HasForeignKey("ClientTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.IncentiveModel", "Incentive")
-                        .WithMany("ClientTypes")
-                        .HasForeignKey("IncentiveId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ClientType");
-
-                    b.Navigation("Incentive");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.Equipment", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.Brand", "EquipBrand")
-                        .WithMany()
-                        .HasForeignKey("EquipBrandId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.Provider", "EquipProvider")
-                        .WithMany()
-                        .HasForeignKey("EquipProviderId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("EquipBrand");
-
-                    b.Navigation("EquipProvider");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.EquipmentCheckListQuestions", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.EquipmentCheckList", "Checklist")
-                        .WithMany("Questions")
-                        .HasForeignKey("CheckListId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.CheckListQuestion", "Question")
-                        .WithMany("CheckList")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Checklist");
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.EquipmentCheckListSections", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.EquipmentCheckList", "CheckList")
-                        .WithMany("Sections")
-                        .HasForeignKey("ChecklistId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.CheckListSection", "Section")
-                        .WithMany("CheckLists")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CheckList");
-
-                    b.Navigation("Section");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.HigherEducation", b =>
                 {
                     b.HasOne("IVSoftware.Data.Models.AcademicLevel", "AcademicLevel")
@@ -3104,17 +2741,6 @@ namespace IVSoftware.Web.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.OtherTechnicalKnowledge", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.Person", "Person")
-                        .WithMany("OtherTechnicalKnowledges")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.Person", b =>
@@ -3195,17 +2821,6 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.TechnicalKnowledge", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.Person", "Person")
-                        .WithMany("TechnicalKnowledges")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.Training", b =>
                 {
                     b.HasOne("IVSoftware.Data.Models.CertificationType", "CertificationType")
@@ -3238,17 +2853,48 @@ namespace IVSoftware.Web.Migrations
 
             modelBuilder.Entity("IVSoftware.Models.ClientModel", b =>
                 {
-                    b.HasOne("IVSoftware.Data.Models.ClientModel", "Client")
+                    b.HasOne("IVSoftware.Web.Models.Municipio", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Models.ClientTypeModel", "ClientType")
+                        .WithMany()
+                        .HasForeignKey("ClientTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.Departamento", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.TipoDocumento", "DocumentType")
+                        .WithMany()
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("City");
+
+                    b.Navigation("ClientType");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("DocumentType");
+                });
+
+            modelBuilder.Entity("IVSoftware.Models.QuotationRequest", b =>
+                {
+                    b.HasOne("IVSoftware.Models.ClientModel", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("IVSoftware.Data.Models.Person", "GenerationUsed")
+                    b.HasOne("IVSoftware.Web.Models.Persona", "GenerationUsed")
                         .WithMany()
                         .HasForeignKey("GenerationUsedId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("IVSoftware.Data.Models.QuotationStatus", "Status")
+                    b.HasOne("IVSoftware.Web.Models.QuotationStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -3260,93 +2906,40 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.ServiceGroupServicesRelation", b =>
+            modelBuilder.Entity("IVSoftware.Models.ServiceModel", b =>
                 {
-                    b.HasOne("IVSoftware.Data.Models.ServiceGroupModel", "ServiceGroup")
-                        .WithMany("Services")
-                        .HasForeignKey("ServiceGroupId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.ServiceModel", "Service")
-                        .WithMany("ServiceGroups")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Service");
-
-                    b.Navigation("ServiceGroup");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ServiceModel", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.MatrixModel", "MatrixGroup")
+                    b.HasOne("IVSoftware.Models.MatrixModel", "MatrixGroup")
                         .WithMany()
                         .HasForeignKey("MatrixGroupId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("IVSoftware.Data.Models.Person", "Responsable")
-                        .WithMany("Services")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("IVSoftware.Data.Models.ReferenceMethodModel", "ReferenceMethod")
+                    b.HasOne("IVSoftware.Models.ReferenceMethodModel", "ReferenceMethod")
                         .WithMany()
                         .HasForeignKey("ReferenceMethodId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("IVSoftware.Data.Models.TypeOfService", "ServiceType")
+                    b.HasOne("IVSoftware.Web.Models.TypeOfService", "ServiceType")
                         .WithMany()
                         .HasForeignKey("ServiceTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Models.WorkingRangeModel", "WorkingRange")
+                        .WithMany()
+                        .HasForeignKey("WorkingRangeId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("MatrixGroup");
 
                     b.Navigation("ReferenceMethod");
 
-                    b.Navigation("Responsable");
-
                     b.Navigation("ServiceType");
+
+                    b.Navigation("WorkingRange");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.ServicesIntoQuotation", b =>
+            modelBuilder.Entity("IVSoftware.Models.VariableModel", b =>
                 {
-                    b.HasOne("IVSoftware.Data.Models.QuotationRequest", "QuotationRequest")
-                        .WithMany("Services")
-                        .HasForeignKey("QuotationRequestId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.ServiceModel", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("QuotationRequest");
-
-                    b.Navigation("Service");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.Training", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.CertificationType", "CertificationType")
-                        .WithMany("Trainings")
-                        .HasForeignKey("CertificationTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("IVSoftware.Data.Models.Person", "Person")
-                        .WithMany("Trainings")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CertificationType");
-
-                    b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.VariableModel", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.MeasurementUnitModel", "MeasurementUnit")
+                    b.HasOne("IVSoftware.Models.MeasurementUnitModel", "MeasurementUnit")
                         .WithMany()
                         .HasForeignKey("MeasurementUnitId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -3373,12 +2966,117 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("Persona");
                 });
 
+            modelBuilder.Entity("IVSoftware.Web.Models.CheckListQuestionCheckListSection", b =>
+                {
+                    b.HasOne("IVSoftware.Web.Models.CheckListQuestion", "CheckListQuestion")
+                        .WithMany("QuestionSection")
+                        .HasForeignKey("QuestionsId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("IVSoftware.Web.Models.CheckListSection", "CheckListSection")
+                        .WithMany("QuestionSections")
+                        .HasForeignKey("SectionsId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.Navigation("CheckListQuestion");
+
+                    b.Navigation("CheckListSection");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.CheckListResponseDetail", b =>
+                {
+                    b.HasOne("IVSoftware.Web.Models.ChecklistResponseHeader", "Header")
+                        .WithMany("Details")
+                        .HasForeignKey("HeaderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.CheckListQuestion", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Header");
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ChecklistResponseHeader", b =>
+                {
+                    b.HasOne("IVSoftware.Web.Models.EquipmentCheckList", "CheckList")
+                        .WithMany()
+                        .HasForeignKey("CheckListId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.Equipment", "Equipment")
+                        .WithMany()
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.Persona", "ValidatedBy")
+                        .WithMany()
+                        .HasForeignKey("ValidatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CheckList");
+
+                    b.Navigation("Equipment");
+
+                    b.Navigation("ValidatedBy");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ClientContact", b =>
+                {
+                    b.HasOne("IVSoftware.Web.Models.Departamento", "AddressDepartment")
+                        .WithMany()
+                        .HasForeignKey("AddressDepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.Municipio", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Models.ClientModel", null)
+                        .WithMany("Contacts")
+                        .HasForeignKey("ClientModelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.TipoDocumento", "DocumentType")
+                        .WithMany()
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("AddressDepartment");
+
+                    b.Navigation("City");
+
+                    b.Navigation("DocumentType");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ClientTypeIncentiveRelation", b =>
+                {
+                    b.HasOne("IVSoftware.Models.ClientTypeModel", "ClientType")
+                        .WithMany("Incentives")
+                        .HasForeignKey("ClientTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.IncentiveModel", "Incentive")
+                        .WithMany("ClientTypes")
+                        .HasForeignKey("IncentiveId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ClientType");
+
+                    b.Navigation("Incentive");
+                });
+
             modelBuilder.Entity("IVSoftware.Web.Models.ConocimientoTecnico", b =>
                 {
                     b.HasOne("IVSoftware.Web.Models.Persona", "Persona")
                         .WithMany("ListConocimientoTecnico")
                         .HasForeignKey("PersonaId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Persona");
                 });
@@ -3428,6 +3126,57 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("ModalidadAcademica");
 
                     b.Navigation("Persona");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.Equipment", b =>
+                {
+                    b.HasOne("IVSoftware.Web.Models.Brand", "EquipBrand")
+                        .WithMany()
+                        .HasForeignKey("EquipBrandId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.Provider", "EquipProvider")
+                        .WithMany()
+                        .HasForeignKey("EquipProviderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("EquipBrand");
+
+                    b.Navigation("EquipProvider");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.EquipmentCheckListQuestions", b =>
+                {
+                    b.HasOne("IVSoftware.Web.Models.EquipmentCheckList", "Checklist")
+                        .WithMany("Questions")
+                        .HasForeignKey("CheckListId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.CheckListQuestion", "Question")
+                        .WithMany("CheckList")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Checklist");
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.EquipmentCheckListSections", b =>
+                {
+                    b.HasOne("IVSoftware.Web.Models.EquipmentCheckList", "CheckList")
+                        .WithMany("Sections")
+                        .HasForeignKey("ChecklistId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Web.Models.CheckListSection", "Section")
+                        .WithMany("CheckLists")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CheckList");
+
+                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("IVSoftware.Web.Models.ExperienciaLaboral", b =>
@@ -3512,7 +3261,8 @@ namespace IVSoftware.Web.Migrations
                     b.HasOne("IVSoftware.Web.Models.Persona", "Persona")
                         .WithMany("ListOtroConocimiento")
                         .HasForeignKey("PersonaId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Persona");
                 });
@@ -3669,6 +3419,48 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("TipoRolGestion");
                 });
 
+            modelBuilder.Entity("IVSoftware.Web.Models.ServiceGroupModel", b =>
+                {
+                    b.HasOne("IVSoftware.Models.ServiceModel", null)
+                        .WithMany("ServiceGroups")
+                        .HasForeignKey("ServiceModelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ServiceGroupServicesRelation", b =>
+                {
+                    b.HasOne("IVSoftware.Web.Models.ServiceGroupModel", "ServiceGroup")
+                        .WithMany("Services")
+                        .HasForeignKey("ServiceGroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Models.ServiceModel", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Service");
+
+                    b.Navigation("ServiceGroup");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ServicesIntoQuotation", b =>
+                {
+                    b.HasOne("IVSoftware.Models.QuotationRequest", "QuotationRequest")
+                        .WithMany("Services")
+                        .HasForeignKey("QuotationRequestId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("IVSoftware.Models.ServiceModel", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("QuotationRequest");
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -3740,35 +3532,6 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("Trainings");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.CheckListQuestion", b =>
-                {
-                    b.Navigation("CheckList");
-
-                    b.Navigation("QuestionSection");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.CheckListSection", b =>
-                {
-                    b.Navigation("CheckLists");
-
-                    b.Navigation("QuestionSections");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ChecklistResponseHeader", b =>
-                {
-                    b.Navigation("Details");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ClientModel", b =>
-                {
-                    b.Navigation("Contacts");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ClientTypeModel", b =>
-                {
-                    b.Navigation("Incentives");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.ContractType", b =>
                 {
                     b.Navigation("People");
@@ -3791,13 +3554,6 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("People");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.EquipmentCheckList", b =>
-                {
-                    b.Navigation("Questions");
-
-                    b.Navigation("Sections");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.Gender", b =>
                 {
                     b.Navigation("Persons");
@@ -3806,11 +3562,6 @@ namespace IVSoftware.Web.Migrations
             modelBuilder.Entity("IVSoftware.Data.Models.IdentificationType", b =>
                 {
                     b.Navigation("People");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.IncentiveModel", b =>
-                {
-                    b.Navigation("ClientTypes");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.Municipality", b =>
@@ -3826,30 +3577,9 @@ namespace IVSoftware.Web.Migrations
 
                     b.Navigation("HigherEducations");
 
-                    b.Navigation("OtherTechnicalKnowledges");
-
-                    b.Navigation("TechnicalKnowledges");
-
-                    b.Navigation("Services");
-
                     b.Navigation("Trainings");
 
                     b.Navigation("WorkExperiences");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.QuotationRequest", b =>
-                {
-                    b.Navigation("Services");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ServiceGroupModel", b =>
-                {
-                    b.Navigation("Services");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.ServiceModel", b =>
-                {
-                    b.Navigation("ServiceGroups");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.User", b =>
@@ -3857,9 +3587,60 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("Person");
                 });
 
+            modelBuilder.Entity("IVSoftware.Models.ClientModel", b =>
+                {
+                    b.Navigation("Contacts");
+                });
+
+            modelBuilder.Entity("IVSoftware.Models.ClientTypeModel", b =>
+                {
+                    b.Navigation("Incentives");
+                });
+
+            modelBuilder.Entity("IVSoftware.Models.QuotationRequest", b =>
+                {
+                    b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("IVSoftware.Models.ServiceModel", b =>
+                {
+                    b.Navigation("ServiceGroups");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.CheckListQuestion", b =>
+                {
+                    b.Navigation("CheckList");
+
+                    b.Navigation("QuestionSection");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.CheckListSection", b =>
+                {
+                    b.Navigation("CheckLists");
+
+                    b.Navigation("QuestionSections");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ChecklistResponseHeader", b =>
+                {
+                    b.Navigation("Details");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.EquipmentCheckList", b =>
+                {
+                    b.Navigation("Questions");
+
+                    b.Navigation("Sections");
+                });
+
             modelBuilder.Entity("IVSoftware.Web.Models.Evaluacion", b =>
                 {
                     b.Navigation("ListPregunta");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.IncentiveModel", b =>
+                {
+                    b.Navigation("ClientTypes");
                 });
 
             modelBuilder.Entity("IVSoftware.Web.Models.ModalidadAcademica", b =>
@@ -3889,6 +3670,11 @@ namespace IVSoftware.Web.Migrations
             modelBuilder.Entity("IVSoftware.Web.Models.Pregunta", b =>
                 {
                     b.Navigation("ListRespuesta");
+                });
+
+            modelBuilder.Entity("IVSoftware.Web.Models.ServiceGroupModel", b =>
+                {
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("IVSoftware.Web.Models.TipoCertificacion", b =>

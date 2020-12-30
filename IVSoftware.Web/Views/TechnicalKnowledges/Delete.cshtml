@@ -1,0 +1,82 @@
+﻿@model TechnicalKnowledge
+@{
+    ViewData["Title"] = "Conocimiento Técnico - Eliminar";
+}
+
+<form asp-action="Delete">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="PersonId" type="hidden" />
+    <input asp-for="Id" type="hidden" />
+    <div>
+        <h5 class="text-primary titulo"><strong>¿Está seguro de que quiere eliminar este registro?</strong></h5>
+    </div>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Person.FullName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Person.FullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Person.IdentificationNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Person.IdentificationNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Person.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Person.Email)
+        </dd>
+    </dl>
+
+    <div class="row" style="margin-top:20px">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Service" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Service" class="form-control" readonly="readonly" />
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="AnalyticTechnique" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="AnalyticTechnique" class="form-control" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Matrix" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Matrix" class="form-control" readonly="readonly" />
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Time" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Time" class="form-control" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Eliminar" class="btn btn-primary" />
+                <a asp-controller="People" asp-action="Edit" asp-route-id="@Model.PersonId" class="btn btn-primary"> Cancelar </a>
+            </div>
+        </div>
+    </div>
+</form>

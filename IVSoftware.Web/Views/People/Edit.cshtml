@@ -236,6 +236,15 @@
             <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseEducacionSuperior" role="button" aria-expanded="false" aria-controls="collapseExample">
                 Educación superior
             </a>
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseFormacion" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Formación
+            </a>
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseExperiencia" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Experiencia
+            </a>
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseConocimientoTecnico" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Conocimiento técnico específico
+            </a>
 
             <div class="collapse" id="collapseEducacionBasica" style="margin-top:20px">
                 <div class="card card-body">
@@ -346,6 +355,229 @@
                         <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "HigherEducations", new { personId = Model.Id })'"
                                class="btn btn-primary btn-sm"
                                style="margin-top:10px" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapse" id="collapseFormacion" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Formación</h6>
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Trainings.FirstOrDefault().Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Trainings.FirstOrDefault().Subject)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Trainings.FirstOrDefault().CertificationType.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Trainings.FirstOrDefault().Entity)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Trainings.FirstOrDefault().EndDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Trainings.FirstOrDefault().NumberOfHours)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Trainings)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Subject)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CertificationType.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Entity)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EndDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NumberOfHours)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-controller="Trainings" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="Trainings" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "Trainings", new { personId = Model.Id })'"
+                               class="btn btn-primary btn-sm"
+                               style="margin-top:10px" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapse" id="collapseExperiencia" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Experiencia</h6>
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WorkExperiences.FirstOrDefault().CompanyName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WorkExperiences.FirstOrDefault().JobTitle)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WorkExperiences.FirstOrDefault().StartDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WorkExperiences.FirstOrDefault().EndDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.WorkExperiences.FirstOrDefault().Responsibilities)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.WorkExperiences)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CompanyName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.JobTitle)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StartDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EndDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Responsibilities)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-controller="WorkExperiences" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="WorkExperiences" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "WorkExperiences", new { personId = Model.Id })'"
+                               class="btn btn-primary btn-sm"
+                               style="margin-top:10px" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapse" id="collapseConocimientoTecnico" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Conocimiento técnico específico</h6>
+                    <div class="row">
+                        <div class="col">
+                            <table class="table">
+                                <thead style="background-color:yellowgreen; color:white">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.TechnicalKnowledges.FirstOrDefault().Service)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.TechnicalKnowledges.FirstOrDefault().AnalyticTechnique)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.TechnicalKnowledges.FirstOrDefault().Matrix)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.TechnicalKnowledges.FirstOrDefault().Time)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.TechnicalKnowledges)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Service)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.AnalyticTechnique)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Matrix)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Time)
+                                            </td>
+                                            <td align="right">
+                                                <a asp-controller="TechnicalKnowledges" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                                <a asp-controller="TechnicalKnowledges" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div>
+                                <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "TechnicalKnowledges", new { personId = Model.Id })'"
+                                       class="btn btn-primary btn-sm"
+                                       style="margin-top:10px" />
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="text-success titulo" style="margin-top:20px">Otros</h6>
+                    <div class="row">
+                        <div class="col">
+                            <table class="table">
+                                <thead style="background-color:yellowgreen; color:white">
+                                <thead style="background-color:yellowgreen; color:white">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.OtherTechnicalKnowledges.FirstOrDefault().Name)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.OtherTechnicalKnowledges.FirstOrDefault().Time)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OtherTechnicalKnowledges)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Time)
+                                            </td>
+                                            <td align="right">
+                                                <a asp-controller="OtherTechnicalKnowledges" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                                <a asp-controller="OtherTechnicalKnowledges" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div>
+                                <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "OtherTechnicalKnowledges", new { personId = Model.Id })'"
+                                       class="btn btn-primary btn-sm"
+                                       style="margin-top:10px" />
+                            </div>
+                        </div>
+                        <div class="col"></div>
                     </div>
                 </div>
             </div>

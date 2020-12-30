@@ -71,27 +71,7 @@ namespace IVSoftware.Web.Models
             new ArlConfiguration("Arl", "Id").Map(modelBuilder);
 
             // ConocimientoTecnico **************************************************************************************************************
-
-            modelBuilder.Entity<ConocimientoTecnico>(entity =>
-            {
-                entity.Property(e => e.Analisis)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Matriz)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PersonaId)
-                    .IsRequired();
-
-                entity.Property(e => e.TecnicaAnalitica)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
+            new TechnicalKnowledgeConfiguration("TechnicalKnowledge", "Id").Map(modelBuilder);
 
             // Departamento **************************************************************************************************************
             new DepartmentConfiguration("Department", "Id").Map(modelBuilder);
@@ -106,48 +86,7 @@ namespace IVSoftware.Web.Models
             new EpsConfiguration("Eps", "Id").Map(modelBuilder);
 
             // ExperienciaLaboral **************************************************************************************************************
-
-            modelBuilder.Entity<ExperienciaLaboral>(entity =>
-            {
-                entity.Property(e => e.CargoContrato)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CorreoElectronico)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Dependencia)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Direccion)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FechaIngreso).HasColumnType("datetime");
-
-                entity.Property(e => e.FechaRetiro).HasColumnType("datetime");
-
-                entity.Property(e => e.NombreEmpresa)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PersonaId)
-                    .IsRequired();
-
-                entity.Property(e => e.Responsabilidades)
-                    .IsRequired()
-                    .HasColumnType("text");
-
-                entity.Property(e => e.Telefono)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-            });
+            new WorkExperienceConfiguration("WorkExperience", "Id").Map(modelBuilder);
 
             // Formacion **************************************************************************************************************
             new TrainingConfiguration("Training", "Id").Map(modelBuilder);
@@ -160,17 +99,7 @@ namespace IVSoftware.Web.Models
             new MunicipalityConfiguration("Municipality", "Id").Map(modelBuilder);
 
             // OtroConocimiento **************************************************************************************************************
-
-            modelBuilder.Entity<OtroConocimiento>(entity =>
-            {
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PersonaId)
-                    .IsRequired();
-            });
+            new OtherTechnicalKnowledgeConfiguration("OtherTechnicalKnowledge", "Id").Map(modelBuilder);
 
             // Pais **************************************************************************************************************
             new CountryConfiguration("Country", "Id").Map(modelBuilder);

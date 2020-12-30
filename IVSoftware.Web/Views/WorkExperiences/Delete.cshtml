@@ -1,12 +1,15 @@
-﻿@model HigherEducation
+﻿@model WorkExperience
 @{
-    ViewData["Title"] = "Educación Superior - Agregar";
+    ViewData["Title"] = "Experiencia Laboral - Eliminar";
 }
 
-<form asp-action="Create">
+<form asp-action="Delete">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input asp-for="PersonId" type="hidden" />
-    <h5 class="text-primary titulo">Educación básica - Agregar</h5>
+    <input asp-for="Id" type="hidden" />
+    <div>
+        <h5 class="text-primary titulo"><strong>¿Está seguro de que quiere eliminar este registro?</strong></h5>
+    </div>
     <hr />
 
     <dl class="row">
@@ -34,19 +37,36 @@
         <div class="col">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="InstitutionName" class="control-label" style="color:white"></label>
+                    <label asp-for="CompanyName" class="control-label" style="color:white"></label>
                 </div>
-                <input asp-for="InstitutionName" class="form-control" />
-                <span asp-validation-for="InstitutionName" class="text-danger"></span>
+                <input asp-for="CompanyName" class="form-control" readonly="readonly" />
             </div>
         </div>
         <div class="col">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="StudiesName" class="control-label" style="color:white"></label>
+                    <label asp-for="JobTitle" class="control-label" style="color:white"></label>
                 </div>
-                <input asp-for="StudiesName" min="0" class="form-control" />
-                <span asp-validation-for="StudiesName" class="text-danger"></span>
+                <input asp-for="JobTitle" class="form-control" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="StartDate" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="StartDate" class="form-control" type="date" readonly="readonly" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="EndDate" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="EndDate" class="form-control" type="date" readonly="readonly" />
             </div>
         </div>
     </div>
@@ -55,34 +75,9 @@
         <div class="col">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="DegreeDate" class="control-label" style="color:white"></label>
+                    <label asp-for="Responsibilities" class="control-label" style="color:white"></label>
                 </div>
-                <input asp-for="DegreeDate" class="form-control" type="date" />
-                <span asp-validation-for="DegreeDate" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="AcademicLevelId" style="color:white"></label>
-                </div>
-                <select asp-for="AcademicLevelId" class="form-control">
-                    <option value=""></option>
-                    @foreach (var item in ViewBag.AcademicLevels)
-                    {
-                        <option value="@item.Value">@item.Text</option>
-                    }
-                </select>
-                <span asp-validation-for="AcademicLevelId" class="text-danger small"></span>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="ProfessionalCardNumber" class="control-label" style="color:white"></label>
-                </div>
-                <input asp-for="ProfessionalCardNumber" class="form-control" />
-                <span asp-validation-for="ProfessionalCardNumber" class="text-danger"></span>
+                <textarea asp-for="Responsibilities" class="form-control" rows="4" readonly="readonly"></textarea>
             </div>
         </div>
     </div>
@@ -90,13 +85,9 @@
     <div class="row">
         <div class="col">
             <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <input type="submit" value="Eliminar" class="btn btn-primary" />
                 <a asp-controller="People" asp-action="Edit" asp-route-id="@Model.PersonId" class="btn btn-primary"> Cancelar </a>
             </div>
         </div>
     </div>
 </form>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
