@@ -71,27 +71,7 @@ namespace IVSoftware.Web.Models
             new ArlConfiguration("Arl", "Id").Map(modelBuilder);
 
             // ConocimientoTecnico **************************************************************************************************************
-
-            modelBuilder.Entity<ConocimientoTecnico>(entity =>
-            {
-                entity.Property(e => e.Analisis)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Matriz)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PersonaId)
-                    .IsRequired();
-
-                entity.Property(e => e.TecnicaAnalitica)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
+            new TechnicalKnowledgeConfiguration("TechnicalKnowledge", "Id").Map(modelBuilder);
 
             // Departamento **************************************************************************************************************
             new DepartmentConfiguration("Department", "Id").Map(modelBuilder);
