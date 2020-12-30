@@ -19,7 +19,7 @@ namespace IVSoftware.Data.Models
         [DisplayName("Matriz")]
         public string Matrix { get; set; }
 
-        [DisplayName("Time")]
+        [DisplayName("Tiempo")]
         [Required(ErrorMessage = "El {0} es requerido.")]
         public string Time { get; set; }
 

@@ -16,10 +16,10 @@ namespace IVSoftware.Web.BusinessLogic
             var person = id.HasValue ?
                await _personService.GetByIdAndIncludeAsync(id.Value, p => p.User,
                    p => p.BasicEducations, p => p.HigherEducations, p => p.Trainings,
-                   p => p.WorkExperiences)
+                   p => p.WorkExperiences, p => p.TechnicalKnowledges)
                : (await _personService.FindByConditionAndIncludeAsync(p => p.Email == email,
                    p => p.User, p => p.BasicEducations, p => p.HigherEducations, p => p.Trainings,
-                   p => p.WorkExperiences)).FirstOrDefault();
+                   p => p.WorkExperiences, p => p.TechnicalKnowledges)).FirstOrDefault();
 
             if (person != null)
             {
