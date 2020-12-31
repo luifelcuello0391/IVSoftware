@@ -64,9 +64,7 @@ namespace IVSoftware.Data.Models
         [DisplayName("Nombre de facturación")]
         public string BillingName { get; set; }
 
-        public virtual ICollection<ServiceGroupServicesRelation> ServiceGroups { get; set; }
-
-        
+        public virtual ICollection<ServiceGroupServicesRelation> ServiceGroups { get; set; }        
 
         // New data added after december 25th reunion
 

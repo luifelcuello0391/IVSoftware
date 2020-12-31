@@ -58,7 +58,8 @@ namespace IVSoftware.Web.Controllers
         public string GetCityByStateId(int stateid)
         {
             List<Municipio> objcity = new List<Municipio>();
-            objcity = _context.Municipio.Where(m => m.Departamento != null && m.Departamento.Id == stateid).ToList();
+            objcity = _context.Municipio.Where<Municipio>(x => x.Departamento != null && x.Departamento.Id == stateid).ToList();
+
             string result = string.Empty;
 
             if(objcity != null && objcity.Count > 0)

@@ -88,7 +88,7 @@
                         if (parseInt(data[0]) == document.getElementById("input_city_id").value ) {
                             option.selected = true;
                         }
-                        
+
                         option.value = data[0];
                         option.text = data[1];
 
@@ -233,6 +233,44 @@
         function citySelection(e) {
             document.getElementById("input_city_id").value = e.target.value
         }
+
+        function departmentAutomaticSelectionOnContactLoad(e) {
+            document.getElementById("cbx_department_contact").value = e;
+
+            var url = "@Url.Action("GetCityByStateId")";
+
+            $.ajax({
+                url: url,
+                data: { stateid: e },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var splitted = data.split("|");
+                    var x = document.getElementById("cbx_city_contact");
+                    x.innerHTML = "";
+                    x.innerHTML = "<option value=\"0\" disabled selected></option>";
+
+                    for (var index = 0; index < splitted.length; index++)
+                    {
+                        var data = splitted[index].split(";");
+
+                        var option = document.createElement("option");
+                        if (document.getElementById("input_city_id").value == data[0])
+                        {
+                            option.selected = true;
+                        }
+
+                        option.value = data[0];
+                        option.text = data[1];
+
+                        x.add(option);
+                    }
+                },
+                error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        }
     </script>
 </head>
 
@@ -284,13 +322,13 @@
 
             <div class="form-group">
                 <label asp-for="Identification" class="control-label"></label>
-                <input asp-for="Identification" class="form-control" />
+                <input id="txt_identification" asp-for="Identification" class="form-control" />
                 <span asp-validation-for="Identification" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label" id="lbl_name"></label>
-                <input asp-for="Name" class="form-control" />
+                <input id="txt_name" asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
@@ -354,7 +392,7 @@
 
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
+                <input id="txt_address" asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
 
@@ -363,7 +401,7 @@
                     <td>
                         <div class="form-group">
                             <label asp-for="PhoneNumber" class="control-label"></label>
-                            <input asp-for="PhoneNumber" class="form-control" />
+                            <input id="txt_phone_number" asp-for="PhoneNumber" class="form-control" />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
                     </td>
@@ -371,7 +409,7 @@
                     <td>
                         <div class="form-group">
                             <label asp-for="Extension" class="control-label"></label>
-                            <input asp-for="Extension" class="form-control" />
+                            <input id="txt_extension" asp-for="Extension" class="form-control" />
                             <span asp-validation-for="Extension" class="text-danger"></span>
                         </div>
                     </td>
@@ -380,7 +418,7 @@
 
             <div class="form-group">
                 <label asp-for="CellPhone" class="control-label"></label>
-                <input asp-for="CellPhone" class="form-control" />
+                <input id="txt_cellphone" asp-for="CellPhone" class="form-control" />
                 <span asp-validation-for="CellPhone" class="text-danger"></span>
             </div>
 
@@ -725,6 +763,21 @@
 
     $(document).ready(function () {
         $("#btnShowModal").click(function () {
+
+            if (document.getElementById("cbx_person_type").value == 1) {
+                document.getElementById("cbx_doc_type_contact").value = document.getElementById("cbx_doc_type").value;
+                document.getElementById("txt_identification_contact").value = document.getElementById("txt_identification").value;
+                document.getElementById("txt_name_contact").value = document.getElementById("txt_name").value;
+                document.getElementById("cbx_department_contact").value = document.getElementById("cbx_department").value;
+                departmentAutomaticSelectionOnContactLoad(document.getElementById("cbx_department").value);
+                
+                document.getElementById("txt_phone_contact").value = document.getElementById("txt_phone_number").value;
+                document.getElementById("txt_cellphone_contact").value = document.getElementById("txt_cellphone").value;
+                document.getElementById("txt_extension_contact").value = document.getElementById("txt_extension").value;
+                document.getElementById("txt_address_contact").value = document.getElementById("txt_address").value;
+                document.getElementById("cbx_city_contact").value = document.getElementById("cbx_city").value;
+            }
+
             $("#loginModal").modal('show');
         });
 
@@ -736,10 +789,11 @@
             $("#loginModal").modal('hide');
         });
 
-        if ($("cbx_person_type").value == 1) {
+        if (document.getElementById("cbx_person_type").value == 1) {
             $("lbl_name").value = "Nombres y apellidos";
         }
-        else {
+        else
+        {
             $("lbl_name").value = "Nombres";
         }
 
@@ -747,6 +801,18 @@
             // your code here
             departmentSelection(document.getElementById("cbx_department").value);
         }).change(); // automatically execute the on change function you just wrote
+
+        $("#cbx_doc_type").change(function () {
+            // your code here
+            docTypeSelection(document.getElementById("cbx_doc_type").value);
+        }).change(); // automatically execute the on change function you just wrote
+
+        $("#cbx_city").change(function () {
+            // your code here
+            citySelection(document.getElementById("cbx_city").value);
+        }).change(); // automatically execute the on change function you just wrote
+
+
     });
 
 </script>

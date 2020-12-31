@@ -92,7 +92,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName")] ServiceModel serviceModel)
+        public async Task<IActionResult> Create([Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue")] ServiceModel serviceModel)
         {
             if (ModelState.IsValid)
             {
@@ -210,7 +210,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName")] ServiceModel serviceModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue")] ServiceModel serviceModel)
         {
             if (id != serviceModel.Id)
             {
