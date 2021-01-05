@@ -36,8 +36,14 @@
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                     <label asp-for="Service" class="control-label" style="color:white"></label>
                 </div>
-                <input asp-for="Service" class="form-control" />
-                <span asp-validation-for="Service" class="text-danger"></span>
+                <select asp-for="ServiceId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.Services)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="ServiceId" class="text-danger"></span>
             </div>
         </div>
         <div class="col">
@@ -55,10 +61,16 @@
         <div class="col">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="Matrix" class="control-label" style="color:white"></label>
+                    <label asp-for="MatrixId" class="control-label" style="color:white"></label>
                 </div>
-                <input asp-for="Matrix" class="form-control" />
-                <span asp-validation-for="Matrix" class="text-danger"></span>
+                <select asp-for="MatrixId" class="form-control">
+                    <option value=""></option>
+                    @foreach (var item in ViewBag.Matrix)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="MatrixId" class="text-danger"></span>
             </div>
         </div>
         <div class="col">

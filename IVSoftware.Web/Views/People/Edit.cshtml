@@ -511,13 +511,19 @@
                                     {
                                         <tr>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Service)
+                                                @if (item.Service != null)
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.Service.Name)
+                                                }
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.AnalyticTechnique)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Matrix)
+                                                @if (item.Matrix != null)
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.Matrix.Name)
+                                                }
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Time)

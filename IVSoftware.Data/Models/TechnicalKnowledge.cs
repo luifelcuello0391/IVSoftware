@@ -7,9 +7,11 @@ namespace IVSoftware.Data.Models
 {
     public class TechnicalKnowledge : BaseModel<Guid>
     {
+        public virtual ServiceModel Service { get; set; }
+
         [DisplayName("Análisis")]
         [Required(ErrorMessage = "El {0} es requerido.")]
-        public string Service { get; set; }
+        public int ServiceId { get; set; }
 
         [DisplayName("Técnica analítica")]
         [Required(ErrorMessage = "La {0} es requerida.")]
@@ -17,7 +19,9 @@ namespace IVSoftware.Data.Models
 
         [Required(ErrorMessage = "La {0} es requerida.")]
         [DisplayName("Matriz")]
-        public string Matrix { get; set; }
+        public int MatrixId { get; set; }
+
+        public virtual MatrixModel Matrix { get; set; }
 
         [DisplayName("Tiempo")]
         [Required(ErrorMessage = "El {0} es requerido.")]
