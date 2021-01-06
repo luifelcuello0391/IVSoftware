@@ -238,6 +238,38 @@
         function citySelection(e) {
             document.getElementById("input_city_id").value = e.target.value
         }
+
+        function departmentAutomaticSelection(e) {
+            var url = "@Url.Action("GetCityByStateId")";
+
+            $.ajax({
+                url: url,
+                data: { stateid: e },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    var splitted = data.split("|");
+                    var x = document.getElementById("cbx_city");
+                    x.innerHTML = "";
+                    x.innerHTML = "<option value=\"0\" disabled selected></option>";
+
+                    for (var index = 0; index < splitted.length; index++)
+                    {
+                        var data = splitted[index].split(";");
+
+                        var option = document.createElement("option");
+                        option.value = data[0];
+                        option.text = data[1];
+
+                        x.add(option);
+                    }
+                },
+                error: function (reponse) {
+                    alert("error : " + reponse);
+                }
+            });
+        }
+
     </script>
 </head>
 
@@ -313,7 +345,14 @@
                     {
                         @foreach (var item in @ViewBag.Departments)
                         {
-                            <option value="@item.Id">@item.Nombre</option>
+                            if (item.Code != null && item.Code.Equals("05"))
+                            {
+                                <option value="@item.Id" selected>@item.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
                         }
                     }
                 </select>
@@ -471,7 +510,7 @@
                                             {
                                                 @foreach (var item in @ViewBag.Departments)
                                                 {
-                                                    <option value="@item.Id">@item.Nombre</option>
+                                                    <option value="@item.Id">@item.Name</option>
                                                 }
                                             }
                                         </select>
@@ -590,12 +629,14 @@
             $("#loginModal").modal('hide');
         });
 
-        if ($("cbx_person_type").value == 1) {
-            $("lbl_name").value = "Nombres y apellidos";
+        if (document.getElementById("cbx_person_type").value == 1) {
+            document.getElementById("lbl_name").innerHTML = "Nombre y apellidos";
         }
         else {
-            $("lbl_name").value = "Nombres";
+            document.getElementById("lbl_name").innerHTML = "Nombre";
         }
+
+        departmentAutomaticSelection(document.getElementById("cbx_department").value);
     });
 
 </script>

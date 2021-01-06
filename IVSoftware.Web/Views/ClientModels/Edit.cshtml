@@ -770,12 +770,21 @@
                 document.getElementById("txt_name_contact").value = document.getElementById("txt_name").value;
                 document.getElementById("cbx_department_contact").value = document.getElementById("cbx_department").value;
                 departmentAutomaticSelectionOnContactLoad(document.getElementById("cbx_department").value);
-                
+
                 document.getElementById("txt_phone_contact").value = document.getElementById("txt_phone_number").value;
                 document.getElementById("txt_cellphone_contact").value = document.getElementById("txt_cellphone").value;
                 document.getElementById("txt_extension_contact").value = document.getElementById("txt_extension").value;
                 document.getElementById("txt_address_contact").value = document.getElementById("txt_address").value;
                 document.getElementById("cbx_city_contact").value = document.getElementById("cbx_city").value;
+            }
+            else 
+            {
+                document.getElementById("txt_identification_contact").value = "";
+                document.getElementById("txt_name_contact").value = "";
+                document.getElementById("txt_phone_contact").value = "";
+                document.getElementById("txt_cellphone_contact").value = "";
+                document.getElementById("txt_extension_contact").value = "";
+                document.getElementById("txt_address_contact").value = "";
             }
 
             $("#loginModal").modal('show');
@@ -790,11 +799,10 @@
         });
 
         if (document.getElementById("cbx_person_type").value == 1) {
-            $("lbl_name").value = "Nombres y apellidos";
+            document.getElementById("lbl_name").innerHTML = "Nombre y apellidos";
         }
-        else
-        {
-            $("lbl_name").value = "Nombres";
+        else {
+            document.getElementById("lbl_name").innerHTML = "Nombre";
         }
 
         $("#cbx_department").change(function () {
@@ -811,7 +819,6 @@
             // your code here
             citySelection(document.getElementById("cbx_city").value);
         }).change(); // automatically execute the on change function you just wrote
-
 
     });
 

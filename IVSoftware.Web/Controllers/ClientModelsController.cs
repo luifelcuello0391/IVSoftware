@@ -249,21 +249,13 @@ namespace IVSoftware.Web.Controllers
 
             try
             {
-                ViewBag.Departments = await _context.Departamento.ToListAsync();
+                ViewBag.Departments = await _DepartmentService.GetAllAsync();
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error on Create.Departments >> " + ex.ToString());
             }
 
-            //try
-            //{
-            //    ViewBag.Cities = await _context.Municipio.ToListAsync();
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("Error on Create.Cities >> " + ex.ToString());
-            //}
 
             return View();
         }
