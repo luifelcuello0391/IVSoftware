@@ -129,5 +129,6 @@ namespace IVSoftware.Data.Models
         }
         #endregion
 
+        public virtual ICollection<TechnicalKnowledge> TechnicalKnowledges { get; set; }
     }
 }

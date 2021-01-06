@@ -18,7 +18,6 @@ namespace IVSoftware.Data.Models
 
         [DisplayFormat(DataFormatString = "{0:d}")]
         [DisplayName("Fecha de retiro")]
-        [Required(ErrorMessage = "La {0} es requerida.")]
         public DateTime? EndDate { get; set; }
 
         [DisplayName("Cargo")]

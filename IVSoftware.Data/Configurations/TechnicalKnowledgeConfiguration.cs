@@ -15,10 +15,13 @@ namespace IVSoftware.Data.Configurations
         protected override void InternalMap(EntityTypeBuilder<TechnicalKnowledge> builder)
         {
             builder
-                .Property(x => x.Service)
-                .IsRequired()
-                .IsUnicode()
-                .HasMaxLength(500);
+                .Property(x => x.ServiceId)
+                .IsRequired();
+
+            builder
+                .HasOne(t => t.Service)
+                .WithMany(s => s.TechnicalKnowledges)
+                .HasForeignKey(t => t.ServiceId);
 
             builder
                 .Property(x => x.AnalyticTechnique)
@@ -27,10 +30,13 @@ namespace IVSoftware.Data.Configurations
                 .HasMaxLength(500);
 
             builder
-                .Property(x => x.Matrix)
-                .IsRequired()
-                .IsUnicode()
-                .HasMaxLength(500);
+                .Property(x => x.MatrixId)
+                .IsRequired();
+
+            builder
+                .HasOne(t => t.Matrix)
+                .WithMany(m => m.TechnicalKnowledges)
+                .HasForeignKey(t => t.MatrixId);
 
             builder
                 .Property(x => x.Time)

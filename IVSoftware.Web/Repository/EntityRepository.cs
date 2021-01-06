@@ -30,17 +30,17 @@ namespace IVSoftware.Web.Repository
 
         public IQueryable<TEntity> FindAll()
         {
-            return RepositoryContext.Set<TEntity>().AsNoTracking();
+            return RepositoryContext.Set<TEntity>();
         }
 
         public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
         {
-            return RepositoryContext.Set<TEntity>().Where(expression).AsNoTracking();
+            return RepositoryContext.Set<TEntity>().Where(expression);
         }
 
         public IQueryable<TEntity> FindByConditionAndInclude(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            IQueryable<TEntity> query = RepositoryContext.Set<TEntity>().Where(expression).AsNoTracking();
+            IQueryable<TEntity> query = RepositoryContext.Set<TEntity>().Where(expression);
 
             foreach (var includeProperty in includeProperties)
             {

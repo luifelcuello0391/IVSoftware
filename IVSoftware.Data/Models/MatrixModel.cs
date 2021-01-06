@@ -16,5 +16,7 @@ namespace IVSoftware.Data.Models
         public bool OnlyForServices { get; set; } = true;
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public string OnlyForServicesText { get { return OnlyForServices ? "Sí" : "No"; } }
+
+        public virtual ICollection<TechnicalKnowledge> TechnicalKnowledges { get; set; }
     }
 }
