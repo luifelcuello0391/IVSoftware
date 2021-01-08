@@ -22,6 +22,7 @@ namespace IVSoftware.Data.Models
         [DisplayName("Solicitud del cliente")]
         public string ClientRequestDescription { get; set; }
         [DisplayFormat(DataFormatString = "{0:d}")]
+        [Required(ErrorMessage = "Debe ingresar la fecha de solicitud")]
         [DisplayName("Fecha de solicitud")]
         public DateTime RequestDateTime { get; set; }
         [DisplayName("Estado")]

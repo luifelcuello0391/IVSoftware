@@ -92,21 +92,39 @@
                                             if (itemQuestion != null && itemQuestion.CheckListQuestion != null)
                                             {
                                                 <tr>
-                                                    <td>@itemQuestion.CheckListQuestion.Name</td>
+
                                                     @if (itemQuestion.CheckListQuestion.TypeOfQuestion == 1)
                                                     {
                                                         <td>
-                                                            <input type="radio" class="section_@itemSection.Section.Id" id="question_@itemQuestion.CheckListQuestion.Id" name="question_@itemQuestion.CheckListQuestion.Id" value="1">
-                                                            <label class="radio-inline" for="question_@itemQuestion.CheckListQuestion.Id">Sí</label>
-                                                            <input type="radio" class="section_@itemSection.Section.Id" id="question_@itemQuestion.CheckListQuestion.Id" name="question_@itemQuestion.CheckListQuestion.Id" value="2">
-                                                            <label for="question_@itemQuestion.CheckListQuestion.Id">No</label>
-                                                            <input type="radio" class="section_@itemSection.Section.Id" id="question_@itemQuestion.CheckListQuestion.Id" name="question_@itemQuestion.CheckListQuestion.Id" value="3">
-                                                            <label for="question_@itemQuestion.CheckListQuestion.Id">N/A</label>
+                                                            <div>
+                                                                <div>
+                                                                    <label>@itemQuestion.CheckListQuestion.Name</label>
+                                                                </div>
+
+                                                                <div>
+                                                                    <input type="radio" class="section_@itemSection.Section.Id" id="question_@itemQuestion.CheckListQuestion.Id" name="question_@itemQuestion.CheckListQuestion.Id" value="1">
+                                                                    <label class="radio-inline" for="question_@itemQuestion.CheckListQuestion.Id">Sí</label>
+                                                                    <input type="radio" class="section_@itemSection.Section.Id" id="question_@itemQuestion.CheckListQuestion.Id" name="question_@itemQuestion.CheckListQuestion.Id" value="2">
+                                                                    <label for="question_@itemQuestion.CheckListQuestion.Id">No</label>
+                                                                    <input type="radio" class="section_@itemSection.Section.Id" id="question_@itemQuestion.CheckListQuestion.Id" name="question_@itemQuestion.CheckListQuestion.Id" value="3">
+                                                                    <label for="question_@itemQuestion.CheckListQuestion.Id">N/A</label>
+                                                                </div>
+                                                            </div>
                                                         </td>
                                                     }
                                                     else
                                                     {
-                                                        <td><input type="text" class="section_@itemSection.Section.Id" id="question_@itemQuestion.CheckListQuestion.Id" /></td>
+                                                        <td>
+                                                            <div>
+                                                                <div>
+                                                                    <label>@itemQuestion.CheckListQuestion.Name</label>
+                                                                </div>
+
+                                                                <div>
+                                                                    <input style="width:100%" type="text" class="section_@itemSection.Section.Id" id="question_@itemQuestion.CheckListQuestion.Id" />
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                     }
 
                                                 </tr>
@@ -137,21 +155,39 @@
                                 if (itemQuestion != null && itemQuestion.Question != null)
                                 {
                                     <tr>
-                                        <td>@itemQuestion.Question.Name</td>
+
                                         @if (itemQuestion.Question.TypeOfQuestion == 1)
                                         {
                                             <td>
-                                                <input type="radio" id="question_add_@itemQuestion.Question.Id" name="question_add_@itemQuestion.Question.Id" value="1">
-                                                <label class="radio-inline" for="question_add_@itemQuestion.Question.Id">Sí</label>
-                                                <input type="radio" id="question_add_@itemQuestion.Question.Id" name="question_add_@itemQuestion.Question.Id" value="2">
-                                                <label for="question_add_@itemQuestion.Question.Id">No</label>
-                                                <input type="radio" id="question_add_@itemQuestion.Question.Id" name="question_add_@itemQuestion.Question.Id" value="3">
-                                                <label for="question_add_@itemQuestion.Question.Id">N/A</label>
+                                                <div>
+                                                    <div>
+                                                        <label>@itemQuestion.Question.Name</label>
+                                                    </div>
+
+                                                    <div>
+                                                        <input type="radio" id="question_add_@itemQuestion.Question.Id" name="question_add_@itemQuestion.Question.Id" value="1">
+                                                        <label class="radio-inline" for="question_add_@itemQuestion.Question.Id">Sí</label>
+                                                        <input type="radio" id="question_add_@itemQuestion.Question.Id" name="question_add_@itemQuestion.Question.Id" value="2">
+                                                        <label for="question_add_@itemQuestion.Question.Id">No</label>
+                                                        <input type="radio" id="question_add_@itemQuestion.Question.Id" name="question_add_@itemQuestion.Question.Id" value="3">
+                                                        <label for="question_add_@itemQuestion.Question.Id">N/A</label>
+                                                    </div>
+                                                </div>
                                             </td>
                                         }
                                         else
                                         {
-                                            <td><input type="text" id="question_add_@itemQuestion.Question.Id" name="question" /></td>
+                                            <td>
+                                                <div>
+                                                    <div>
+                                                        <label>@itemQuestion.Question.Name</label>
+                                                    </div>
+
+                                                    <div>
+                                                        <input style="width:100%" type="text" id="question_add_@itemQuestion.Question.Id" name="question" />
+                                                    </div>
+                                                </div>
+                                            </td>
                                         }
                                     </tr>
                                 }
