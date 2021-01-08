@@ -139,5 +139,32 @@ namespace IVSoftware.Data.Models
         public virtual List<OtherTechnicalKnowledge> OtherTechnicalKnowledges { get; set; }
         //public virtual List<PersonaInduccion> ListPersonaInduccion { get; set; }
         public virtual List<ServiceModel> Services { get; set; }
+
+        [DisplayName("Tiempo de experiencia")]
+        [NotMapped]
+        public string WorkExperiencesTime { 
+            get 
+            {
+                if (WorkExperiences != null && WorkExperiences.Count > 0) 
+                {
+                    int totalDays = 0;
+                    foreach (var workExperience in WorkExperiences)
+                    {
+                        totalDays += (workExperience.EndDate.Value - workExperience.StartDate).Days;
+                    }
+
+                    if(totalDays > 0)
+                    {
+                        var mod = totalDays % 365;
+                        var years = (totalDays >= 365) ? (totalDays / 365) : 0;
+                        var months = (mod > 0) ? (mod / 30) : 0;
+
+                        return $"{years} Año(s) y {months} Mes(es)";
+                    }
+                }
+
+                return "";
+            } 
+        }
     }
 }
