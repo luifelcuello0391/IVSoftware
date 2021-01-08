@@ -1,0 +1,90 @@
+﻿@model IEnumerable<IVSoftware.Data.Models.ClientModel>
+<div class="modal-header">
+    <h5 class="modal-title" style="float:left; color:yellowgreen">Maestro de clientes</h5>
+    <button id="btn_hide_client_modal" type="button" data-dismiss="modal" class="close" style="color:red; margin-right:5px">
+        X
+    </button>
+</div>
+
+<table class="table table-striped table-sm" style="display:block; overflow:auto">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th></th>
+            <th  style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.DocumentType)
+            </th>
+            <th style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.Identification)
+            </th>
+            <th style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.ClientType)
+            </th>
+            <th style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.EmailAddress)
+            </th>
+            <th style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.IsRegular)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="white-space:nowrap">
+                    <button class="btn btn-primary" onclick="selectClient(@item.Identification)">Seleccionar</button>
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.DocumentTypeName)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.Identification)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.ClientTypeName)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.EmailAddress)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.IsRegularText)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+
+<script>
+    function selectClient(id) {
+        $("#txtId").val(id);
+        $("#btnGet").click();
+
+        hideClientmodal();
+    }
+
+    function hideClientmodal() {
+        $("#modalClients").modal('hide');
+        $('.modal-content').html("");
+    }
+</script>
+

@@ -46,7 +46,7 @@
 <h4>Solicitud de cotización</h4>
 <hr />
 <div class="row">
-    <div >
+    <div>
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -69,16 +69,13 @@
             </div>
 
             <div class="form-group col">
-                
-                <table class="col-md-6">
+
+                <table class="col-md-4">
                     <tr>
                         <td>
-                            <label asp-for="ClientIdentification" class="control-label"></label>
+                            <label class="control-label">Ingrese la identificación del cliente</label>
                         </td>
-
                         <td></td>
-
-                        <td>Nombre del cliente</td>
                     </tr>
 
                     <tr>
@@ -86,21 +83,17 @@
                             <input id="txtId" class="form-control" asp-for="RequestedClientId" />
                         </td>
                         <td>
-                            <input id="btnGet" type="Button" value="Buscar" class="btn btn-primary" style="background-color:yellowgreen; color:white; margin-left:10px" />
-                        </td>
-                        <td>
-                            <input id="txt_client_name" asp-for="RequestedClientName" class="form-control" readonly />
+                            <div style="display:inline">
+                                <input id="btnGet" type="Button" value="Buscar" class="btn btn-primary" style="background-color:yellowgreen; color:white; margin-left:10px" />
+                                <input id="btnRemove" type="Button" value="X" class="btn btn-danger" style="margin-left:10px" />
+                            </div>
                         </td>
                     </tr>
                 </table>
-                <span asp-validation-for="ClientIdentification" class="text-danger"></span>
             </div>
 
-            @*@<div class="form-group col-md-4">
-                <label asp-for="RequestedClientName" class="control-label"></label>
-                <input id="txt_client_name" asp-for="RequestedClientName" class="form-control" readonly />
-                <span asp-validation-for="RequestedClientName" class="text-danger"></span>
-            </div>*@
+            <!--To show client information-->
+            <div id="div_client_info" class="form-group"></div>
 
             <div class="form-group  col-md-10">
                 <label asp-for="ClientRequestDescription" class="control-label"></label>
@@ -109,7 +102,7 @@
             </div>
 
             <!--Modal para agregar servicios uno por uno-->
-            <div class="form-group  col-md-4" >
+            <div class="form-group  col-md-4">
                 <button id="btnShowModal"
                         type="button"
                         style="background-color:yellowgreen; color:white"
@@ -239,11 +232,6 @@
 
                                 </tbody>
                             </table>
-
-                            <div class="form-group">
-                                <input type="button" id="btnSelectModal" value="Seleccionar" class="btn btn-primary" style="background-color:yellowgreen; color:white; margin-left:20px" />
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -304,63 +292,63 @@
                 </thead>
                 <tbody>
                     @* @if (Model.Services != null && Model.Services.Count > 0)
-        {
-            @foreach (var service in @Model.Services)
-            {
-                if (service.Service != null)
-                {
-                    var item = service.Service;
-                    <tr>
-                        <td>
-                            <a asp-action="RemoveService" asp-route-serviceId="@item.Id" asp-route-quotationId="@Model.Id" asp-route-isForManagement="@Model.ManageQuotation"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
-                        </td>
+                        {
+                            @foreach (var service in @Model.Services)
+                            {
+                                if (service.Service != null)
+                                {
+                                    var item = service.Service;
+                                    <tr>
+                                        <td>
+                                            <a asp-action="RemoveService" asp-route-serviceId="@item.Id" asp-route-quotationId="@Model.Id" asp-route-isForManagement="@Model.ManageQuotation"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                        </td>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Code)
-                        </td>
-                        <td style="white-space:nowrap">
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td style="white-space:nowrap">
-                            @Html.DisplayFor(model => item.ServiceTypeName)
-                        </td>
-                        <td style="white-space:nowrap">
-                            @Html.DisplayFor(model => item.MatrixGroupName)
-                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Code)
+                                        </td>
+                                        <td style="white-space:nowrap">
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td style="white-space:nowrap">
+                                            @Html.DisplayFor(model => item.ServiceTypeName)
+                                        </td>
+                                        <td style="white-space:nowrap">
+                                            @Html.DisplayFor(model => item.MatrixGroupName)
+                                        </td>
 
-                        <td style="white-space:nowrap">
-                            @Html.DisplayFor(modelItem => item.ReferenceMethodName)
-                        </td>
-                        <td style="white-space:nowrap">
-                            @Html.DisplayFor(modelItem => item.WorkingRangeName)
-                        </td>
+                                        <td style="white-space:nowrap">
+                                            @Html.DisplayFor(modelItem => item.ReferenceMethodName)
+                                        </td>
+                                        <td style="white-space:nowrap">
+                                            @Html.DisplayFor(modelItem => item.WorkingRangeName)
+                                        </td>
 
-                        <td style="white-space:nowrap">
-                            $ @Html.DisplayFor(modelItem => item.UnitValue)
-                        </td>
+                                        <td style="white-space:nowrap">
+                                            $ @Html.DisplayFor(modelItem => item.UnitValue)
+                                        </td>
 
-                        <td style="white-space:nowrap">
-                            @Html.DisplayFor(modelItem => item.ReportDeliveryTime)
-                        </td>
+                                        <td style="white-space:nowrap">
+                                            @Html.DisplayFor(modelItem => item.ReportDeliveryTime)
+                                        </td>
 
-                        <td>
-                            @item.GetYesNo(item.AcredditedByIdeam)
-                        </td>
-                        <td>
-                            @item.GetYesNo(item.AuthorizedByINS)
-                        </td>
-                        <td>
-                            @item.GetYesNo(item.Valid)
-                        </td>
+                                        <td>
+                                            @item.GetYesNo(item.AcredditedByIdeam)
+                                        </td>
+                                        <td>
+                                            @item.GetYesNo(item.AuthorizedByINS)
+                                        </td>
+                                        <td>
+                                            @item.GetYesNo(item.Valid)
+                                        </td>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        </td>
 
-                    </tr>
-                }
-            }
-        }*@
+                                    </tr>
+                                }
+                            }
+                        }*@
 
                 </tbody>
             </table>
@@ -419,20 +407,55 @@
 
 </script>
 
+<!--Modal para seleccionar el cliente-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalClients" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
 
-@section Scripts {
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section FooterAssets {
     <script>
-    function getClient() {
-        var url = "@Url.Action("GetClientInfo")";
-        var id = $("#txtId").val();
+        // Functions definition
+        function getClient() {
+            var url = "@Url.Action("GetClientInformation")";
+            var id = $("#txtId").val();
 
-        $.get(url, { id: id }, function (data)
-        {
-            document.getElementById("txt_client_name").value = data;
-        });
-    }
+            if (id == null || id == "")
+            {
+                // Show modal for clients
+                $.get(url, { id: id }, function (data) {
+                    $('.modal-content').html(data);
+                    $("#modalClients").modal('show');
+                });
+            }
+            else
+            {
+                $.get(url, { id: id }, function (data) {
+                    $("#div_client_info").html(data);
+                });
+            }
+        }
 
+        function removeClient() {
+            $("#div_client_info").html("");
+            $("#txtId").val("");
+        }
+
+        function hideClientmodal() {
+            $("#modalClients").modal('hide');
+            $("#div_client_list").html("");
+        }
+
+        // Events assignment
         $("#btnGet").on("click", getClient);
+        $("#btnRemove").on("click", removeClient);
+
     </script>
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

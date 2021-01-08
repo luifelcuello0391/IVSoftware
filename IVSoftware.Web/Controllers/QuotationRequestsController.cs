@@ -48,12 +48,21 @@ namespace IVSoftware.Web.Controllers
         // GET: QuotationRequests/Create
         public IActionResult Create()
         {
+            try
+            {
+                ViewBag.ActiveClients = _context.ClientModel.ToList();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error on QuotationRequestController.Create >> " + ex.ToString());
+            }
+
             return View();
         }
 
-        public async Task<string> GetClientInfo(string id)
+        public async Task<ActionResult> GetClientInformation(string id)
         {
-            if (id != null && !string.IsNullOrEmpty(id.Replace(" ", string.Empty)))
+            if(id != null && !string.IsNullOrEmpty(id.Replace(" ", string.Empty)))
             {
                 ClientModel client = null;
                 try
@@ -62,14 +71,15 @@ namespace IVSoftware.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error GetClientInfo >> " + ex.ToString());
+                    Console.WriteLine("Error GetClientInformation >> " + ex.ToString());
                 }
 
-                return client != null ? client.Name : string.Empty;
+                return PartialView("clientMainInfo", client);
             }
-
-            Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return string.Empty;
+            else
+            {
+                return PartialView("clientSelectionList", _context.ClientModel.ToList());
+            }
         }
 
         // POST: QuotationRequests/Create
