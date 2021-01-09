@@ -184,6 +184,7 @@ namespace IVSoftware.Web.Controllers
             ViewBag.ContractTypes = await GetContractTypeSelectList();
             ViewBag.Genders = await GetGenderSelectList();
             ViewBag.HasUser = (person.User != null);
+            ViewBag.Roles = GetRolesList();
 
             return View(person);
         }
@@ -326,6 +327,19 @@ namespace IVSoftware.Web.Controllers
             }).ToList();
 
             return genders;
+        }
+
+        private List<SelectListItem> GetRolesList()
+        {
+            var roles = new List<SelectListItem>()
+                {
+                    new SelectListItem(){Text="Responsabilidad 1", Value="1"},
+                    new SelectListItem(){Text="Responsabilidad 2", Value="2"},
+                    new SelectListItem(){Text="Responsabilidad 3", Value="3"},
+                    new SelectListItem(){Text="Responsabilidad 4", Value="4"},
+                };
+
+            return roles;
         }
     }
 }

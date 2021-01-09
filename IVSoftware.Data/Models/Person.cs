@@ -166,5 +166,9 @@ namespace IVSoftware.Data.Models
                 return "";
             } 
         }
+
+        [DisplayName("Roles o Responsabilidades")]
+        [NotMapped]
+        public List<int> Roles { get; set; }
     }
 }
