@@ -1,15 +1,16 @@
-﻿@model Arl
+﻿@model AcademicLevel
 
 @{
-    ViewData["Title"] = "Crear";
+    ViewData["Title"] = "Editar";
 }
 
-<h5 class="text-primary titulo">Arl - Agregar</h5>
+<h5 class="text-primary titulo">Modalidad Académica - Editar</h5>
 <hr />
 <div class="row">
     <div class="col-md-8 col-sm-12">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                     <label asp-for="Name" class="control-label" style="color:white"></label>
@@ -18,7 +19,7 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Crear" class="btn btn-primary" />
+                <input type="submit" value="Editar" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-primary">Cancelar</a>
             </div>
         </form>
