@@ -1,40 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using IVSoftware.Data.Models;
+using IVSoftware.Web.Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using IVSoftware.Web.Models;
-using IVSoftware.Data.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace IVSoftware.Web.Controllers.Configuracion
 {
     public class ArlController : Controller
     {
-        private readonly IVSoftwareContext _context;
+        private readonly IEntityService<Arl, int> _arlService;
 
-        public ArlController(IVSoftwareContext context)
+        public ArlController(IEntityService<Arl, int> arlService)
         {
-            _context = context;
+            _arlService = arlService;
         }
 
         // GET: Arl
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Arl.ToListAsync());
+            return View(await _arlService.GetAllAsync());
         }
 
         // GET: Arl/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var arl = await _context.Arl
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Arl arl = await _arlService.GetByIdAsync(id);
             if (arl == null)
             {
                 return NotFound();
@@ -50,45 +40,41 @@ namespace IVSoftware.Web.Controllers.Configuracion
         }
 
         // POST: Arl/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre")] Arl arl)
+        public async Task<IActionResult> Create(Arl model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(arl);
-                await _context.SaveChangesAsync();
+                Arl arl = await _arlService.CreateAsync(model);
                 return RedirectToAction(nameof(Index));
             }
-            return View(arl);
+
+            return View(model);
         }
 
         // GET: Arl/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var arl = await _context.Arl.FindAsync(id);
+            Arl arl = await _arlService.GetByIdAsync(id);
             if (arl == null)
             {
                 return NotFound();
             }
+
             return View(arl);
         }
 
         // POST: Arl/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from over-posting attacks, enable the specific properties you want to bind to, for
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre")] Arl arl)
+        public async Task<IActionResult> Edit(int id, Arl model)
         {
-            if (id != arl.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
@@ -97,35 +83,30 @@ namespace IVSoftware.Web.Controllers.Configuracion
             {
                 try
                 {
-                    _context.Update(arl);
-                    await _context.SaveChangesAsync();
+                    Arl arl = await _arlService.UpdateAsync(model);
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!ArlExists(arl.Id))
+                    if (!await ArlExists(model.Id))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError("Name", ex.Message);
+                        return View(model);
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(arl);
+
+            return View(model);
         }
 
         // GET: Arl/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var arl = await _context.Arl
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Arl arl = await _arlService.GetByIdAsync(id);
             if (arl == null)
             {
                 return NotFound();
@@ -139,15 +120,19 @@ namespace IVSoftware.Web.Controllers.Configuracion
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var arl = await _context.Arl.FindAsync(id);
-            _context.Arl.Remove(arl);
-            await _context.SaveChangesAsync();
+            Arl arl = await _arlService.GetByIdAsync(id);
+            if (arl == null)
+            {
+                return NotFound();
+            }
+
+            await _arlService.DeleteAsync(arl);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ArlExists(int id)
+        private async Task<bool> ArlExists(int id)
         {
-            return _context.Arl.Any(e => e.Id == id);
+            return (await _arlService.GetByIdAsync(id)) != null;
         }
     }
 }
