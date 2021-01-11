@@ -1,6 +1,7 @@
 ﻿using IVSoftware.Data.Models;
 using IVSoftware.Web.BusinessLogic;
 using IVSoftware.Web.Data;
+using IVSoftware.Web.Models;
 using IVSoftware.Web.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +27,8 @@ namespace IVSoftware.Web.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IEntityService<AcademicLevel, int> _academicLevelService;
         private readonly IEntityService<CertificationType, int> _certificationTypeService;
+        private readonly IEntityService<JobRole, int> _jobRoleService;
+        private readonly IVSoftwareContext _context;
 
         public PeopleController(IEntityService<Person, Guid> personService,
             IEntityService<IdentificationType, int> identificationTypeService,
@@ -36,7 +39,9 @@ namespace IVSoftware.Web.Controllers
             IEntityService<Gender, int> genderService,
             UserManager<User> userManager,
             IEntityService<AcademicLevel, int> academicLevelService,
-            IEntityService<CertificationType, int> certificationTypeService)
+            IEntityService<CertificationType, int> certificationTypeService,
+            IEntityService<JobRole, int> jobRoleService,
+            IVSoftwareContext context)
         {
             _personService = personService;
             _identificationTypeService = identificationTypeService;
@@ -48,6 +53,8 @@ namespace IVSoftware.Web.Controllers
             _genderService = genderService;
             _academicLevelService = academicLevelService;
             _certificationTypeService = certificationTypeService;
+            _jobRoleService = jobRoleService;
+            _context = context;
         }
 
         // GET: PeopleController
@@ -114,7 +121,7 @@ namespace IVSoftware.Web.Controllers
             }
         }
 
-        
+
         public async Task<ActionResult> CreateUser(Guid id)
         {
             var person = await _personService.GetByIdAsync(id);
@@ -184,7 +191,7 @@ namespace IVSoftware.Web.Controllers
             ViewBag.ContractTypes = await GetContractTypeSelectList();
             ViewBag.Genders = await GetGenderSelectList();
             ViewBag.HasUser = (person.User != null);
-            ViewBag.Roles = GetRolesList();
+            ViewBag.Roles = await GetRolesList();
 
             return View(person);
         }
@@ -198,6 +205,22 @@ namespace IVSoftware.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    List<PersonJobRole> personJobRoles = new List<PersonJobRole>();
+                    if (model.Roles != null && model.Roles.Count > 0)
+                    {
+                        personJobRoles =
+                            model.Roles.Select(r => new PersonJobRole()
+                            {
+                                PersonId = id,
+                                JobRoleId = r
+                            }).ToList();
+
+                        _context.PersonJobRoles.RemoveRange(
+                            _context.PersonJobRoles.Where(pjr => pjr.PersonId == id));
+                        _context.PersonJobRoles.AddRange(personJobRoles);
+                        model.PeopleJobRole = personJobRoles;
+                    }
+
                     await _personService.UpdateAsync(model);
                     return RedirectToAction(nameof(Index));
                 }
@@ -209,12 +232,13 @@ namespace IVSoftware.Web.Controllers
                 ViewBag.ContractTypes = await GetContractTypeSelectList();
                 ViewBag.Genders = await GetGenderSelectList();
                 ViewBag.HasUser = (!string.IsNullOrEmpty(model.UserId));
+                ViewBag.Roles = await GetRolesList();
 
                 return View(model);
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return View(model);
             }
         }
 
@@ -329,15 +353,13 @@ namespace IVSoftware.Web.Controllers
             return genders;
         }
 
-        private List<SelectListItem> GetRolesList()
+        private async Task<List<SelectListItem>> GetRolesList()
         {
-            var roles = new List<SelectListItem>()
-                {
-                    new SelectListItem(){Text="Responsabilidad 1", Value="1"},
-                    new SelectListItem(){Text="Responsabilidad 2", Value="2"},
-                    new SelectListItem(){Text="Responsabilidad 3", Value="3"},
-                    new SelectListItem(){Text="Responsabilidad 4", Value="4"},
-                };
+            var roles = (await _jobRoleService.GetAllAsync()).Select(t => new SelectListItem()
+            {
+                Text = t.Name,
+                Value = t.Id.ToString()
+            }).ToList();
 
             return roles;
         }

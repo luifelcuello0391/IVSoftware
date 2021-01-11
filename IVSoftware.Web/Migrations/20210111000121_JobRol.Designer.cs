@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210111000121_JobRol")]
+    partial class JobRol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -860,7 +862,7 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("IncentiveModel");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.JobRole", b =>
+            modelBuilder.Entity("IVSoftware.Data.Models.JobRol", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -876,7 +878,7 @@ namespace IVSoftware.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("JobRole");
+                    b.ToTable("JobRol");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.MatrixModel", b =>
@@ -1142,19 +1144,19 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("Person");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.PersonJobRole", b =>
+            modelBuilder.Entity("IVSoftware.Data.Models.PersonJobRol", b =>
                 {
                     b.Property<Guid>("PersonId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("JobRoleId")
+                    b.Property<int>("JobRolId")
                         .HasColumnType("int");
 
-                    b.HasKey("PersonId", "JobRoleId");
+                    b.HasKey("PersonId", "JobRolId");
 
-                    b.HasIndex("JobRoleId");
+                    b.HasIndex("JobRolId");
 
-                    b.ToTable("PersonJobRoles");
+                    b.ToTable("PersonJobRol");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.Provider", b =>
@@ -3117,21 +3119,21 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.PersonJobRole", b =>
+            modelBuilder.Entity("IVSoftware.Data.Models.PersonJobRol", b =>
                 {
-                    b.HasOne("IVSoftware.Data.Models.JobRole", "JobRole")
-                        .WithMany("PeopleJobRole")
-                        .HasForeignKey("JobRoleId")
+                    b.HasOne("IVSoftware.Data.Models.JobRol", "JobRol")
+                        .WithMany("PeopleJobRol")
+                        .HasForeignKey("JobRolId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("IVSoftware.Data.Models.Person", "Person")
-                        .WithMany("PeopleJobRole")
+                        .WithMany("PeopleJobRol")
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("JobRole");
+                    b.Navigation("JobRol");
 
                     b.Navigation("Person");
                 });
@@ -3751,9 +3753,9 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("ClientTypes");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.JobRole", b =>
+            modelBuilder.Entity("IVSoftware.Data.Models.JobRol", b =>
                 {
-                    b.Navigation("PeopleJobRole");
+                    b.Navigation("PeopleJobRol");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.MatrixModel", b =>
@@ -3776,7 +3778,7 @@ namespace IVSoftware.Web.Migrations
 
                     b.Navigation("OtherTechnicalKnowledges");
 
-                    b.Navigation("PeopleJobRole");
+                    b.Navigation("PeopleJobRol");
 
                     b.Navigation("Services");
 

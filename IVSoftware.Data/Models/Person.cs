@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace IVSoftware.Data.Models
 {
@@ -103,7 +104,7 @@ namespace IVSoftware.Data.Models
         public virtual BloodType BloodType { get; set; }
 
         [DisplayName("Tipo de contrato")]
-        [Required(ErrorMessage = "El {0} es requerido.")]   
+        [Required(ErrorMessage = "El {0} es requerido.")]
         public int ContractTypeId { get; set; }
 
         public virtual ContractType ContractType { get; set; }
@@ -129,23 +130,23 @@ namespace IVSoftware.Data.Models
         public virtual List<TechnicalKnowledge> TechnicalKnowledges { get; set; }
 
         public virtual List<BasicEducation> BasicEducations { get; set; }
-        
+
         public virtual List<HigherEducation> HigherEducations { get; set; }
 
         public virtual List<WorkExperience> WorkExperiences { get; set; }
 
         public virtual List<Training> Trainings { get; set; }
-        
+
         public virtual List<OtherTechnicalKnowledge> OtherTechnicalKnowledges { get; set; }
         //public virtual List<PersonaInduccion> ListPersonaInduccion { get; set; }
         public virtual List<ServiceModel> Services { get; set; }
 
         [DisplayName("Tiempo de experiencia")]
         [NotMapped]
-        public string WorkExperiencesTime { 
-            get 
+        public string WorkExperiencesTime {
+            get
             {
-                if (WorkExperiences != null && WorkExperiences.Count > 0) 
+                if (WorkExperiences != null && WorkExperiences.Count > 0)
                 {
                     int totalDays = 0;
                     foreach (var workExperience in WorkExperiences)
@@ -153,7 +154,7 @@ namespace IVSoftware.Data.Models
                         totalDays += (workExperience.EndDate.Value - workExperience.StartDate).Days;
                     }
 
-                    if(totalDays > 0)
+                    if (totalDays > 0)
                     {
                         var mod = totalDays % 365;
                         var years = (totalDays >= 365) ? (totalDays / 365) : 0;
@@ -164,11 +165,26 @@ namespace IVSoftware.Data.Models
                 }
 
                 return "";
-            } 
+            }
         }
 
         [DisplayName("Roles o Responsabilidades")]
+        public virtual ICollection<PersonJobRole> PeopleJobRole { get; set; }
+
         [NotMapped]
-        public List<int> Roles { get; set; }
+        public List<int> _roles { get; set; }
+        [DisplayName("Roles o Responsabilidades")]
+        [NotMapped]
+        public List<int> Roles {
+            get
+            {
+                return _roles ?? PeopleJobRole?.Select(pjr => pjr.JobRoleId).ToList();
+            }
+
+            set
+            {
+                _roles = value;
+            }
+        }
     }
 }

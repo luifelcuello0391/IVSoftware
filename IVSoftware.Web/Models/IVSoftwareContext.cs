@@ -165,6 +165,10 @@ namespace IVSoftware.Web.Models
             // Contract Type
             new ContractTypeConfiguration("ContractType", "Id").Map(modelBuilder);
 
+            // JobRol
+            new JobRoleConfiguration("JobRole", "Id").Map(modelBuilder);
+            new PersonJobRoleConfiguration().Map(modelBuilder.Entity<PersonJobRole>());
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -218,5 +222,6 @@ namespace IVSoftware.Web.Models
 
         public DbSet<IVSoftware.Data.Models.ServiceGroupServicesRelation> ServiceGroupServicesRelation { get; set; }
 
+        public DbSet<PersonJobRole> PersonJobRoles { get; set; }
     }
 }
