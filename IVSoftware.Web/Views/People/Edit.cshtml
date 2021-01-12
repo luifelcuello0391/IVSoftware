@@ -151,7 +151,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-12 col-md-6">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                     <label asp-for="Address" style="color:white"></label>
@@ -190,7 +190,10 @@
                 <span asp-validation-for="EpsId" class="text-danger small"></span>
             </div>
         </div>
-        <div class="col-sm-3">
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-3">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                     <label asp-for="ContractTypeId" style="color:white"></label>
@@ -203,6 +206,24 @@
                     }
                 </select>
                 <span asp-validation-for="ContractTypeId" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="WorkExperiencesTime" style="color:white"></label>
+                </div>
+                <input asp-for="WorkExperiencesTime" class="form-control" readonly="readonly" />
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Roles" style="color:white"></label>
+                </div>
+                <select asp-for="Roles" multiple="multiple" class="form-control"
+                        asp-items="(List<SelectListItem>) ViewBag.Roles">
+                </select>
             </div>
         </div>
     </div>
@@ -372,7 +393,7 @@
                                     @Html.DisplayNameFor(model => model.Trainings.FirstOrDefault().Subject)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Trainings.FirstOrDefault().CertificationType.Name)
+                                    @Html.DisplayNameFor(model => model.Trainings.FirstOrDefault().CertificationType)
                                 </th>
                                 <th>
                                     @Html.DisplayNameFor(model => model.Trainings.FirstOrDefault().Entity)
@@ -600,12 +621,31 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <!-- Include the plugin's JS: -->
+    <script src="~/lib/bootstrap-multiselect/js/bootstrap-multiselect.min.js"></script>
+}
+
+@section Styles {
+    <!-- Include the plugin's CSS: -->
+    <link href="~/lib/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" />
 }
 
 @section FooterAssets {
     <script>
         var createURL = '@Url.Action("CreateUser", "People")';
         $(document).ready(function () {
+            $('#Roles').multiselect({
+                buttonWidth: '100%',
+                enableFiltering: true,
+                filterPlaceholder: 'Filtrar',
+                includeSelectAllOption: true,
+                selectAllText: 'Seleccionar todos!',
+                allSelectedText: 'Todos seleccionados',
+                nonSelectedText: 'Sin selección',
+                nSelectedText: 'Seleccionados',
+            });
+
 		    $('#btnNew').on("click", function () {
 		        let data_id = "0";
 		        if (typeof $(this).data('id') !== 'undefined') {

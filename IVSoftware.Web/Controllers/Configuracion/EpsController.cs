@@ -1,40 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using IVSoftware.Data.Models;
+using IVSoftware.Web.Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using IVSoftware.Web.Models;
-using IVSoftware.Data.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace IVSoftware.Web.Controllers.Configuracion
 {
     public class EpsController : Controller
     {
-        private readonly IVSoftwareContext _context;
+        private readonly IEntityService<Eps, int> _epsService;
 
-        public EpsController(IVSoftwareContext context)
+        public EpsController(IEntityService<Eps, int> epsService)
         {
-            _context = context;
+            _epsService = epsService;
         }
 
         // GET: Eps
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Eps.ToListAsync());
+            return View(await _epsService.GetAllAsync());
         }
 
         // GET: Eps/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var eps = await _context.Eps
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Eps eps = await _epsService.GetByIdAsync(id);
             if (eps == null)
             {
                 return NotFound();
@@ -50,45 +40,41 @@ namespace IVSoftware.Web.Controllers.Configuracion
         }
 
         // POST: Eps/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre")] Eps eps)
+        public async Task<IActionResult> Create(Eps model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(eps);
-                await _context.SaveChangesAsync();
+                Eps eps = await _epsService.CreateAsync(model);
                 return RedirectToAction(nameof(Index));
             }
-            return View(eps);
+
+            return View(model);
         }
 
         // GET: Eps/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var eps = await _context.Eps.FindAsync(id);
+            Eps eps = await _epsService.GetByIdAsync(id);
             if (eps == null)
             {
                 return NotFound();
             }
+
             return View(eps);
         }
 
         // POST: Eps/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre")] Eps eps)
+        public async Task<IActionResult> Edit(int id, Eps model)
         {
-            if (id != eps.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
@@ -97,35 +83,30 @@ namespace IVSoftware.Web.Controllers.Configuracion
             {
                 try
                 {
-                    _context.Update(eps);
-                    await _context.SaveChangesAsync();
+                    Eps eps = await _epsService.UpdateAsync(model);
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!EpsExists(eps.Id))
+                    if (!await EpsExists(model.Id))
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError("Name", ex.Message);
+                        return View(model);
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(eps);
+
+            return View(model);
         }
 
         // GET: Eps/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var eps = await _context.Eps
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Eps eps = await _epsService.GetByIdAsync(id);
             if (eps == null)
             {
                 return NotFound();
@@ -139,15 +120,19 @@ namespace IVSoftware.Web.Controllers.Configuracion
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var eps = await _context.Eps.FindAsync(id);
-            _context.Eps.Remove(eps);
-            await _context.SaveChangesAsync();
+            Eps eps = await _epsService.GetByIdAsync(id);
+            if (eps == null)
+            {
+                return NotFound();
+            }
+
+            await _epsService.DeleteAsync(eps);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EpsExists(int id)
+        private async Task<bool> EpsExists(int id)
         {
-            return _context.Eps.Any(e => e.Id == id);
+            return (await _epsService.GetByIdAsync(id)) != null;
         }
     }
 }

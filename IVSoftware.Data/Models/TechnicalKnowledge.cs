@@ -7,6 +7,7 @@ namespace IVSoftware.Data.Models
 {
     public class TechnicalKnowledge : BaseModel<Guid>
     {
+        [DisplayName("Análisis")]
         public virtual ServiceModel Service { get; set; }
 
         [DisplayName("Análisis")]
@@ -21,6 +22,7 @@ namespace IVSoftware.Data.Models
         [DisplayName("Matriz")]
         public int MatrixId { get; set; }
 
+        [DisplayName("Matriz")]
         public virtual MatrixModel Matrix { get; set; }
 
         [DisplayName("Tiempo")]

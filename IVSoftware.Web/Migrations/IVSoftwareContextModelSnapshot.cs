@@ -860,6 +860,25 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("IncentiveModel");
                 });
 
+            modelBuilder.Entity("IVSoftware.Data.Models.JobRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JobRole");
+                });
+
             modelBuilder.Entity("IVSoftware.Data.Models.MatrixModel", b =>
                 {
                     b.Property<int>("Id")
@@ -1121,6 +1140,21 @@ namespace IVSoftware.Web.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Person");
+                });
+
+            modelBuilder.Entity("IVSoftware.Data.Models.PersonJobRole", b =>
+                {
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("JobRoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PersonId", "JobRoleId");
+
+                    b.HasIndex("JobRoleId");
+
+                    b.ToTable("PersonJobRoles");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.Provider", b =>
@@ -3083,6 +3117,25 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("IVSoftware.Data.Models.PersonJobRole", b =>
+                {
+                    b.HasOne("IVSoftware.Data.Models.JobRole", "JobRole")
+                        .WithMany("PeopleJobRole")
+                        .HasForeignKey("JobRoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("IVSoftware.Data.Models.Person", "Person")
+                        .WithMany("PeopleJobRole")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("JobRole");
+
+                    b.Navigation("Person");
+                });
+
             modelBuilder.Entity("IVSoftware.Data.Models.QuotationRequest", b =>
                 {
                     b.HasOne("IVSoftware.Data.Models.ClientModel", "Client")
@@ -3698,6 +3751,11 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("ClientTypes");
                 });
 
+            modelBuilder.Entity("IVSoftware.Data.Models.JobRole", b =>
+                {
+                    b.Navigation("PeopleJobRole");
+                });
+
             modelBuilder.Entity("IVSoftware.Data.Models.MatrixModel", b =>
                 {
                     b.Navigation("TechnicalKnowledges");
@@ -3717,6 +3775,8 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("HigherEducations");
 
                     b.Navigation("OtherTechnicalKnowledges");
+
+                    b.Navigation("PeopleJobRole");
 
                     b.Navigation("Services");
 

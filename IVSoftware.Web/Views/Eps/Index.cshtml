@@ -4,7 +4,12 @@
     ViewData["Title"] = "EPS";
 }
 
-<h5 class="text-primary titulo">EPS</h5>
+<h5 class="text-primary titulo">Lista de EPS</h5>
+
+<div class="row">
+    <div class="col"><a asp-action="Create" class="float-right btn btn-primary mb-3">Nueva EPS</a></div>
+</div>
+
 <table class="table">
     <thead style="background-color:yellowgreen; color:white">
         <tr>
@@ -15,7 +20,8 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
@@ -26,11 +32,6 @@
                     <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
                 </td>
             </tr>
-    }
+        }
     </tbody>
 </table>
-<div>
-    <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "EPS")'"
-           class="btn btn-primary btn-sm"
-           style="margin-top:10px" />
-</div>

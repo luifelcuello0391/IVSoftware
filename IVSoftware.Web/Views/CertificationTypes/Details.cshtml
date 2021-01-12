@@ -1,0 +1,24 @@
+﻿@model CertificationType
+
+@{
+    ViewData["Title"] = "Detalle";
+}
+
+<h5 class="text-primary titulo">Tipos de certificación - Detalle</h5>
+<hr />
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <div class="form-group">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+        <a asp-action="Index" class="btn btn-primary">Atrás</a>
+    </div>
+</div>

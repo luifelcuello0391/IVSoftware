@@ -17,26 +17,26 @@ namespace IVSoftware.Web.BusinessLogic
                await _personService.GetByIdAndIncludeAsync(id.Value, p => p.User,
                    p => p.BasicEducations, p => p.HigherEducations, p => p.Trainings,
                    p => p.WorkExperiences, p => p.TechnicalKnowledges,
-                   p => p.OtherTechnicalKnowledges)
+                   p => p.OtherTechnicalKnowledges, p => p.PeopleJobRole)
                : (await _personService.FindByConditionAndIncludeAsync(p => p.Email == email,
                    p => p.User, p => p.BasicEducations, p => p.HigherEducations, p => p.Trainings,
                    p => p.WorkExperiences, p => p.TechnicalKnowledges,
-                   p => p.OtherTechnicalKnowledges)).FirstOrDefault();
+                   p => p.OtherTechnicalKnowledges, p => p.PeopleJobRole)).FirstOrDefault();
 
-            if (person != null)
-            {
-                for (int i = 0; i < person.HigherEducations.Count; i++)
-                {
-                    person.HigherEducations[i].AcademicLevel =
-                        await _academicLevelService.GetByIdAsync(person.HigherEducations[i].AcademicLevelId);
-                }
+            //if (person != null)
+            //{
+            //    for (int i = 0; i < person.HigherEducations.Count; i++)
+            //    {
+            //        person.HigherEducations[i].AcademicLevel =
+            //            await _academicLevelService.GetByIdAsync(person.HigherEducations[i].AcademicLevelId);
+            //    }
 
-                for (int i = 0; i < person.Trainings.Count; i++)
-                {
-                    person.Trainings[i].CertificationType =
-                        await _certificationTypeService.GetByIdAsync(person.Trainings[i].CertificationTypeId);
-                }
-            }
+            //    for (int i = 0; i < person.Trainings.Count; i++)
+            //    {
+            //        person.Trainings[i].CertificationType =
+            //            await _certificationTypeService.GetByIdAsync(person.Trainings[i].CertificationTypeId);
+            //    }
+            //}
 
             return person;
         }
