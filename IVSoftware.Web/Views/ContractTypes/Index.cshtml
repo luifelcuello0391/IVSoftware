@@ -1,15 +1,20 @@
-﻿@model IEnumerable<IVSoftware.Web.Models.TipoContrato>
+﻿@model IEnumerable<ContractType>
 
 @{
-    ViewData["Title"] = "Tipos de contrato";
+    ViewData["Title"] = "Tipo de Contrato";
 }
 
-<h5 class="text-primary titulo">Tipos de contrato</h5>
+<h5 class="text-primary titulo">Lista de Tipos de Contratos</h5>
+
+<div class="row">
+    <div class="col"><a asp-action="Create" class="float-right btn btn-primary mb-3">Nuevo Tipo</a></div>
+</div>
+
 <table class="table">
     <thead style="background-color:yellowgreen; color:white">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th></th>
         </tr>
@@ -19,7 +24,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td align="right" style="white-space:nowrap">
                     <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
@@ -30,8 +35,3 @@
         }
     </tbody>
 </table>
-<div>
-    <input type="button" value="Agregar" onclick="location.href='@Url.Action("Create", "TipoDocumento")'"
-           class="btn btn-primary btn-sm"
-           style="margin-top:10px" />
-</div>
