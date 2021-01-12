@@ -42,14 +42,6 @@ namespace IVSoftware.Data.Models
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public int SelectedReferenceMethodId { get; set; }
 
-        //public int? WorkingRangeId { get; set; }
-        //[DisplayName("Rango de trabajo")]
-        //public virtual WorkingRangeModel WorkingRange { get; set; }
-        //[System.ComponentModel.DataAnnotations.Schema.NotMapped]
-        //public string WorkingRangeName { get { return WorkingRange != null && WorkingRange.Name != null && !string.IsNullOrEmpty(WorkingRange.Name.Replace(" ", string.Empty)) ? WorkingRange.Name : "No definido"; } }
-        //[System.ComponentModel.DataAnnotations.Schema.NotMapped]
-        //public int SelectedWorkingRangeId { get; set; }
-
         // Data added after presentation reunion
         [DisplayName("Acreditado por el IDEAM")]
         public bool AcredditedByIdeam { get; set; }
@@ -130,5 +122,6 @@ namespace IVSoftware.Data.Models
         #endregion
 
         public virtual ICollection<TechnicalKnowledge> TechnicalKnowledges { get; set; }
+
     }
 }

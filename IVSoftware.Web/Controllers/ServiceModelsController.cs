@@ -15,9 +15,11 @@ namespace IVSoftware.Web.Controllers
     public class ServiceModelsController : Controller
     {
         private readonly IVSoftwareContext _context;
+        private readonly IEntityService<Person, Guid> _personService;
 
-        public ServiceModelsController(IVSoftwareContext context)
+        public ServiceModelsController(IVSoftwareContext context, IEntityService<Person, Guid> PersonService)
         {
+            _personService = PersonService;
             _context = context;
         }
 
@@ -92,7 +94,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue")] ServiceModel serviceModel)
+        public async Task<IActionResult> Create([Bind("Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId")] ServiceModel serviceModel)
         {
             if (ModelState.IsValid)
             {
@@ -121,13 +123,16 @@ namespace IVSoftware.Web.Controllers
 
                 serviceModel.ReferenceMethod = referenceMethod;
 
-                //WorkingRangeModel workingRange = null;
-                //if(serviceModel.SelectedWorkingRangeId > 0)
-                //{
-                //    workingRange = await _context.WorkingRangeModel.FindAsync(serviceModel.SelectedWorkingRangeId);
-                //}
-
-                //serviceModel.WorkingRange = workingRange;
+                Person responsable = null;
+                if(serviceModel.PersonId != null)
+                {
+                    IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.Id != null && x.Id.Equals(serviceModel.PersonId));
+                    if(persons != null && persons.Count() > 0)
+                    {
+                        responsable = persons.First();
+                    }
+                }
+                serviceModel.Responsable = responsable;
 
                 _context.Add(serviceModel);
                 await _context.SaveChangesAsync();
@@ -210,7 +215,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue")] ServiceModel serviceModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId")] ServiceModel serviceModel)
         {
             if (id != serviceModel.Id)
             {
@@ -246,13 +251,18 @@ namespace IVSoftware.Web.Controllers
 
                     serviceModel.ReferenceMethod = referenceMethod;
 
-                    //WorkingRangeModel workingRange = null;
-                    //if (serviceModel.SelectedWorkingRangeId > 0)
-                    //{
-                    //    workingRange = await _context.WorkingRangeModel.FindAsync(serviceModel.SelectedWorkingRangeId);
-                    //}
-
-                    //serviceModel.WorkingRange = workingRange;
+                    if(serviceModel.PersonId != null)
+                    {
+                        if(serviceModel.Responsable == null || 
+                            (serviceModel.Responsable != null && !serviceModel.Responsable.Id.Equals(serviceModel.PersonId)))
+                        {
+                            IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.Id != null && x.Id.Equals(serviceModel.PersonId));
+                            if (persons != null && persons.Count() > 0)
+                            {
+                                serviceModel.Responsable = persons.First();
+                            }
+                        }
+                    }
 
                     _context.Update(serviceModel);
                     await _context.SaveChangesAsync();
@@ -321,6 +331,38 @@ namespace IVSoftware.Web.Controllers
         private bool ServiceModelExists(int id)
         {
             return _context.ServiceModel.Any(e => e.Id == id);
+        }
+        public async Task<IActionResult> GetPersons()
+        {
+            try
+            {
+                IEnumerable<Person> persons = await _personService.GetAllAsync();
+                return PartialView("personSelectionList", persons);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error on ServiceModelsController.GetPersons >> " + ex.ToString());
+            }
+
+            return null;
+        }
+
+        public async Task<IActionResult> GetPerson(string identification)
+        {
+            try
+            {
+                IEnumerable < Person > persons = await _personService.FindByConditionAsync(x => x.IdentificationNumber != null && x.IdentificationNumber.Equals(identification));
+                if(persons != null && persons.Count() > 0)
+                {
+                    return PartialView("ResponsableData", persons.First());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on ServiceModelsController.GetPerson >> " + ex.ToString());
+            }
+
+            return PartialView("ResponsableData", null);
         }
     }
 }
