@@ -1,0 +1,48 @@
+﻿@model IdentificationType
+
+@{
+    ViewData["Title"] = "Crear";
+}
+
+<h5 class="text-primary titulo">Tipos de Identificación - Agregar</h5>
+<hr />
+<form asp-action="Edit">
+    <div class="row">
+        <div class="col">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Name" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Code" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-primary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
