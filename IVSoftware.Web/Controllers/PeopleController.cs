@@ -345,6 +345,55 @@ namespace IVSoftware.Web.Controllers
             }
         }
 
+        // GET: PeopleController/ChangePassword/
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordVM model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    User user = await _userManager.GetUserAsync(User);
+                    if (user == null)
+                    {
+                        return NotFound();
+                    }
+
+                    string currentPassword = ClsCipher.Encrypt(model.Password, ClsCipher.PasswordKey);
+                    if (!await _userManager.CheckPasswordAsync(user, currentPassword))
+                    {
+                        ModelState.AddModelError("Password", "Contraseña incorrecta");
+                        return View(model);
+                    }
+
+                    IdentityResult result =
+                        await _userManager.ChangePasswordAsync(
+                            user,
+                            currentPassword,
+                            ClsCipher.Encrypt(model.NewPassword, ClsCipher.PasswordKey));
+
+                    if (result == IdentityResult.Success)
+                    {
+                        return RedirectToAction("Logout", "Account");
+                    }
+
+                    ModelState.AddModelError("Password", string.Join(';', result.Errors.Select(e => e.Description)));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Password", ex.Message);
+            }
+
+            return View(model);
+        }
+
         private async Task<List<SelectListItem>> GetIdentificationTypeSelectList()
         {
             var identificationTypes = new List<SelectListItem>();
