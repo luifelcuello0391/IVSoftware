@@ -394,6 +394,53 @@ namespace IVSoftware.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Administrador")]
+        public async Task<ActionResult> ResetPassword(Guid id)
+        {
+            var person = await _personService.GetByIdAsync(id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            ResetPasswordVM resetPasswordVM = new ResetPasswordVM
+            {
+                Id = person.Id
+            };
+
+            return PartialView("_ModalResetPassword", resetPasswordVM);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrador")]
+        public async Task<ActionResult> ResetPassword(ResetPasswordVM model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Person person = await _personService.GetByIdAsync(model.Id);
+                    User user = person.User;
+                    if (user == null) { return NotFound(); }
+
+                    string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var result = await _userManager.ResetPasswordAsync(user, token, ClsCipher.Encrypt(model.Password, ClsCipher.PasswordKey));
+                    if (result == IdentityResult.Success)
+                    {
+                        return RedirectToAction(nameof(Edit), new { id = model.Id });
+                    }
+
+                    ModelState.AddModelError("Password", string.Join(';', result.Errors.Select(e => e.Description)));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Password", ex.Message);
+            }
+
+            return PartialView("_ModalResetPassword", model);
+        }
+
         private async Task<List<SelectListItem>> GetIdentificationTypeSelectList()
         {
             var identificationTypes = new List<SelectListItem>();

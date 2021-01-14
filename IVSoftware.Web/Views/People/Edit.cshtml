@@ -23,6 +23,16 @@
             </div>
         </div>
     }
+    else if (ViewBag.HasUser != null && ViewBag.HasUser && User.IsInRole("Administrador"))
+    {
+        <div class="row">
+            <div class="col">
+                <button id="btnReset" type="button" class="float-right btn btn-primary mb-3" data-toggle="modal" href="#create-modal" data-id="@Model.Id">
+                    Restablecer Contraseña
+                </button>
+            </div>
+        </div>
+    }
 
     <div class="row">
         <div class="col">
@@ -658,6 +668,7 @@
 @section FooterAssets {
     <script>
         var createURL = '@Url.Action("CreateUser", "People")';
+        var resetURL = '@Url.Action("ResetPassword", "People")';
         $(document).ready(function () {
             $('#Roles').multiselect({
                 buttonWidth: '100%',
@@ -685,7 +696,24 @@
                         $('#userModal').modal('show');
 		            }
 		        });
-		    });
+            });
+
+            $('#btnReset').on("click", function () {
+                let data_id = "0";
+                if (typeof $(this).data('id') !== 'undefined') {
+                    data_id = $(this).data('id');
+                }
+
+                $('#create-modal #id').val(data_id);
+                $.ajax({
+                    url: resetURL,
+                    data: { id: data_id },
+                    success: function (data) {
+                        $('.modal-content').html(data);
+                        $('#userModal').modal('show');
+                    }
+                });
+            });
 		});
     </script>
 }
