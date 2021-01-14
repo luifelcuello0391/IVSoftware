@@ -127,17 +127,17 @@ namespace IVSoftware.Data.Models
         }
 
         //public virtual List<AplicacionEvaluacion> ListAplicacionEvaluacion { get; set; }
-        public virtual List<TechnicalKnowledge> TechnicalKnowledges { get; set; }
+        public virtual List<TechnicalKnowledge> TechnicalKnowledges { get; set; } = new List<TechnicalKnowledge>();
 
-        public virtual List<BasicEducation> BasicEducations { get; set; }
+        public virtual List<BasicEducation> BasicEducations { get; set; } = new List<BasicEducation>();
 
-        public virtual List<HigherEducation> HigherEducations { get; set; }
+        public virtual List<HigherEducation> HigherEducations { get; set; } = new List<HigherEducation>();
 
-        public virtual List<WorkExperience> WorkExperiences { get; set; }
+        public virtual List<WorkExperience> WorkExperiences { get; set; } = new List<WorkExperience>();
 
-        public virtual List<Training> Trainings { get; set; }
+        public virtual List<Training> Trainings { get; set; } = new List<Training>();
 
-        public virtual List<OtherTechnicalKnowledge> OtherTechnicalKnowledges { get; set; }
+        public virtual List<OtherTechnicalKnowledge> OtherTechnicalKnowledges { get; set; } = new List<OtherTechnicalKnowledge>();
         //public virtual List<PersonaInduccion> ListPersonaInduccion { get; set; }
         public virtual List<ServiceModel> Services { get; set; }
 
@@ -186,5 +186,9 @@ namespace IVSoftware.Data.Models
                 _roles = value;
             }
         }
+
+        [DisplayName("Rol")]
+        [NotMapped]
+        public string Role { get; set; }
     }
 }

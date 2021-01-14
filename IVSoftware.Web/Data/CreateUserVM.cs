@@ -22,5 +22,9 @@ namespace IVSoftware.Web.Data
         [DisplayName("Confirmar contraseña")]
         [Required(ErrorMessage = "El campo es requerido")]
         public string CPassword { get; set; }
+
+        [DisplayName("Rol")]
+        [Required(ErrorMessage = "El campo es requerido")]
+        public string Rol { get; set; }
     }
 }

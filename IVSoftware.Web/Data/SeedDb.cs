@@ -1,7 +1,6 @@
-﻿using IVSoftware.Data;
-using IVSoftware.Data.Models;
-using IVSoftware.Web.Service;
+﻿using IVSoftware.Data.Models;
 using IVSoftware.Web.Models;
+using IVSoftware.Web.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,13 +12,18 @@ namespace IVSoftware.Web.Data
     {
         private readonly IVSoftwareContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEntityService<Person, Guid> _personService;
 
-        public SeedDb(IVSoftwareContext context, UserManager<User> userManager, IEntityService<Person, Guid> personService)
+        public SeedDb(IVSoftwareContext context,
+            UserManager<User> userManager,
+            IEntityService<Person, Guid> personService,
+            RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
             _personService = personService;
+            _roleManager = roleManager;
         }
 
         public async Task SeedAsync()
@@ -27,6 +31,7 @@ namespace IVSoftware.Web.Data
             try
             {
                 _context.Database.Migrate();
+                await CreateRoles();
                 var user = await _userManager.FindByEmailAsync("admin@fkconsultores.com");
 
                 if (user == null)
@@ -68,10 +73,42 @@ namespace IVSoftware.Web.Data
                         }
                     }
                 }
+
+                if(!await _userManager.IsInRoleAsync(user, "Administrador"))
+                {
+                    IdentityResult result = await _userManager.AddToRoleAsync(user, "Administrador");
+                    if(result != IdentityResult.Success)
+                    {
+                        throw new InvalidOperationException("No se pudo asignar el usuario en el rol administrador en el Seed.");
+                    }
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        private async Task CreateRoles()
+        {
+            if (!await _roleManager.RoleExistsAsync("Administrador"))
+            {
+                IdentityRole role = new IdentityRole
+                {
+                    Name = "Administrador"
+                };
+
+                await _roleManager.CreateAsync(role);
+            }
+
+            if (!await _roleManager.RoleExistsAsync("Funcionario"))
+            {
+                IdentityRole role = new IdentityRole
+                {
+                    Name = "Funcionario"
+                };
+
+                await _roleManager.CreateAsync(role);
             }
         }
     }

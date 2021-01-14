@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace IVSoftware.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrador, Funcionario")]
     public class PeopleController : Controller
     {
         private readonly IEntityService<Person, Guid> _personService;
@@ -29,6 +30,7 @@ namespace IVSoftware.Web.Controllers
         private readonly IEntityService<CertificationType, int> _certificationTypeService;
         private readonly IEntityService<JobRole, int> _jobRoleService;
         private readonly IVSoftwareContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public PeopleController(IEntityService<Person, Guid> personService,
             IEntityService<IdentificationType, int> identificationTypeService,
@@ -41,7 +43,8 @@ namespace IVSoftware.Web.Controllers
             IEntityService<AcademicLevel, int> academicLevelService,
             IEntityService<CertificationType, int> certificationTypeService,
             IEntityService<JobRole, int> jobRoleService,
-            IVSoftwareContext context)
+            IVSoftwareContext context,
+            RoleManager<IdentityRole> roleManager)
         {
             _personService = personService;
             _identificationTypeService = identificationTypeService;
@@ -55,15 +58,18 @@ namespace IVSoftware.Web.Controllers
             _certificationTypeService = certificationTypeService;
             _jobRoleService = jobRoleService;
             _context = context;
+            _roleManager = roleManager;
         }
 
         // GET: PeopleController
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Index()
         {
             return View(await _personService.GetAllAsync());
         }
 
         // GET: PeopleController/Details/5
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Details(Guid id)
         {
             var person = await _personService.GetByIdAndIncludeAsync(id,
@@ -81,6 +87,7 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: PeopleController/Create
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Create()
         {
             ViewBag.IdentificationTypes = await GetIdentificationTypeSelectList();
@@ -96,6 +103,7 @@ namespace IVSoftware.Web.Controllers
         // POST: PeopleController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Create(Person model)
         {
             try
@@ -121,9 +129,10 @@ namespace IVSoftware.Web.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> CreateUser(Guid id)
         {
+            ViewBag.Roles = await GetRolesList();
             var person = await _personService.GetByIdAsync(id);
             if (person == null)
             {
@@ -140,8 +149,10 @@ namespace IVSoftware.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> CreateUser(CreateUserVM model)
         {
+            ViewBag.Roles = await GetRolesList();
             try
             {
                 if (ModelState.IsValid)
@@ -160,8 +171,21 @@ namespace IVSoftware.Web.Controllers
                         if (person != null)
                         {
                             person.UserId = userCreated.Id;
-                            await _personService.UpdateAsync(person);
+                            Person personResult = await _personService.UpdateAsync(person);
+                            if(personResult == null)
+                            {
+                                ModelState.AddModelError("Rol", "No se pudo agregar el usuario a la persona");
+                                return PartialView("_ModalCreateUser", model);
+                            }
+
+                            IdentityResult rolResult = await _userManager.AddToRoleAsync(user, model.Rol);
+                            if (rolResult != IdentityResult.Success)
+                            {
+                                ModelState.AddModelError("Rol", "No se pudo agregar el rol al usuario");
+                                return PartialView("_ModalCreateUser", model);
+                            }
                         }
+
                         return RedirectToAction(nameof(Edit), new { id = model.Id });
                     }
                 }
@@ -175,6 +199,7 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: PeopleController/Edit/5
+
         public async Task<ActionResult> Edit(Guid? id, string email)
         {
             var person = await _personService.GetFullPerson(id, email, _academicLevelService, _certificationTypeService);
@@ -191,7 +216,10 @@ namespace IVSoftware.Web.Controllers
             ViewBag.ContractTypes = await GetContractTypeSelectList();
             ViewBag.Genders = await GetGenderSelectList();
             ViewBag.HasUser = (person.User != null);
+            ViewBag.JobRoles = await GetJobRolesList();
             ViewBag.Roles = await GetRolesList();
+
+            person.Role = (person.User != null) ? (await _userManager.GetRolesAsync(person.User)).FirstOrDefault() : "";
 
             return View(person);
         }
@@ -203,6 +231,18 @@ namespace IVSoftware.Web.Controllers
         {
             try
             {
+                User user = _userManager.Users.Where(u => u.Id == model.UserId).FirstOrDefault();
+                List<SelectListItem> roles = await GetRolesList();
+                ViewBag.IdentificationTypes = await GetIdentificationTypeSelectList();
+                ViewBag.ARLs = await GetArlSelectList();
+                ViewBag.EPSs = await GetEpsSelectList();
+                ViewBag.BloodTypes = await GetBloodTypeSelectList();
+                ViewBag.ContractTypes = await GetContractTypeSelectList();
+                ViewBag.Genders = await GetGenderSelectList();
+                ViewBag.HasUser = (!string.IsNullOrEmpty(model.UserId));
+                ViewBag.JobRoles = await GetJobRolesList();
+                ViewBag.Roles = roles;
+
                 if (ModelState.IsValid)
                 {
                     List<PersonJobRole> personJobRoles = new List<PersonJobRole>();
@@ -221,18 +261,40 @@ namespace IVSoftware.Web.Controllers
                         model.PeopleJobRole = personJobRoles;
                     }
 
-                    await _personService.UpdateAsync(model);
-                    return RedirectToAction(nameof(Index));
-                }
+                    if(!string.IsNullOrEmpty(model.Role) && !await _userManager.IsInRoleAsync(user, model.Role))
+                    {
+                        SelectListItem currentRole = roles.Where(r => r.Value != model.Role).FirstOrDefault();
+                        if(currentRole != null)
+                        {
+                            IdentityResult removingRolResult = await _userManager.RemoveFromRoleAsync(user, currentRole.Value);
+                            if (removingRolResult != IdentityResult.Success)
+                            {
+                                ModelState.AddModelError("Rol", $"No se pudo agregar al rol: {string.Join(',', removingRolResult.Errors.Select(e => e.Description))}");
+                                return View(model);
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Rol", "No se encuentra ningún rol");
+                            return View(model);
+                        }
 
-                ViewBag.IdentificationTypes = await GetIdentificationTypeSelectList();
-                ViewBag.ARLs = await GetArlSelectList();
-                ViewBag.EPSs = await GetEpsSelectList();
-                ViewBag.BloodTypes = await GetBloodTypeSelectList();
-                ViewBag.ContractTypes = await GetContractTypeSelectList();
-                ViewBag.Genders = await GetGenderSelectList();
-                ViewBag.HasUser = (!string.IsNullOrEmpty(model.UserId));
-                ViewBag.Roles = await GetRolesList();
+                        IdentityResult assingRolResult = await _userManager.AddToRoleAsync(user, model.Role);
+                        if (assingRolResult != IdentityResult.Success)
+                        {
+                            ModelState.AddModelError("Rol", $"No se pudo agregar al rol: {string.Join(',', assingRolResult.Errors.Select(e => e.Description))}");
+                            return View(model);
+                        }
+                    }
+
+                    await _personService.UpdateAsync(model);
+                    if (User.IsInRole("Administrador"))
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    return RedirectToAction(nameof(Index), "Home");
+                }
 
                 return View(model);
             }
@@ -243,6 +305,7 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: PeopleController/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var person = await _personService.GetByIdAndIncludeAsync(id,
@@ -262,6 +325,7 @@ namespace IVSoftware.Web.Controllers
         // POST: PeopleController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
             try
@@ -353,13 +417,24 @@ namespace IVSoftware.Web.Controllers
             return genders;
         }
 
-        private async Task<List<SelectListItem>> GetRolesList()
+        private async Task<List<SelectListItem>> GetJobRolesList()
         {
-            var roles = (await _jobRoleService.GetAllAsync()).Select(t => new SelectListItem()
+            var Jobroles = (await _jobRoleService.GetAllAsync()).Select(t => new SelectListItem()
             {
                 Text = t.Name,
                 Value = t.Id.ToString()
             }).ToList();
+
+            return Jobroles;
+        }
+
+        private async Task<List<SelectListItem>> GetRolesList()
+        {
+            var roles = await _roleManager.Roles.Select(t => new SelectListItem()
+            {
+                Text = t.Name,
+                Value = t.Name
+            }).ToListAsync();
 
             return roles;
         }
