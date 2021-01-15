@@ -7,15 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IVSoftware.Web.Models;
 using IVSoftware.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using IVSoftware.Web.Service;
 
 namespace IVSoftware.Web.Controllers
 {
     public class ChecklistResponseHeadersController : Controller
     {
         private readonly IVSoftwareContext _context;
+        private readonly UserManager<User> _userManager; 
+        private readonly IEntityService<Person, Guid> _personService;
 
-        public ChecklistResponseHeadersController(IVSoftwareContext context)
+        public ChecklistResponseHeadersController(IVSoftwareContext context, UserManager<User> userManager, IEntityService<Person, Guid> personService)
         {
+            _personService = personService;
+            _userManager = userManager;
             _context = context;
         }
 
@@ -68,30 +74,138 @@ namespace IVSoftware.Web.Controllers
             return View(checklistResponseHeader);
         }
 
-        public async Task<IActionResult> CaptureCheckListResponse(int equipId, int checklistId, string answers, string observation, string fillupDate)
+        public async Task<IActionResult> CaptureCheckListResponse(int equipId, int checklistId, string answers, string observation, string fillupDate, int validation_result)
         {
-            if(equipId > 0 && checklistId > 0 && answers != null && fillupDate != null)
+            if(equipId > 0 && checklistId > 0 && answers != null && !string.IsNullOrEmpty(answers.Replace(" ", string.Empty)) && fillupDate != null)
             {
-                // TODO: Save answers
-
                 ChecklistResponseHeader header = new ChecklistResponseHeader();
                 header.EquipmentId = equipId;
                 header.Equipment = await _context.Equipment.FirstOrDefaultAsync<Equipment>(x => x.Id == equipId);
+                header.Name = "Response header";
+                header.ValidationResult = validation_result == 1;
+
+                try
+                {
+                    User currentUser = await _userManager.GetUserAsync(User);
+                    if (currentUser != null)
+                    {
+                        header.ValidatedBy = await _personService.GetByIdAsync(Guid.Parse(currentUser.Id));
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("Error on CaptureCheckListResponse.UserData >> " + ex.ToString());
+                }
 
                 header.CheckListId = checklistId;
                 header.CheckList = await _context.EquipmentCheckList.FirstOrDefaultAsync<EquipmentCheckList>(x => x.Id == checklistId);
 
                 header.Observation = observation;
+                header.RegisterStatus = 1;
+                header.CreationDatetime = DateTime.Now;
+                header.ModificationDatetime = DateTime.Now;
 
                 try
                 {
                     header.FillUpDate = DateTime.Parse(fillupDate);
                 }
-                catch(Exception ex)
+                catch
                 {
                     header.FillUpDate = DateTime.Now;
                 }
+
+                string[] sections = answers.Split(new string[] { "||EOM||" }, StringSplitOptions.RemoveEmptyEntries);
                 
+                if(sections.Length > 0)
+                {
+                    foreach(string section in sections)
+                    {
+                        try
+                        {
+                            if (section != null && !string.IsNullOrEmpty(section.Replace(" ", string.Empty)))
+                            {
+                                string[] questions = section.Split(new string[] { "||QUEST||" }, StringSplitOptions.RemoveEmptyEntries);
+                                if (questions.Length > 0)
+                                {
+                                    int sectionId = 0;
+
+                                    foreach (string question in questions)
+                                    {
+                                        if (question != null && !string.IsNullOrEmpty(question.Replace(" ", string.Empty)))
+                                        {
+                                            if(question.StartsWith("question_"))
+                                            {
+                                                string[] answer = question.Split(new string[] { "||RESP||" }, StringSplitOptions.RemoveEmptyEntries);
+
+                                                if (answer.Length > 0)
+                                                {
+                                                    CheckListResponseDetail response_detail = new CheckListResponseDetail();
+                                                    response_detail.Header = header;
+                                                    response_detail.QuestionId = int.Parse(answer[0].Replace("question_", string.Empty).Replace("add_", string.Empty));
+                                                    response_detail.Response = answer[1];
+                                                    response_detail.Name = "Response detail";
+
+                                                    if(sectionId > 0)
+                                                    {
+                                                        response_detail.SectionId = sectionId;
+                                                    }
+                                                    else
+                                                    {
+                                                        response_detail.SectionId = null;
+                                                    }
+                                                    
+                                                    response_detail.RegisterStatus = 1;
+                                                    response_detail.CreationDatetime = DateTime.Now;
+                                                    response_detail.ModificationDatetime = DateTime.Now;
+
+                                                    if (header != null)
+                                                    {
+                                                        if (header.Details == null) header.Details = new List<CheckListResponseDetail>();
+
+                                                        header.Details.Add(response_detail);
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+
+                                                    sectionId = 0;
+                                                }
+                                            }
+                                            else if (question.StartsWith("section_"))
+                                            {
+                                                // Obtains the section Id
+                                                sectionId = int.Parse(question.Replace("section_", string.Empty).Replace("valid", string.Empty).Replace(" ", string.Empty));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error on answers collection >> " + ex.ToString());
+                        }
+                        
+                    }
+                }
+
+                // Save answers
+                if(header != null && header.Details != null && header.Details.Count > 0)
+                {
+                    try
+                    {
+                        _context.Add(header);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index), new { _id = checklistId, _equipId = equipId });
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine("Error on CheckListResponseHeader.Create >> " + ex.ToString());
+                    }
+                }
+
+                return NotFound();
             }
 
             return NotFound();

@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210113173029_ChecklistResponseDetailModel")]
+    partial class ChecklistResponseDetailModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,16 +239,11 @@ namespace IVSoftware.Web.Migrations
                     b.Property<string>("Response")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SectionId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("HeaderId");
 
                     b.HasIndex("QuestionId");
-
-                    b.HasIndex("SectionId");
 
                     b.ToTable("CheckListResponseDetail");
                 });
@@ -2849,16 +2846,9 @@ namespace IVSoftware.Web.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("IVSoftware.Data.Models.CheckListSection", "Section")
-                        .WithMany()
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("Header");
 
                     b.Navigation("Question");
-
-                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.ChecklistResponseHeader", b =>

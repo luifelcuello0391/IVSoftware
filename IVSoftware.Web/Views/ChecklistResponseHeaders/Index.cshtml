@@ -76,9 +76,10 @@ else
                     <thead style="background-color:yellowgreen; color:white">
                         <tr>
                             <th>
-                                Nombre
                             </th>
+
                             <th>
+                                Nombre
                             </th>
                         </tr>
                     </thead>
@@ -89,10 +90,11 @@ else
                             {
                                 <tr>
                                     <td>
-                                        @data.Name
+                                        @*<input type="button" value="Seleccionar" asp-action="Create" asp-route-_id="@data.Id" asp-route-_equipId="@ViewBag.Equipment.Id" class="btn btn-primary"/>*@
+                                        <a asp-action="Create" asp-route-_id="@data.Id" asp-route-_equipId="@ViewBag.Equipment.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
                                     </td>
                                     <td>
-                                        <a asp-action="Create" asp-route-_id="@data.Id" asp-route-_equipId="@ViewBag.Equipment.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        @data.Name
                                     </td>
                                 </tr>
                             }
@@ -134,7 +136,7 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.FillUpDate)
                 </td>
-                @if (@ViewBag.Equipment == null || @ViewBag.Equipment.Id > 0)
+                @if (@ViewBag.Equipment == null || @ViewBag.Equipment.Id == 0)
                 {
                     <td>
                         @Html.DisplayFor(modelItem => item.Equipment.Name)
@@ -150,7 +152,6 @@ else
                 </td>
 
                 <td style="white-space:nowrap">
-                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
                     <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
                     <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
                 </td>
