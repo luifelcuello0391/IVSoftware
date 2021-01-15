@@ -172,7 +172,7 @@ namespace IVSoftware.Web.Controllers
                         {
                             person.UserId = userCreated.Id;
                             Person personResult = await _personService.UpdateAsync(person);
-                            if(personResult == null)
+                            if (personResult == null)
                             {
                                 ModelState.AddModelError("Rol", "No se pudo agregar el usuario a la persona");
                                 return PartialView("_ModalCreateUser", model);
@@ -261,10 +261,10 @@ namespace IVSoftware.Web.Controllers
                         model.PeopleJobRole = personJobRoles;
                     }
 
-                    if(!string.IsNullOrEmpty(model.Role) && !await _userManager.IsInRoleAsync(user, model.Role))
+                    if (!string.IsNullOrEmpty(model.Role) && !await _userManager.IsInRoleAsync(user, model.Role))
                     {
                         SelectListItem currentRole = roles.Where(r => r.Value != model.Role).FirstOrDefault();
-                        if(currentRole != null)
+                        if (currentRole != null)
                         {
                             IdentityResult removingRolResult = await _userManager.RemoveFromRoleAsync(user, currentRole.Value);
                             if (removingRolResult != IdentityResult.Success)
@@ -298,7 +298,7 @@ namespace IVSoftware.Web.Controllers
 
                 return View(model);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View(model);
             }
@@ -334,6 +334,11 @@ namespace IVSoftware.Web.Controllers
                 if (person == null)
                 {
                     return NotFound();
+                }
+
+                if (person.User != null)
+                {
+                    await _userManager.DeleteAsync(person.User);
                 }
 
                 await _personService.DeleteAsync(person);
