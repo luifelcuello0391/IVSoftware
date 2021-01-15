@@ -4,14 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IVSoftware.Web.Data
 {
-    public class CreateUserVM
+    public class ResetPasswordVM
     {
-        public Guid Id { get; set; }
-
-        [DisplayName("Correo electrónico")]
-        [EmailAddress(ErrorMessage = "El campo no tiene un formato de E-mail válido")]
         [Required(ErrorMessage = "El campo es requerido")]
-        public string Email { get; set; }
+        public Guid Id { get; set; }
 
         [DisplayName("Contraseña")]
         [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
@@ -22,9 +18,5 @@ namespace IVSoftware.Web.Data
         [DisplayName("Confirmar contraseña")]
         [Required(ErrorMessage = "El campo es requerido")]
         public string CPassword { get; set; }
-
-        [DisplayName("Rol")]
-        [Required(ErrorMessage = "El campo es requerido")]
-        public string Rol { get; set; }
     }
 }

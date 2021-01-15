@@ -34,7 +34,8 @@ namespace IVSoftware.Web
                 cfg.Password.RequireUppercase = false;
                 cfg.Password.RequiredLength = 6;
             })
-            .AddEntityFrameworkStores<IVSoftwareContext>();
+            .AddEntityFrameworkStores<IVSoftwareContext>()
+            .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider); ;
 
             services.AddControllersWithViews();
 

@@ -23,6 +23,16 @@
             </div>
         </div>
     }
+    else if (ViewBag.HasUser != null && ViewBag.HasUser && User.IsInRole("Administrador"))
+    {
+        <div class="row">
+            <div class="col">
+                <button id="btnReset" type="button" class="float-right btn btn-primary mb-3" data-toggle="modal" href="#create-modal" data-id="@Model.Id">
+                    Restablecer Contraseña
+                </button>
+            </div>
+        </div>
+    }
 
     <div class="row">
         <div class="col">
@@ -222,11 +232,28 @@
                     <label asp-for="Roles" style="color:white"></label>
                 </div>
                 <select asp-for="Roles" multiple="multiple" class="form-control"
-                        asp-items="(List<SelectListItem>) ViewBag.Roles">
+                        asp-items="(List<SelectListItem>) ViewBag.JobRoles">
                 </select>
             </div>
         </div>
     </div>
+
+    @if (ViewBag.HasUser != null && ViewBag.HasUser && User.IsInRole("Administrador"))
+    {
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <div class="form-group">
+                    <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                        <label asp-for="Role" style="color:white"></label>
+                    </div>
+                    <select asp-for="Role" class="form-control"
+                            asp-items="(List<SelectListItem>) ViewBag.Roles">
+                    </select>
+                    <span asp-validation-for="Role" class="text-danger small"></span>
+                </div>
+            </div>
+        </div>
+    }
 
     <div class="row">
         <div class="col">
@@ -244,7 +271,14 @@
         <div class="col">
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-primary"> Cancelar </a>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <a asp-action="Index" class="btn btn-primary"> Cancelar </a>
+                }
+                else
+                {
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary"> Cancelar </a>
+                }
             </div>
         </div>
     </div>
@@ -634,6 +668,7 @@
 @section FooterAssets {
     <script>
         var createURL = '@Url.Action("CreateUser", "People")';
+        var resetURL = '@Url.Action("ResetPassword", "People")';
         $(document).ready(function () {
             $('#Roles').multiselect({
                 buttonWidth: '100%',
@@ -661,7 +696,24 @@
                         $('#userModal').modal('show');
 		            }
 		        });
-		    });
+            });
+
+            $('#btnReset').on("click", function () {
+                let data_id = "0";
+                if (typeof $(this).data('id') !== 'undefined') {
+                    data_id = $(this).data('id');
+                }
+
+                $('#create-modal #id').val(data_id);
+                $.ajax({
+                    url: resetURL,
+                    data: { id: data_id },
+                    success: function (data) {
+                        $('.modal-content').html(data);
+                        $('#userModal').modal('show');
+                    }
+                });
+            });
 		});
     </script>
 }

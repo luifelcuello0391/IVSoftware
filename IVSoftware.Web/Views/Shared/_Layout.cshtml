@@ -51,7 +51,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
 
-                        @if (this.User.Identity.IsAuthenticated)
+                        @if (this.User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -141,14 +141,14 @@
                                                         </li>
 
                                                         <!--<li class="nav-item dropdown dropdown_menu">
-                                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                Mantenimientos
-                                                            </a>
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Mantenimientos
+                                        </a>
 
-                                                            <div class="dropdown-content" aria-labelledby="navbarDropdown">
-                                                                <a class="dropdown-item btn-sm" asp-area="" asp-controller="ClientModels" asp-action="Index">Listado de mantenimientos</a>
-                                                            </div>
-                                                        </li>-->
+                                        <div class="dropdown-content" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item btn-sm" asp-area="" asp-controller="ClientModels" asp-action="Index">Listado de mantenimientos</a>
+                                        </div>
+                                    </li>-->
 
                                                     </ul>
                                                 </li>
@@ -158,6 +158,7 @@
                                 </div>
 
                             </li>
+
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -180,9 +181,9 @@
                                     <a class="dropdown-item btn-sm" asp-area="" asp-controller="AcademicLevels" asp-action="Index">Modalidades académicas</a>
                                     <a class="dropdown-item btn-sm" asp-area="" asp-controller="JobRoles" asp-action="Index">Roles y responsabilidades</a>
                                     <a class="dropdown-item btn-sm" asp-area="" asp-controller="CertificationTypes" asp-action="Index">Tipos de certificación</a>
-                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="TipoContrato" asp-action="Index">Tipos de contrato</a>
+                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="ContractTypes" asp-action="Index">Tipos de contrato</a>
                                     <a class="dropdown-item btn-sm" asp-area="" asp-controller="IdentificationTypes" asp-action="Index">Tipos de documento</a>
-                                    <a class="dropdown-item btn-sm" asp-area="" asp-controller="TipoInduccion" asp-action="Index">Tipos de inducción</a>
+                                    @*<a class="dropdown-item btn-sm" asp-area="" asp-controller="TipoInduccion" asp-action="Index">Tipos de inducción</a>*@
                                 </div>
                             </li>
                         }
@@ -196,7 +197,8 @@
                                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">@this.User.Identity.Name</a>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item btn-sm" asp-area="" asp-controller="people" asp-action="Edit" asp-route-email="@this.User.Identity.Name">Editar hoja de vida</a>
-                                        <a class="dropdown-item btn-sm" asp-area="" asp-controller="AplicacionEvaluacion" asp-action="Index" asp-route-userName="@this.User.Identity.Name">Mis evaluaciones</a>
+                                        <a class="dropdown-item btn-sm" asp-controller="people" asp-action="ChangePassword">Cambiar contraseña</a>
+                                        @*<a class="dropdown-item btn-sm" asp-area="" asp-controller="AplicacionEvaluacion" asp-action="Index" asp-route-userName="@this.User.Identity.Name">Mis evaluaciones</a>*@
                                         <a class="dropdown-item btn-sm" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar sesión</a>
                                     </div>
                                 </li>

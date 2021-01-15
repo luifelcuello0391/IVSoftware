@@ -1,4 +1,5 @@
 ﻿using IVSoftware.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace IVSoftware.Data.Configurations
@@ -13,12 +14,14 @@ namespace IVSoftware.Data.Configurations
             builder
                 .HasOne(pjr => pjr.Person)
                 .WithMany(p => p.PeopleJobRole)
-                .HasForeignKey(pjr => pjr.PersonId);
+                .HasForeignKey(pjr => pjr.PersonId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasOne(pjr => pjr.JobRole)
                 .WithMany(p => p.PeopleJobRole)
-                .HasForeignKey(pjr => pjr.JobRoleId);
+                .HasForeignKey(pjr => pjr.JobRoleId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
