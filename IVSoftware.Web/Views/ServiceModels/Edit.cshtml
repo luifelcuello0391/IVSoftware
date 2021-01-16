@@ -275,9 +275,16 @@
     $(window).on('load', function () {
         try
         {
-             selectPerson(@Model.Responsable.IdentificationNumber);
+            var responsableId = @Model.Responsable != null ? @Model.Responsable.IdentificationNumber : "";
+
+            if (responsableId != null) {
+                selectPerson(@Model.Responsable.IdentificationNumber);
+            }
+            else {
+                selectPerson("");
+            }
         }
-        catch (Err)
+        catch (err)
         {
             selectPerson("");
         }

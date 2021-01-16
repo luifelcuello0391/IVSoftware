@@ -9,8 +9,16 @@ namespace IVSoftware.Web.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var sqlFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"InitialScripts\QuestionAndCheckListScript.sql");
-            migrationBuilder.Sql(File.ReadAllText(sqlFile, Encoding.GetEncoding(28591)));
+            try
+            {
+                var sqlFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"InitialScripts\QuestionAndCheckListScript.sql");
+                migrationBuilder.Sql(File.ReadAllText(sqlFile, Encoding.GetEncoding(28591)));
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error on Migration RuningCheckListScript >> " + ex.ToString());
+            }
+            
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
