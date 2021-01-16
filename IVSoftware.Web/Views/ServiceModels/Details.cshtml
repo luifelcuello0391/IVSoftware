@@ -8,6 +8,7 @@
 
 <div>
     <h4 style="color:yellowgreen">Servicio</h4>
+
     <hr />
     <dl class="row">
         <dt class="col-sm-2" style="white-space:nowrap">
@@ -109,39 +110,51 @@
     </dl>
 
     <h5 style="color:yellowgreen">Información del responsable</h5>
-    <hr/>
-    <dl class="row">
+    <hr />
+    <div class="row" style="margin-left:10px">
         @if (Model.Responsable != null)
         {
-            <dd>
-                <div class="row" style="margin-left:10px">
-                    <div class="form-group col-md-3" style="white-space:nowrap">
-                        <div><b>Tipo de ID</b></div>
-                        <div>@Html.DisplayFor(model => model.Responsable.IdentificationType.Name)</div>
-                    </div>
+        <table>
+            <tr>
+                <td style="padding: 0 15px 0 0">
+                    <div><b>Tipo de ID</b></div>
+                </td>
 
-                    <div class="form-group col-md-3">
-                        <div><b>@Html.DisplayNameFor(model => model.Responsable.IdentificationNumber)</b></div>
-                        <div>@Html.DisplayFor(model => model.Responsable.IdentificationNumber)</div>
-                    </div>
+                <td style="padding: 0 15px 0 0">
+                    <div><b>@Html.DisplayNameFor(model => model.Responsable.IdentificationNumber)</b></div>
+                </td>
 
-                    <div class="form-group col-md-6">
-                        <div><b>@Html.DisplayNameFor(model => model.Responsable.FullName)</b></div>
-                        <div>@Html.DisplayFor(model => model.Responsable.FullName)</div>
-                    </div>
-                </div>
-            </dd>
+                <td style="padding: 0 15px 0 0">
+                    <div><b>@Html.DisplayNameFor(model => model.Responsable.FullName)</b></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="padding: 0 15px 0 0">
+                    <div>@Html.DisplayFor(model => model.Responsable.IdentificationType.Name)</div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
+                    <div>@Html.DisplayFor(model => model.Responsable.IdentificationNumber)</div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
+                    <div>@Html.DisplayFor(model => model.Responsable.FullName)</div>
+                </td>
+            </tr>
+        </table>
         }
         else
         {
-            <dd class="col-sm-10" style="margin-left:10px">
+            <div class="col-sm-10" style="margin-left:10px">
                 <label>No se ha asignado un responsable</label>
-            </dd>
+            </div>
         }
-        </dl>
+    </div>
+    <h1> </h1>
 
     <h5 style="color:yellowgreen">Información adicional</h5>
-    <hr/>
+    <hr />
     <dl class="row">
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.RegisterStatus)
@@ -168,3 +181,4 @@
     <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
     <a asp-action="Index">Regresar</a>
 </div>
+

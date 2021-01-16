@@ -31,6 +31,14 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            @if (Model.Responsable != null)
+            {
+                <input type="hidden" id="txt_load_person_id" value="@Model.Responsable.IdentificationNumber" />
+            }
+            else
+            {
+                <input type="hidden" id="txt_load_person_id" />
+            }
             <input type="hidden" asp-for="TypeOfServiceId" id="input_service_type_id" />
             <input type="hidden" asp-for="SelectedMatrixGroupId" id="input_matrix_id" />
             <input type="hidden" asp-for="SelectedVariableId" id="input_variable_id" />
@@ -273,21 +281,7 @@
 
 <script>
     $(window).on('load', function () {
-        try
-        {
-            var responsableId = @Model.Responsable != null ? @Model.Responsable.IdentificationNumber : "";
-
-            if (responsableId != null) {
-                selectPerson(@Model.Responsable.IdentificationNumber);
-            }
-            else {
-                selectPerson("");
-            }
-        }
-        catch (err)
-        {
-            selectPerson("");
-        }
+        selectPersonOnLoad();
     });
 
     function showPersonModal() {
@@ -300,8 +294,25 @@
             });
         }
 
-        function selectPerson(id) {
+    function selectPerson(id) {
             hidePersonmodal();
+
+            var url = "@Url.Action("GetPerson")";
+
+            // Obtains the person data with ID
+            $.get(url, { identification: id }, function (data) {
+                if (data != null)
+                {
+                    $("#lbl_responsable").html("");
+                    $("#div_responsable").html(data);
+
+                    $("#txt_responsable_id").val($("#txt_person_id").val());
+                }
+            });
+    }
+
+    function selectPersonOnLoad() {
+            var id = $("#txt_load_person_id").val();
 
             var url = "@Url.Action("GetPerson")";
 
@@ -317,7 +328,7 @@
             });
         }
 
-        function hidePersonmodal() {
+    function hidePersonmodal() {
             $("#modalPersons").modal('hide');
             $('.modal-content').html("");
         }
