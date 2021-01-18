@@ -246,6 +246,8 @@ namespace IVSoftware.Web.Controllers
                 if (ModelState.IsValid)
                 {
                     List<PersonJobRole> personJobRoles = new List<PersonJobRole>();
+                    IQueryable<PersonJobRole> currentPersonJobRoles =
+                        _context.PersonJobRoles.Where(pjr => pjr.PersonId == id);
                     if (model.Roles != null && model.Roles.Count > 0)
                     {
                         personJobRoles =
@@ -255,10 +257,13 @@ namespace IVSoftware.Web.Controllers
                                 JobRoleId = r
                             }).ToList();
 
-                        _context.PersonJobRoles.RemoveRange(
-                            _context.PersonJobRoles.Where(pjr => pjr.PersonId == id));
+                        _context.PersonJobRoles.RemoveRange(currentPersonJobRoles);
                         _context.PersonJobRoles.AddRange(personJobRoles);
                         model.PeopleJobRole = personJobRoles;
+                    }
+                    else if(currentPersonJobRoles.Any())
+                    {
+                        _context.PersonJobRoles.RemoveRange(currentPersonJobRoles);
                     }
 
                     if (!string.IsNullOrEmpty(model.Role) && !await _userManager.IsInRoleAsync(user, model.Role))
