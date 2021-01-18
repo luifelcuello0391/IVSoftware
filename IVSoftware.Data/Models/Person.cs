@@ -151,7 +151,9 @@ namespace IVSoftware.Data.Models
                     int totalDays = 0;
                     foreach (var workExperience in WorkExperiences)
                     {
-                        totalDays += (workExperience.EndDate.Value - workExperience.StartDate).Days;
+                        DateTime endDate = workExperience.EndDate.HasValue ?
+                            workExperience.EndDate.Value : DateTime.Today;
+                        totalDays += (endDate - workExperience.StartDate).Days;
                     }
 
                     if (totalDays > 0)
