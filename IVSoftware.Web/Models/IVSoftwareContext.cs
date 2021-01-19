@@ -169,6 +169,10 @@ namespace IVSoftware.Web.Models
             new JobRoleConfiguration("JobRole", "Id").Map(modelBuilder);
             new PersonJobRoleConfiguration().Map(modelBuilder.Entity<PersonJobRole>());
 
+            // Evaluation
+            new PeriodicityConfiguration("Periodicity", "Id").Map(modelBuilder);
+            new EvaluationConfiguration("Evaluation", "Id").Map(modelBuilder);
+
             base.OnModelCreating(modelBuilder);
         }
 
