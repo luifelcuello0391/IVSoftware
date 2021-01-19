@@ -172,6 +172,7 @@ namespace IVSoftware.Web.Models
             // Evaluation
             new PeriodicityConfiguration("Periodicity", "Id").Map(modelBuilder);
             new EvaluationConfiguration("Evaluation", "Id").Map(modelBuilder);
+            new PersonEvaluationConfiguration().Map(modelBuilder.Entity<PersonEvaluation>());
 
             base.OnModelCreating(modelBuilder);
         }
@@ -227,5 +228,7 @@ namespace IVSoftware.Web.Models
         public DbSet<IVSoftware.Data.Models.ServiceGroupServicesRelation> ServiceGroupServicesRelation { get; set; }
 
         public DbSet<PersonJobRole> PersonJobRoles { get; set; }
+
+        public DbSet<PersonEvaluation> PersonEvaluations { get; set; }
     }
 }

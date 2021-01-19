@@ -1,5 +1,6 @@
 ﻿using IVSoftware.Data.Models.Core;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,5 +24,7 @@ namespace IVSoftware.Data.Models
 
         [DisplayName("Cantidad")]
         public int? PeriodicityAmount { get; set; }
+
+        public virtual ICollection<PersonEvaluation> PersonEvaluations { get; set; }
     }
 }

@@ -192,5 +192,7 @@ namespace IVSoftware.Data.Models
         [DisplayName("Rol")]
         [NotMapped]
         public string Role { get; set; }
+
+        public virtual ICollection<PersonEvaluation> PersonEvaluations { get; set; }
     }
 }
