@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Person>
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Asignación de personas</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <table class="table w-100" id="usersTable">
+        <thead style="background-color:yellowgreen; color:white">
+            <tr>
+                <td></td>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().FullName)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+    <button type="button" class="btn btn-primary">Asignar</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#usersTable').DataTable({
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0
+            }],
+            select: {
+                style: 'multi',
+                selector: 'td:first-child'
+            },
+            language: {
+                url: '/lib/datatables.net/Spanish.json'
+            },
+            order: [[1, 'asc']]
+        });
+
+        @*$('#assign').on("click", function () {
+            let Id = $('#Id').val();
+            let Email = $('#Email').val();
+            let Password = $('#Password').val();
+            let CPassword = $('#CPassword').val()
+            let Rol = $('#Rol').val()
+            $.ajax({
+                url: '@Url.Action("CreateUser", "People")',
+                method: 'POST',
+                data: {
+                    Id: Id,
+                    Email: Email,
+                    Password: Password,
+                    CPassword: CPassword,
+                    Rol: Rol
+                },
+                    success: function (data) {
+                    //if (!data.startsWith("<div"))
+                    $('#create-modal').modal('show');
+                    if (data.lastIndexOf("<div", 6) != -1) {
+                        $('.modal-content').html(data);
+                        $('#create-modal').modal('show');
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("Ocurrió un error, intente más tarde por favor");
+                }
+            });
+        })*@
+    });
+
+</script>

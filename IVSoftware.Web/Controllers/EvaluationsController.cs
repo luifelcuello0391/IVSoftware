@@ -13,12 +13,15 @@ namespace IVSoftware.Web.Controllers
     {
         private readonly IEntityService<Evaluation, int> _evaluationService;
         private readonly IEntityService<Periodicity, int> _periodicityService;
+        private readonly IEntityService<Person, Guid> _personService;
 
         public EvaluationsController(IEntityService<Evaluation, int> evaluationService,
-            IEntityService<Periodicity, int> periodicityService)
+            IEntityService<Periodicity, int> periodicityService,
+            IEntityService<Person, Guid> personService)
         {
             _evaluationService = evaluationService;
             _periodicityService = periodicityService;
+            _personService = personService;
         }
 
         public async Task<IActionResult> Index()
@@ -126,6 +129,11 @@ namespace IVSoftware.Web.Controllers
 
             await _evaluationService.DeleteAsync(evaluation);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AssignPeople(int id)
+        {
+            return PartialView("_ModalAssignPeople", await _personService.GetAllAsync());
         }
 
         private async Task<bool> EvaluationExists(int id)
