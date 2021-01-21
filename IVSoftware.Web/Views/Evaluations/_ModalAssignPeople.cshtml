@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Person>
+﻿@model PeopleEvaluationVM
 
 <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLabel">Asignación de personas</h5>
@@ -7,22 +7,26 @@
     </button>
 </div>
 <div class="modal-body">
+    <input type="hidden" asp-for="Id" />
+    <span asp-validation-for="PersonEvaluations" class="text-danger small"></span>
     <table class="table w-100" id="usersTable">
         <thead style="background-color:yellowgreen; color:white">
             <tr>
-                <td></td>
+                <th></th>
+                <th class="d-none"></th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().FullName)
+                    @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().Person.FullName)
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.PersonEvaluations)
             {
-                <tr>
+                <tr class="@((item.IsSelected) ? "assigned" : "")">
                     <td></td>
+                    <td class="d-none">@Html.DisplayFor(modelItem => item.PersonId)</td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.FullName)
+                        @Html.DisplayFor(modelItem => item.Person.FullName)
                     </td>
                 </tr>
             }
@@ -31,12 +35,12 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-    <button type="button" class="btn btn-primary">Asignar</button>
+    <button type="button" class="btn btn-primary" id="assign">Asignar</button>
 </div>
 
 <script>
     $(document).ready(function () {
-        $('#usersTable').DataTable({
+        const usersTable = $('#usersTable').DataTable({
             columnDefs: [{
                 orderable: false,
                 className: 'select-checkbox',
@@ -52,28 +56,34 @@
             order: [[1, 'asc']]
         });
 
-        @*$('#assign').on("click", function () {
+        usersTable.select().init();
+        usersTable.rows('.assigned').select();
+
+        $('#assign').on("click", function () {
+            let people = usersTable.rows({ selected: true }).data();
+            if (people.length === 0) {
+                alert("Se deben seleccionar una o más personas");
+            }
+
             let Id = $('#Id').val();
-            let Email = $('#Email').val();
-            let Password = $('#Password').val();
-            let CPassword = $('#CPassword').val()
-            let Rol = $('#Rol').val()
+            let personEvaluations = new Array();
+            for (let i = 0; i < people.length; i++) {
+                personEvaluations.push({ EvaluationId: Id, PersonId: people[i][1], IsSelected: true });
+            }
+
             $.ajax({
-                url: '@Url.Action("CreateUser", "People")',
+                url: '@Url.Action("AssignPeople", "Evaluations")',
                 method: 'POST',
                 data: {
                     Id: Id,
-                    Email: Email,
-                    Password: Password,
-                    CPassword: CPassword,
-                    Rol: Rol
+                    PersonEvaluations: personEvaluations
                 },
-                    success: function (data) {
+                success: function (data) {
                     //if (!data.startsWith("<div"))
-                    $('#create-modal').modal('show');
+                    $('#assign-modal').modal('show');
                     if (data.lastIndexOf("<div", 6) != -1) {
                         $('.modal-content').html(data);
-                        $('#create-modal').modal('show');
+                        $('#assign-modal').modal('show');
                     }
                     else {
                         location.reload();
@@ -84,7 +94,7 @@
                     alert("Ocurrió un error, intente más tarde por favor");
                 }
             });
-        })*@
+        })
     });
 
 </script>

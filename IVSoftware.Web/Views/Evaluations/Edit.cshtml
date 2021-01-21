@@ -67,7 +67,8 @@
         <div class="col">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary float-right mb-3"
-                    data-toggle="modal" id="assignPeople">
+                    data-toggle="modal" id="assignPeople" href="#assign-modal"
+                    data-id="@Model.Id">
                 Asignar personas
             </button>
 
@@ -84,7 +85,6 @@
             <table class="table" id="AssignedUsers">
                 <thead style="background-color:yellowgreen; color:white">
                     <tr>
-                        <td></td>
                         <th>
                             @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().Person.FullName)
                         </th>
@@ -94,7 +94,6 @@
                     @foreach (var item in Model.PersonEvaluations)
                     {
                         <tr>
-                            <td></td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Person.FullName)
                             </td>
@@ -137,15 +136,9 @@
             });
 
             $('#AssignedUsers').DataTable({
-                columnDefs: [{
-                    orderable: false,
-                    className: 'select-checkbox',
-                    targets: 0
-                }],
                 language: {
                     url: '/lib/datatables.net/Spanish.json'
-                },
-                order: [[1, 'asc']]
+                }
             });
         });
     </script>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IVSoftware.Data.Models
 {
@@ -11,5 +12,9 @@ namespace IVSoftware.Data.Models
         public int EvaluationId { get; set; }
 
         public virtual Evaluation Evaluation { get; set; }
+
+
+        [NotMapped]
+        public bool IsSelected { get; set; }
     }
 }
