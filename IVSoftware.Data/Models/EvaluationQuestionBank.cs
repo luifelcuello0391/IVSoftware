@@ -14,6 +14,6 @@ namespace IVSoftware.Data.Models
         [MinLength(10, ErrorMessage = "La {0} debe tener al menos {1} caracteres")]
         public string Question { get; set; }
 
-        public virtual ICollection<QuestionAnswerRelation> QuestionAnswers { get; set; }
+        public virtual ICollection<EvaluationQuestionAnswer> QuestionAnswers { get; set; }
     }
 }

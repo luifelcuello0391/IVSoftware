@@ -1,6 +1,5 @@
 ﻿using IVSoftware.Data.Models.Core;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,8 +14,12 @@ namespace IVSoftware.Data.Models
 
         [DisplayName("¿Es Correcta?")]
         [Required(ErrorMessage = "El campo {0} es requerido.")]
-        public string IsRight { get; set; }
+        public bool IsRight { get; set; }
 
-        public virtual ICollection<QuestionAnswerRelation> QuestionsAnswer { get; set; }
+        [DisplayName("Pregunta")]
+        [Required(ErrorMessage = "El campo {0} es requerido.")]
+        public Guid EvaluationQuestionBankId { get; set; }
+
+        public virtual EvaluationQuestionBank EvaluationQuestionBank { get; set; }
     }
 }

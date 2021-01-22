@@ -1,19 +1,24 @@
 ﻿using IVSoftware.Data.Models;
 using IVSoftware.Web.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace IVSoftware.Web.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class EvaluationQuestionBanksController : Controller
     {
         private readonly IEntityService<EvaluationQuestionBank, Guid> _evaluationQuestionBankService;
+        private readonly IEntityService<EvaluationQuestionAnswer, Guid> _questionAnswerService;
 
         public EvaluationQuestionBanksController(
-            IEntityService<EvaluationQuestionBank, Guid> evaluationQuestionBankService)
+            IEntityService<EvaluationQuestionBank, Guid> evaluationQuestionBankService,
+            IEntityService<EvaluationQuestionAnswer, Guid> questionAnswerService)
         {
             _evaluationQuestionBankService = evaluationQuestionBankService;
+            _questionAnswerService = questionAnswerService;
         }
 
         // GET: EvaluationQuestionBanks
@@ -122,6 +127,44 @@ namespace IVSoftware.Web.Controllers
 
             await _evaluationQuestionBankService.DeleteAsync(evaluationQuestionBank);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AssignAnswers(Guid id)
+        {
+            EvaluationQuestionBank evaluationQuestionBank =
+                await _evaluationQuestionBankService.GetByIdAsync(id);
+            if (evaluationQuestionBank == null) { return NotFound(); }
+
+            EvaluationQuestionAnswer questionAnswer = new EvaluationQuestionAnswer()
+            {
+                EvaluationQuestionBankId = id,
+                EvaluationQuestionBank = evaluationQuestionBank
+            };
+
+            return PartialView("_ModalAssignAnswers", questionAnswer);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignAnswers(EvaluationQuestionAnswer model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    EvaluationQuestionBank evaluationQuestionBank =
+                        await _evaluationQuestionBankService.GetByIdAsync(model.EvaluationQuestionBankId);
+                    if (evaluationQuestionBank == null) { return NotFound(); }
+
+                    await _questionAnswerService.CreateAsync(model);
+                    return RedirectToAction(nameof(Edit), new { id = model.EvaluationQuestionBankId });
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Answer", ex.Message);
+            }
+
+            return PartialView("_ModalAssignAnswers", model);
         }
 
         private async Task<bool> EvaluationQuestionBankExists(Guid id)
