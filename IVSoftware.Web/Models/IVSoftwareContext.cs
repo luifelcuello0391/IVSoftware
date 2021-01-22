@@ -173,6 +173,7 @@ namespace IVSoftware.Web.Models
             new PeriodicityConfiguration("Periodicity", "Id").Map(modelBuilder);
             new EvaluationConfiguration("Evaluation", "Id").Map(modelBuilder);
             new PersonEvaluationConfiguration().Map(modelBuilder.Entity<PersonEvaluation>());
+            new EvaluationQuestionBankConfiguration("EvaluationQuestion", "Id").Map(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
