@@ -40,6 +40,7 @@
 <div>
     <div>
         <form asp-action="Create">
+            @Html.Hidden("RedirectTo", Url.Action("Index", "ChecklistResponseHeaders"))
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group col-md-4">
                 <label asp-for="FillUpDate" class="control-label"></label>
@@ -197,11 +198,11 @@
                 }
             }
 
-            <div >
+            <div>
                 <label asp-for="Observation" class="control-label"></label>
-                @Html.TextAreaFor(model => model.Observation, new { @id="txt_observation", @class = "form-control", @rows = 4 })
+                @Html.TextAreaFor(model => model.Observation, new { @id = "txt_observation", @class = "form-control", @rows = 4 })
                 <span asp-validation-for="Observation" class="text-danger"></span>
-                <br/>
+                <br />
             </div>
 
             <div>
@@ -267,7 +268,9 @@
                 validation_result: validation
             },
                 function (data) {
-                //location.reload();
+                    url = $("#RedirectTo").val();
+                    location.href = url + "/Index/" + data;
+
             });
         }
         else
