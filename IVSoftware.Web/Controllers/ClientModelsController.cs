@@ -283,6 +283,22 @@ namespace IVSoftware.Web.Controllers
                 }
                 clientModel.DocumentType = docType;
 
+                // Obtains the department instance
+                Department dep = null;
+                if (clientModel.DepartmentId != null && clientModel.DepartmentId.Value > 0)
+                {
+                    dep = await _DepartmentService.GetByIdAsync(clientModel.DepartmentId.Value);
+                }
+                clientModel.Department = dep;
+
+                // Obtains the city instance
+                Municipality city = null;
+                if (clientModel.CityId != null && clientModel.CityId.Value > 0)
+                {
+                    city = await _MunicipalityService.GetByIdAsync(clientModel.CityId.Value);
+                }
+                clientModel.City = city;
+
                 _context.Add(clientModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
