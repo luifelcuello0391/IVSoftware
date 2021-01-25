@@ -4,20 +4,22 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210125182542_MaintenanceStructure")]
+    partial class MaintenanceStructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("IVSoftware.Data.Models.AcademicLevel", b =>
                 {
@@ -935,10 +937,6 @@ namespace IVSoftware.Web.Migrations
 
                     b.Property<DateTime?>("ModificationDatetime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("NextCalibrationDate")
                         .HasColumnType("datetime2");

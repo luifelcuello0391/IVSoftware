@@ -159,6 +159,20 @@ namespace IVSoftware.Web.Models
                 .HasForeignKey(p => p.PersonId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            // Maintenance - Provider relationship *************************************************************************************
+            modelBuilder.Entity<MaintenanceModel>()
+                .HasOne(m => m.ServiceProvider)
+                .WithMany()
+                .HasForeignKey(m => m.ProviderId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Maintenance - Equipment relationship ************************************************************************************
+            modelBuilder.Entity<MaintenanceModel>()
+                .HasOne(m => m.Equip)
+                .WithMany(e => e.Maintenances)
+                .HasForeignKey(m => m.EquipId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Gender
             new GenderConfiguration("Gender", "Id").Map(modelBuilder);
 
@@ -230,5 +244,7 @@ namespace IVSoftware.Web.Models
         public DbSet<PersonJobRole> PersonJobRoles { get; set; }
 
         public DbSet<PersonEvaluation> PersonEvaluations { get; set; }
+
+        public DbSet<MaintenanceModel> Maintenances { get; set; }
     }
 }

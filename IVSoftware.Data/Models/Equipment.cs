@@ -51,5 +51,6 @@ namespace IVSoftware.Data.Models
         public int SelectedBrandId { get; set; }
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public int RequestedProviderId { get; set; }
+        public virtual List<MaintenanceModel> Maintenances { get; set; }
     }
 }
