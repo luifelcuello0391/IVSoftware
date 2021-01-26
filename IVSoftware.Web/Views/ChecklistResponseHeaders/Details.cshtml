@@ -1,48 +1,186 @@
 ﻿@model IVSoftware.Data.Models.ChecklistResponseHeader
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Lista de chequeo";
 }
 
-<h1>Details</h1>
+@if (Model.Equipment != null && Model.Equipment.Name != null && !string.IsNullOrEmpty(Model.Equipment.Name.Replace(" ", string.Empty)))
+{
+    <h1>@Model.Equipment.Name - @Model.CheckList.Name</h1>
+}
+else
+{
+    <h1>Detalle de lista de chequeo</h1>
+}
+
 
 <div>
-    <h4>ChecklistResponseHeader</h4>
+    @if (Model.ValidationResult)
+    {
+        <h4 style="color:green">Conforme</h4>
+    }
+    else
+    {
+        <h4 style="color:red">No conforme</h4>
+    }
+
+    <div>
+        <label><b>@Html.DisplayNameFor(model => model.FillUpDate):</b></label>
+        <label>@Html.DisplayFor(model => model.FillUpDate)</label>
+    </div>
     <hr />
+
+    @if (Model.Equipment != null)
+    {
+        <h5 style="color:yellowgreen">Información del equipo</h5>
+        <hr />
+
+        <dl class="row">
+            <dt class="col-sm-2">
+                Equipo:
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Equipment.Name
+            </dd>
+            <dt class="col-sm-2">
+                Modelo:
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Equipment.Model
+            </dd>
+            <dt class="col-sm-2">
+                Marca:
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Equipment.BrandName
+            </dd>
+            <dt class="col-sm-2">
+                Serie:
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Equipment.Serie
+            </dd>
+        </dl>
+    }
+
+    <h5 style="color:yellowgreen">Cuestionario</h5>
+    <hr />
+
+    @if (Model.CheckList != null)
+    {
+        @if (Model.CheckList.Sections != null && Model.CheckList.Sections.Count > 0)
+        {
+            foreach (var itemSection in Model.CheckList.Sections)
+            {
+                @if (itemSection.Section != null)
+                {
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white">
+                            <tr>
+                                <th>
+                                    @itemSection.Section.Name
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (itemSection.Section.QuestionSections != null && itemSection.Section.QuestionSections.Count > 0)
+                            {
+                                @foreach (var itemQuestion in itemSection.Section.QuestionSections)
+                                {
+                                    if (itemQuestion != null && itemQuestion.CheckListQuestion != null)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <div>
+                                                        <label>@itemQuestion.CheckListQuestion.Name</label>
+                                                    </div>
+
+                                                    <div>
+                                                        <label><b>Respuesta:</b></label>
+                                                        <label>@Model.GetResponse(itemSection.Section.Id, itemQuestion.CheckListQuestionCheckListSectionId, itemQuestion.CheckListQuestion.TypeOfQuestion)</label>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+
+            }
+        }
+
+        @if (Model.CheckList.Questions != null && Model.CheckList.Questions.Count > 0)
+        {
+            <table class="table">
+                <thead style="background-color:yellowgreen; color:white">
+                    <tr>
+                        <th>
+                            Preguntas adicionales
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var itemQuestion in Model.CheckList.Questions)
+                    {
+                        if (itemQuestion != null && itemQuestion.Question != null)
+                        {
+                            <tr>
+                                <td>
+                                    <div>
+                                        <div>
+                                            <label>@itemQuestion.Question.Name</label>
+                                        </div>
+
+                                        <div>
+                                            <label><b>Respuesta:</b></label>
+                                            <label>@Model.GetResponse(null, itemQuestion.QuestionId.Value, itemQuestion.Question.TypeOfQuestion)</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+    }
+
+    <h5 style="color:yellowgreen">Información adicional</h5>
+    <hr />
+
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FillUpDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FillUpDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.RegisterStatus)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RegisterStatus)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegisterStatusName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreationDatetime)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreationDatetime)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ModificationDatetime)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ModificationDatetime)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a href="#" onclick="goBack()">Regresar</a>
 </div>
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
