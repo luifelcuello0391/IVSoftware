@@ -1,0 +1,61 @@
+﻿@model EvaluationQuestionAnswer
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<h5 class="text-primary titulo">Answer - Editar</h5>
+<hr />
+<form asp-action="Edit">
+    <div class="row">
+        <div class="col-md-8 col-sm-12">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="EvaluationQuestionBankId" />
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Answer" style="color:white"></label>
+                </div>
+                <textarea asp-for="Answer" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Answer" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="IsRight" style="color:white"></label>
+                </div>
+                <div class="form-check">
+                    @if (Model.IsRight)
+                    {
+                        <input class="form-check-input" type="checkbox" value="true" asp-for="IsRight" checked>
+                    }
+                    else
+                    {
+                        <input class="form-check-input" type="checkbox" value="true" asp-for="IsRight">
+                    }
+                    <label class="form-check-label" for="IsRight">
+                        Es correcta
+                    </label>
+                </div>
+                <span asp-validation-for="IsRight" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Editar" class="btn btn-primary" />
+                <a asp-controller="EvaluationQuestionBanks"
+                   asp-action="Edit"
+                   asp-route-id="@Model.EvaluationQuestionBankId"
+                   class="btn btn-primary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

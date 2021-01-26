@@ -85,8 +85,13 @@ namespace IVSoftware.Web.Controllers
             {
                 try
                 {
-                    EvaluationQuestionAnswer evaluationQuestionAnswer = await _questionAnswerService.UpdateAsync(model);
-                    return RedirectToAction(nameof(Index));
+                    EvaluationQuestionAnswer evaluationQuestionAnswer =
+                        await _questionAnswerService.UpdateAsync(model);
+
+                    return RedirectToAction(nameof(Edit),
+                        "EvaluationQuestionBanks",
+                        new { id = model.EvaluationQuestionBankId}
+                    );
                 }
                 catch (Exception ex)
                 {
@@ -122,14 +127,19 @@ namespace IVSoftware.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            EvaluationQuestionAnswer evaluationQuestionAnswer = await _questionAnswerService.GetByIdAsync(id);
+            EvaluationQuestionAnswer evaluationQuestionAnswer =
+                await _questionAnswerService.GetByIdAsync(id);
+
             if (evaluationQuestionAnswer == null)
             {
                 return NotFound();
             }
 
             await _questionAnswerService.DeleteAsync(evaluationQuestionAnswer);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Edit),
+                "EvaluationQuestionBanks",
+                new { id = evaluationQuestionAnswer.EvaluationQuestionBankId }
+            );
         }
 
         private async Task<bool> QuestionAnswerExists(Guid id)
