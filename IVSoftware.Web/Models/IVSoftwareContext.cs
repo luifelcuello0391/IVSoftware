@@ -173,6 +173,21 @@ namespace IVSoftware.Web.Models
                 .HasForeignKey(m => m.EquipId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // ChecklistResponseHeader - ChecklistDetail relationship ******************************************************************
+            modelBuilder.Entity<CheckListResponseDetail>()
+                .HasOne(d => d.Header)
+                .WithMany(h => h.Details)
+                .HasForeignKey(d => d.HeaderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ChecklistResponseHeader - Person relationship***************************************************************************
+            modelBuilder.Entity<ChecklistResponseHeader>()
+                .HasOne(h => h.ValidatedBy)
+                .WithMany()
+                .HasForeignKey(h => h.ValidatedById)
+                .OnDelete(DeleteBehavior.SetNull);
+
+
             // Gender
             new GenderConfiguration("Gender", "Id").Map(modelBuilder);
 

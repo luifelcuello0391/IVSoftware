@@ -48,7 +48,7 @@ namespace IVSoftware.Web.Controllers
                     Console.WriteLine("Error on ChecklistResponseHeadersController.Index >> " + ex.ToString());
                 }
 
-                return View(await _context.ChecklistResponseHeader.Where(x => x.Equipment != null && x.Equipment.Id == id.Value).ToListAsync());
+                return View(await _context.ChecklistResponseHeader.Where(x => x.Equipment != null && x.Equipment.Id == id.Value && x.RegisterStatus > 0).ToListAsync());
             }
             else
             {
@@ -90,6 +90,7 @@ namespace IVSoftware.Web.Controllers
                     if (currentUser != null)
                     {
                         header.ValidatedBy = await _personService.GetByIdAsync(Guid.Parse(currentUser.Id));
+                        if(header.ValidatedBy != null) header.ValidatedById = header.ValidatedBy.Id;
                     }
                 }
                 catch(Exception ex)
@@ -330,12 +331,12 @@ namespace IVSoftware.Web.Controllers
         // POST: ChecklistResponseHeaders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, int equipmentId)
         {
             var checklistResponseHeader = await _context.ChecklistResponseHeader.FindAsync(id);
             _context.ChecklistResponseHeader.Remove(checklistResponseHeader);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { Id = equipmentId });
         }
 
         private bool ChecklistResponseHeaderExists(int id)
