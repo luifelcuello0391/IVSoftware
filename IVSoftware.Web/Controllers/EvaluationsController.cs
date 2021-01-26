@@ -2,6 +2,8 @@
 using IVSoftware.Web.Data;
 using IVSoftware.Web.Models;
 using IVSoftware.Web.Service;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -11,22 +13,26 @@ using System.Threading.Tasks;
 
 namespace IVSoftware.Web.Controllers
 {
+    [Authorize]
     public class EvaluationsController : Controller
     {
         private readonly IEntityService<Evaluation, int> _evaluationService;
         private readonly IEntityService<Periodicity, int> _periodicityService;
         private readonly IEntityService<Person, Guid> _personService;
         private readonly IVSoftwareContext _context;
+        private readonly UserManager<User> _userManager;
 
         public EvaluationsController(IEntityService<Evaluation, int> evaluationService,
             IEntityService<Periodicity, int> periodicityService,
             IEntityService<Person, Guid> personService,
-            IVSoftwareContext context)
+            IVSoftwareContext context,
+            UserManager<User> userManager)
         {
             _evaluationService = evaluationService;
             _periodicityService = periodicityService;
             _personService = personService;
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -169,7 +175,7 @@ namespace IVSoftware.Web.Controllers
                     List<PersonEvaluation> currentPeople =
                         _context.PersonEvaluations.Where(pe => pe.EvaluationId == model.Id).ToList();
 
-                    List<PersonEvaluation> newPeople = model.PersonEvaluations!= null ? model.PersonEvaluations.ToList() : new List<PersonEvaluation>();
+                    List<PersonEvaluation> newPeople = model.PersonEvaluations != null ? model.PersonEvaluations.ToList() : new List<PersonEvaluation>();
 
                     List<PersonEvaluation> personEvaluationToDelete =
                         currentPeople.Where(p => !newPeople.Any(np => np.PersonId == p.PersonId)).ToList();
@@ -200,6 +206,18 @@ namespace IVSoftware.Web.Controllers
             }
 
             return PartialView("_ModalAssignPeople", model);
+        }
+
+        public async Task<IActionResult> MyEvaluations()
+        {
+            User user = await _userManager.GetUserAsync(User);
+            if(user == null) { return NotFound(); }
+
+            Person person = (await _personService.FindByConditionAsync(p => p.UserId == user.Id)).FirstOrDefault();
+            if (person == null) { return NotFound(); }
+
+            IEnumerable<Evaluation> evaluations = await _evaluationService.FindByConditionAsync(e => e.PersonEvaluations.Any(pe => pe.PersonId == person.Id));
+            return View(evaluations);
         }
 
         private async Task<bool> EvaluationExists(int id)

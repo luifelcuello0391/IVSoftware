@@ -1,0 +1,113 @@
+﻿@model EvaluationQuestionBank
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<h5 class="text-primary titulo">Banco de pregunta - Editar</h5>
+<hr />
+<form asp-action="Edit">
+    <div class="row">
+        <div class="col">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Question" class="control-label" style="color:white"></label>
+                </div>
+                <textarea asp-for="Question" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Question" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Editar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-primary">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    <div class="col">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary float-right mb-3"
+                data-toggle="modal" id="assignAnswers" href="#assign-modal"
+                data-id="@Model.Id">
+            Asignar respuestas
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="assignModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <table class="table" id="QuestionsTable">
+            <thead style="background-color:yellowgreen; color:white">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.QuestionAnswers.FirstOrDefault().Answer)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.QuestionAnswers.FirstOrDefault().IsRight)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.QuestionAnswers)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Answer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsRight)
+                    </td>
+                    <td align="right" style="white-space:nowrap">
+                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            const AssignAnswersURL = '@Url.Action("AssignAnswers", "EvaluationQuestionBanks")';
+            $('#assignAnswers').on("click", function () {
+                let data_id = "0";
+                if (typeof $(this).data('id') !== 'undefined') {
+                    data_id = $(this).data('id');
+                }
+
+                $.ajax({
+                    url: AssignAnswersURL,
+                    data: { id: data_id },
+                    success: function (data) {
+                        $('.modal-content').html(data);
+                        $('#assignModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+}

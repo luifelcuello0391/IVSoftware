@@ -4,20 +4,22 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210122024323_EvaluationQuestionAnswer")]
+    partial class EvaluationQuestionAnswer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("IVSoftware.Data.Models.AcademicLevel", b =>
                 {
@@ -792,15 +794,11 @@ namespace IVSoftware.Web.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<Guid>("EvaluationQuestionBankId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsRight")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsRight")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EvaluationQuestionBankId");
 
                     b.ToTable("EvaluationQuestionAnswer");
                 });
@@ -956,59 +954,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("JobRole");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.MaintenanceModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Diagnostic")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EquipId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("MaintenanceDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("NextCalibrationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Observations")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ProviderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TypeOfMaintenanceId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WorkExecuted")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EquipId");
-
-                    b.HasIndex("ProviderId");
-
-                    b.ToTable("Maintenances");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.MatrixModel", b =>
@@ -1361,6 +1306,21 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Provider");
+                });
+
+            modelBuilder.Entity("IVSoftware.Data.Models.QuestionAnswerRelation", b =>
+                {
+                    b.Property<Guid>("EvaluationQuestionBankId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EvaluationQuestionAnswerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EvaluationQuestionBankId", "EvaluationQuestionAnswerId");
+
+                    b.HasIndex("EvaluationQuestionAnswerId");
+
+                    b.ToTable("QuestionAnswers");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.QuotationModel", b =>
@@ -3184,17 +3144,6 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("Periodicity");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.EvaluationQuestionAnswer", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.EvaluationQuestionBank", "EvaluationQuestionBank")
-                        .WithMany("QuestionAnswers")
-                        .HasForeignKey("EvaluationQuestionBankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("EvaluationQuestionBank");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.HigherEducation", b =>
                 {
                     b.HasOne("IVSoftware.Data.Models.AcademicLevel", "AcademicLevel")
@@ -3212,24 +3161,6 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("AcademicLevel");
 
                     b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.MaintenanceModel", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.Equipment", "Equip")
-                        .WithMany("Maintenances")
-                        .HasForeignKey("EquipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IVSoftware.Data.Models.Provider", "ServiceProvider")
-                        .WithMany()
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Equip");
-
-                    b.Navigation("ServiceProvider");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.Municipality", b =>
@@ -3367,6 +3298,25 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("JobRole");
 
                     b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("IVSoftware.Data.Models.QuestionAnswerRelation", b =>
+                {
+                    b.HasOne("IVSoftware.Data.Models.EvaluationQuestionAnswer", "EvaluationQuestionAnswer")
+                        .WithMany("QuestionsAnswer")
+                        .HasForeignKey("EvaluationQuestionAnswerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IVSoftware.Data.Models.EvaluationQuestionBank", "EvaluationQuestionBank")
+                        .WithMany("QuestionAnswers")
+                        .HasForeignKey("EvaluationQuestionBankId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EvaluationQuestionAnswer");
+
+                    b.Navigation("EvaluationQuestionBank");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.QuotationRequest", b =>
@@ -3962,11 +3912,6 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("People");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.Equipment", b =>
-                {
-                    b.Navigation("Maintenances");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.EquipmentCheckList", b =>
                 {
                     b.Navigation("Questions");
@@ -3977,6 +3922,11 @@ namespace IVSoftware.Web.Migrations
             modelBuilder.Entity("IVSoftware.Data.Models.Evaluation", b =>
                 {
                     b.Navigation("PersonEvaluations");
+                });
+
+            modelBuilder.Entity("IVSoftware.Data.Models.EvaluationQuestionAnswer", b =>
+                {
+                    b.Navigation("QuestionsAnswer");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.EvaluationQuestionBank", b =>
