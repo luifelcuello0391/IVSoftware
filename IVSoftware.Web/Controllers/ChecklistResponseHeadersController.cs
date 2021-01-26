@@ -90,7 +90,6 @@ namespace IVSoftware.Web.Controllers
                     if (currentUser != null)
                     {
                         header.ValidatedBy = await _personService.GetByIdAsync(Guid.Parse(currentUser.Id));
-                        if(header.ValidatedBy != null) header.ValidatedById = header.ValidatedBy.Id;
                     }
                 }
                 catch(Exception ex)

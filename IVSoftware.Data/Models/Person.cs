@@ -195,6 +195,5 @@ namespace IVSoftware.Data.Models
 
         public virtual ICollection<PersonEvaluation> PersonEvaluations { get; set; }
 
-        public virtual ICollection<ChecklistResponseHeader> CheckListsValidated { get; set; }
     }
 }

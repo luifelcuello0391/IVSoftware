@@ -26,8 +26,6 @@ namespace IVSoftware.Data.Models
         [NotMapped]
         public string ValidationResultName { get { return ValidationResult ? "Conforme" : "No conforme"; } }
         
-        public Guid? ValidatedById { get; set; }
-
         [DisplayName("Revisó")]
         public virtual Person ValidatedBy { get; set; }
         public virtual ICollection<CheckListResponseDetail> Details { get; set; }

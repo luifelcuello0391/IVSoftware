@@ -181,11 +181,11 @@ namespace IVSoftware.Web.Models
                 .OnDelete(DeleteBehavior.Cascade);
 
             // ChecklistResponseHeader - Person relationship***************************************************************************
-            modelBuilder.Entity<ChecklistResponseHeader>()
-                .HasOne(h => h.ValidatedBy)
-                .WithMany()
-                .HasForeignKey(h => h.ValidatedById)
-                .OnDelete(DeleteBehavior.SetNull);
+            //modelBuilder.Entity<ChecklistResponseHeader>()
+            //    .HasOne(h => h.ValidatedBy)
+            //    .WithMany()
+            //    .HasForeignKey(h => h.ValidatedById)
+            //    .OnDelete(DeleteBehavior.SetNull);
 
 
             // Gender
