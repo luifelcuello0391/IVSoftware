@@ -19,18 +19,21 @@ namespace IVSoftware.Web.Controllers
         private readonly IEntityService<Evaluation, int> _evaluationService;
         private readonly IEntityService<Periodicity, int> _periodicityService;
         private readonly IEntityService<Person, Guid> _personService;
+        private readonly IEntityService<EvaluationQuestionBank, Guid> _questionService;
         private readonly IVSoftwareContext _context;
         private readonly UserManager<User> _userManager;
 
         public EvaluationsController(IEntityService<Evaluation, int> evaluationService,
             IEntityService<Periodicity, int> periodicityService,
             IEntityService<Person, Guid> personService,
+            IEntityService<EvaluationQuestionBank, Guid> questionService,
             IVSoftwareContext context,
             UserManager<User> userManager)
         {
             _evaluationService = evaluationService;
             _periodicityService = periodicityService;
             _personService = personService;
+            _questionService = questionService;
             _context = context;
             _userManager = userManager;
         }
@@ -206,6 +209,74 @@ namespace IVSoftware.Web.Controllers
             }
 
             return PartialView("_ModalAssignPeople", model);
+        }
+
+        public async Task<IActionResult> AssignQuestions(int id)
+        {
+            List<QuestionEvaluation> currentQuestions =
+                        _context.QuestionEvaluations.Where(pe => pe.EvaluationId == id).ToList();
+            IEnumerable<EvaluationQuestionBank> questions =
+                await _questionService.GetAllAsync();
+            List<QuestionEvaluation> questionsEvaluation = questions.Select(p => new QuestionEvaluation()
+            {
+                EvaluationId = id,
+                QuestionId = p.Id,
+                Question = p,
+                IsSelected = currentQuestions.Any(cp => cp.QuestionId == p.Id)
+            }).ToList();
+
+            QuestionsEvaluationVM questionsEvaluationVM = new QuestionsEvaluationVM()
+            {
+                Id = id,
+                QuestionsEvaluation = questionsEvaluation
+            };
+
+            return PartialView("_ModalAssignQuestions", questionsEvaluationVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignQuestions(QuestionsEvaluationVM model)
+        {
+            try
+            {
+                if (model.Id > 0)
+                {
+                    bool commitChanges = false;
+                    List<QuestionEvaluation> currentQuestions =
+                        _context.QuestionEvaluations.Where(pe => pe.EvaluationId == model.Id).ToList();
+
+                    List<QuestionEvaluation> newQuestions = model.QuestionsEvaluation != null ?
+                        model.QuestionsEvaluation.ToList() : new List<QuestionEvaluation>();
+
+                    List<QuestionEvaluation> questionsEvaluationToDelete =
+                        currentQuestions.Where(p => !newQuestions.Any(np => np.QuestionId == p.QuestionId)).ToList();
+
+                    List<QuestionEvaluation> questionsEvaluationToAdd =
+                        newQuestions.Where(p => !currentQuestions.Any(cp => cp.QuestionId == p.QuestionId)).ToList();
+
+                    if (questionsEvaluationToDelete != null && questionsEvaluationToDelete.Count > 0)
+                    {
+                        _context.QuestionEvaluations.RemoveRange(questionsEvaluationToDelete);
+                        commitChanges = true;
+                    }
+
+                    if (questionsEvaluationToAdd != null && questionsEvaluationToAdd.Count > 0)
+                    {
+                        _context.QuestionEvaluations.AddRange(questionsEvaluationToAdd);
+                        commitChanges = true;
+                    }
+
+                    if (commitChanges) { await _context.SaveChangesAsync(); }
+
+                    return RedirectToAction(nameof(Edit), new { id = model.Id });
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("QuestionsEvaluation", ex.Message);
+            }
+
+            return PartialView("_ModalAssignQuestions", model);
         }
 
         public async Task<IActionResult> MyEvaluations()

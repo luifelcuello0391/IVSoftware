@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210126034423_QuestionEvaluation")]
+    partial class QuestionEvaluation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -305,9 +307,6 @@ namespace IVSoftware.Web.Migrations
                     b.Property<string>("Observation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PersonId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("RegisterStatus")
                         .HasColumnType("int");
 
@@ -322,8 +321,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasIndex("CheckListId");
 
                     b.HasIndex("EquipmentId");
-
-                    b.HasIndex("PersonId");
 
                     b.HasIndex("ValidatedById");
 
@@ -3021,7 +3018,7 @@ namespace IVSoftware.Web.Migrations
                     b.HasOne("IVSoftware.Data.Models.ChecklistResponseHeader", "Header")
                         .WithMany("Details")
                         .HasForeignKey("HeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("IVSoftware.Data.Models.CheckListQuestion", "Question")
@@ -3054,14 +3051,10 @@ namespace IVSoftware.Web.Migrations
                         .HasForeignKey("EquipmentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("IVSoftware.Data.Models.Person", null)
-                        .WithMany("CheckListsValidated")
-                        .HasForeignKey("PersonId");
-
                     b.HasOne("IVSoftware.Data.Models.Person", "ValidatedBy")
                         .WithMany()
                         .HasForeignKey("ValidatedById")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CheckList");
 
@@ -4071,8 +4064,6 @@ namespace IVSoftware.Web.Migrations
             modelBuilder.Entity("IVSoftware.Data.Models.Person", b =>
                 {
                     b.Navigation("BasicEducations");
-
-                    b.Navigation("CheckListsValidated");
 
                     b.Navigation("HigherEducations");
 

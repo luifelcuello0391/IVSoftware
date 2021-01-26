@@ -26,5 +26,7 @@ namespace IVSoftware.Data.Models
         public int? PeriodicityAmount { get; set; }
 
         public virtual ICollection<PersonEvaluation> PersonEvaluations { get; set; }
+
+        public virtual ICollection<QuestionEvaluation> QuestionsEvaluation { get; set; }
     }
 }
