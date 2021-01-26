@@ -63,6 +63,45 @@
             </div>
         </div>
     </div>
+
+    <br />
+    <div class="row">
+        <div class="col">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary float-right mb-3"
+                    data-toggle="modal" id="assignQuestions" href="#assign-modal"
+                    data-id="@Model.Id">
+                Asignar preguntas
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table" id="AssignedQuestions">
+                <thead style="background-color:yellowgreen; color:white">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.QuestionsEvaluation
+                                .FirstOrDefault().Question.Question)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.QuestionsEvaluation)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Question.Question)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <hr />
+    <br />
     <div class="row">
         <div class="col">
             <!-- Button trigger modal -->
@@ -71,13 +110,6 @@
                     data-id="@Model.Id">
                 Asignar personas
             </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="assignModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content"></div>
-                </div>
-            </div>
         </div>
     </div>
     <div class="row">
@@ -104,6 +136,13 @@
         </div>
     </div>
 </form>
+
+<!-- Modal -->
+<div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="assignModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
 
 @section Styles {
     <link href="~/lib/datatables.net/dataTables.bootstrap4.min.css" rel="stylesheet" />
@@ -135,7 +174,30 @@
                 });
             });
 
+            const AssignQuestionsURL = '@Url.Action("AssignQuestions", "Evaluations")';
+            $('#assignQuestions').on("click", function () {
+                let data_id = "0";
+                if (typeof $(this).data('id') !== 'undefined') {
+                    data_id = $(this).data('id');
+                }
+
+                $.ajax({
+                    url: AssignQuestionsURL,
+                    data: { id: data_id },
+                    success: function (data) {
+                        $('.modal-content').html(data);
+                        $('#assignModal').modal('show');
+                    }
+                });
+            });
+
             $('#AssignedUsers').DataTable({
+                language: {
+                    url: '/lib/datatables.net/Spanish.json'
+                }
+            });
+
+            $('#AssignedQuestions').DataTable({
                 language: {
                     url: '/lib/datatables.net/Spanish.json'
                 }

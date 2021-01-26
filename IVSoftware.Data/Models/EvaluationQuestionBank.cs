@@ -15,5 +15,7 @@ namespace IVSoftware.Data.Models
         public string Question { get; set; }
 
         public virtual ICollection<EvaluationQuestionAnswer> QuestionAnswers { get; set; }
+
+        public virtual ICollection<QuestionEvaluation> QuestionEvaluations { get; set; }
     }
 }

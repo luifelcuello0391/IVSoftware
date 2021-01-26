@@ -189,6 +189,7 @@ namespace IVSoftware.Web.Models
             new PersonEvaluationConfiguration().Map(modelBuilder.Entity<PersonEvaluation>());
             new EvaluationQuestionBankConfiguration("EvaluationQuestionBank", "Id").Map(modelBuilder);
             new EvaluationQuestionAnswerConfiguration("EvaluationQuestionAnswer", "Id").Map(modelBuilder);
+            new QuestionEvaluationConfiguration().Map(modelBuilder.Entity<QuestionEvaluation>());
 
             base.OnModelCreating(modelBuilder);
         }
@@ -248,5 +249,7 @@ namespace IVSoftware.Web.Models
         public DbSet<PersonEvaluation> PersonEvaluations { get; set; }
 
         public DbSet<MaintenanceModel> Maintenances { get; set; }
+
+        public DbSet<QuestionEvaluation> QuestionEvaluations { get; set; }
     }
 }
