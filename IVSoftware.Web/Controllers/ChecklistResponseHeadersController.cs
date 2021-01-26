@@ -74,7 +74,7 @@ namespace IVSoftware.Web.Controllers
             return View(checklistResponseHeader);
         }
 
-        public async Task<IActionResult> CaptureCheckListResponse(int equipId, int checklistId, string answers, string observation, string fillupDate, int validation_result)
+        public async Task<string> CaptureCheckListResponse(int equipId, int checklistId, string answers, string observation, string fillupDate, int validation_result)
         {
             if(equipId > 0 && checklistId > 0 && answers != null && !string.IsNullOrEmpty(answers.Replace(" ", string.Empty)) && fillupDate != null)
             {
@@ -197,7 +197,8 @@ namespace IVSoftware.Web.Controllers
                     {
                         _context.Add(header);
                         await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index), new { _id = checklistId, _equipId = equipId });
+                        return equipId.ToString();
+                        //return RedirectToAction(nameof(Index), "ChecklistResponseHeaders", new { id = equipId });
                     }
                     catch(Exception ex)
                     {
@@ -205,10 +206,10 @@ namespace IVSoftware.Web.Controllers
                     }
                 }
 
-                return NotFound();
+                return null;
             }
 
-            return NotFound();
+            return null;
         }
 
         // GET: ChecklistResponseHeaders/Create

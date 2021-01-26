@@ -54,7 +54,7 @@ namespace IVSoftware.Data.Models
         public string Extension { get; set; }
         [DisplayName("Departamento")]
         public virtual Department Department { get; set; }
-        public int? DepartmentId { get; set; }
+        public int? DepartmentId { get; set; } = 1; // ANTIOQUIA
         [DisplayName("Ciudad")]
         public virtual Municipality City { get; set; }
         public int? CityId { get; set; }

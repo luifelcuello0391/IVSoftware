@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210125201644_MaintenanceModelAdded")]
+    partial class MaintenanceModelAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -777,50 +779,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasIndex("PeriodicityId");
 
                     b.ToTable("Evaluation");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.EvaluationQuestionAnswer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
-
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid>("EvaluationQuestionBankId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsRight")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EvaluationQuestionBankId");
-
-                    b.ToTable("EvaluationQuestionAnswer");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.EvaluationQuestionBank", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
-
-                    b.Property<string>("Question")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EvaluationQuestionBank");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.Gender", b =>
@@ -3184,17 +3142,6 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("Periodicity");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.EvaluationQuestionAnswer", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.EvaluationQuestionBank", "EvaluationQuestionBank")
-                        .WithMany("QuestionAnswers")
-                        .HasForeignKey("EvaluationQuestionBankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("EvaluationQuestionBank");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.HigherEducation", b =>
                 {
                     b.HasOne("IVSoftware.Data.Models.AcademicLevel", "AcademicLevel")
@@ -3977,11 +3924,6 @@ namespace IVSoftware.Web.Migrations
             modelBuilder.Entity("IVSoftware.Data.Models.Evaluation", b =>
                 {
                     b.Navigation("PersonEvaluations");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.EvaluationQuestionBank", b =>
-                {
-                    b.Navigation("QuestionAnswers");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.Gender", b =>

@@ -59,6 +59,10 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
 
+            <th>
+                @Html.DisplayNameFor(model => model.Responsable)
+            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -106,6 +110,19 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
+
+            @if(item.Responsable != null && !string.IsNullOrEmpty(item.Responsable.FullName))
+            {
+                <td style="white-space:nowrap">
+                    @item.Responsable.FullName
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.Raw("No asignado")
+                </td>
+            }
 
             <td style="white-space:nowrap">
                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;

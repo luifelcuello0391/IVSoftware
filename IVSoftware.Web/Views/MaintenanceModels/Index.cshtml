@@ -1,0 +1,101 @@
+﻿@model IEnumerable<IVSoftware.Data.Models.MaintenanceModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeOfMaintenanceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Equip)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaintenanceDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Diagnostic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkExecuted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NextCalibrationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Observations)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceProvider)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegisterStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDatetime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModificationDatetime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeOfMaintenanceId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Equip.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaintenanceDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Diagnostic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkExecuted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NextCalibrationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Observations)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceProvider.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegisterStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDatetime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModificationDatetime)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
