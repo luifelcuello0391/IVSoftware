@@ -7,22 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IVSoftware.Data.Models;
 using IVSoftware.Web.Models;
+using IVSoftware.Web.Service;
 
 namespace IVSoftware.Web.Controllers
 {
     public class MaintenanceModelsController : Controller
     {
         private readonly IVSoftwareContext _context;
+        private readonly IEntityService<Person, Guid> _personService;
 
-        public MaintenanceModelsController(IVSoftwareContext context)
+        public MaintenanceModelsController(IVSoftwareContext context, IEntityService<Person, Guid> PersonService)
         {
+            this._personService = PersonService;
             _context = context;
         }
 
         // GET: MaintenanceModels
         public async Task<IActionResult> Index()
         {
-            var iVSoftwareContext = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider);
+            var iVSoftwareContext = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable);
             return View(await iVSoftwareContext.ToListAsync());
         }
 
@@ -37,7 +40,9 @@ namespace IVSoftware.Web.Controllers
             var maintenanceModel = await _context.Maintenances
                 .Include(m => m.Equip)
                 .Include(m => m.ServiceProvider)
+                .Include(m => m.Responsable)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (maintenanceModel == null)
             {
                 return NotFound();
@@ -59,10 +64,35 @@ namespace IVSoftware.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TypeOfMaintenanceId,EquipId,MaintenanceDate,Diagnostic,WorkExecuted,NextCalibrationDate,Observations,ProviderId,Name,RegisterStatus,CreationDatetime,ModificationDatetime")] MaintenanceModel maintenanceModel)
+        public async Task<IActionResult> Create([Bind("TypeOfMaintenanceId,EquipId,MaintenanceDate,Diagnostic,WorkExecuted,NextCalibrationDate,Observations,ProviderId,Name,RegisterStatus,CreationDatetime,ModificationDatetime, PersonId")] MaintenanceModel maintenanceModel)
         {
             if (ModelState.IsValid)
             {
+                Equipment equipment = null;
+                if(maintenanceModel.EquipId > 0)
+                {
+                    equipment = await _context.Equipment.FirstOrDefaultAsync<Equipment>(x => x.Id == maintenanceModel.EquipId && x.RegisterStatus > 0);
+                }
+                maintenanceModel.Equip = equipment;
+
+                Provider provider = null;
+                if(maintenanceModel.ProviderId > 0)
+                {
+                    provider = await _context.Provider.FirstOrDefaultAsync<Provider>(x => x.Id == maintenanceModel.ProviderId && x.RegisterStatus > 0);
+                }
+                maintenanceModel.ServiceProvider = provider;
+
+                Person responsable = null;
+                if(maintenanceModel.PersonId != null)
+                {
+                    IEnumerable<Person> people = await _personService.FindByConditionAsync(x => x.Id.ToString().Equals(maintenanceModel.PersonId.Value.ToString()));
+                    if(people != null && people.Count() > 0)
+                    {
+                        responsable = people.FirstOrDefault();
+                    }
+                }
+                maintenanceModel.Responsable = responsable;
+
                 _context.Add(maintenanceModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -95,7 +125,7 @@ namespace IVSoftware.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TypeOfMaintenanceId,EquipId,MaintenanceDate,Diagnostic,WorkExecuted,NextCalibrationDate,Observations,ProviderId,Name,RegisterStatus,CreationDatetime,ModificationDatetime")] MaintenanceModel maintenanceModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TypeOfMaintenanceId,EquipId,MaintenanceDate,Diagnostic,WorkExecuted,NextCalibrationDate,Observations,ProviderId,Name,RegisterStatus,CreationDatetime,ModificationDatetime, PersonId")] MaintenanceModel maintenanceModel)
         {
             if (id != maintenanceModel.Id)
             {
@@ -106,6 +136,31 @@ namespace IVSoftware.Web.Controllers
             {
                 try
                 {
+                    Equipment equipment = null;
+                    if (maintenanceModel.EquipId > 0)
+                    {
+                        equipment = await _context.Equipment.FirstOrDefaultAsync<Equipment>(x => x.Id == maintenanceModel.EquipId && x.RegisterStatus > 0);
+                    }
+                    maintenanceModel.Equip = equipment;
+
+                    Provider provider = null;
+                    if (maintenanceModel.ProviderId > 0)
+                    {
+                        provider = await _context.Provider.FirstOrDefaultAsync<Provider>(x => x.Id == maintenanceModel.ProviderId && x.RegisterStatus > 0);
+                    }
+                    maintenanceModel.ServiceProvider = provider;
+
+                    Person responsable = null;
+                    if (maintenanceModel.PersonId != null)
+                    {
+                        IEnumerable<Person> people = await _personService.FindByConditionAsync(x => x.Id.ToString().Equals(maintenanceModel.PersonId.Value.ToString()));
+                        if (people != null && people.Count() > 0)
+                        {
+                            responsable = people.FirstOrDefault();
+                        }
+                    }
+                    maintenanceModel.Responsable = responsable;
+
                     _context.Update(maintenanceModel);
                     await _context.SaveChangesAsync();
                 }
@@ -161,6 +216,123 @@ namespace IVSoftware.Web.Controllers
         private bool MaintenanceModelExists(int id)
         {
             return _context.Maintenances.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> GetPersons()
+        {
+            try
+            {
+                IEnumerable<Person> persons = await _personService.GetAllAsync();
+                return PartialView("personSelectionList", persons);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on ServiceModelsController.GetPersons >> " + ex.ToString());
+            }
+
+            return null;
+        }
+
+        public async Task<IActionResult> GetProviders()
+        {
+            try
+            {
+                List<Provider> providers = await _context.Provider.ToListAsync();
+                return PartialView("providerSelectionList", providers);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on ServiceModelsController.GetProviders >> " + ex.ToString());
+            }
+
+            return null;
+        }
+
+        public async Task<IActionResult> GetEquipments()
+        {
+            try
+            {
+                List<Equipment> equipments = await _context.Equipment.ToListAsync();
+                return PartialView("equipmentSelectionList", equipments);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on ServiceModelsController.GetEquipments >> " + ex.ToString());
+            }
+
+            return null;
+        }
+
+        public async Task<IActionResult> GetPerson(string identification)
+        {
+            try
+            {
+                IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.IdentificationNumber.Equals(identification));
+                if (persons != null && persons.Count() > 0)
+                {
+                    return PartialView("ResponsableData", persons.First());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on MaintenanceModelsController.GetPerson >> " + ex.ToString());
+            }
+
+            return PartialView("ResponsableData", null);
+        }
+
+        public async Task<IActionResult> GetPersonByGuid(string identification)
+        {
+            try
+            {
+                IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.Id.ToString().Equals(identification));
+                if (persons != null && persons.Count() > 0)
+                {
+                    return PartialView("ResponsableData", persons.First());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on MaintenanceModelsController.GetPerson >> " + ex.ToString());
+            }
+
+            return PartialView("ResponsableData", null);
+        }
+
+        public async Task<IActionResult> GetProvider(int identification)
+        {
+            try
+            {
+                Provider provider = await _context.Provider.FirstOrDefaultAsync<Provider>(x => x.Id == identification && x.RegisterStatus > 0);
+                if (provider != null)
+                {
+                    return PartialView("ProviderData", provider);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on MaintenanceModelsController.GetProvider >> " + ex.ToString());
+            }
+
+            return PartialView("ProviderData", null);
+        }
+
+        public async Task<IActionResult> GetEquipment(int identification)
+        {
+            try
+            {
+                Equipment equipment = await _context.Equipment.FirstOrDefaultAsync<Equipment>(x => x.Id == identification && x.RegisterStatus > 0);
+                if (equipment != null)
+                {
+                    return PartialView("EquipmentData", equipment);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on MaintenanceModelsController.GetEquipment >> " + ex.ToString());
+            }
+
+            return PartialView("EquipmentData", null);
         }
     }
 }
