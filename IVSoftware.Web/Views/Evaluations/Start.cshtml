@@ -1,0 +1,144 @@
+﻿@model Evaluation
+
+@{
+    ViewData["Title"] = "Mis evaluaciones";
+}
+
+<h5 class="text-primary titulo">Evaluación - @Model.Name</h5>
+<br />
+<br />
+
+<form asp-action="Start">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Name" />
+    <input type="hidden" asp-for="Date" />
+    @for (int i = 0; i < Model.QuestionsEvaluation.Count; i++)
+    {
+        <div>
+            <div class="row">
+                <div class="col question" data-id="@Model.QuestionsEvaluation.ElementAtOrDefault(i).Question.Id">
+                    <input type="hidden" asp-for="QuestionsEvaluation.ElementAtOrDefault(i).Question.Question" />
+                    <p>
+                        @Model.QuestionsEvaluation.ElementAtOrDefault(i).Question.Question
+                    </p>
+
+                    @for (int j = 0; j < @Model.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.Count; j++)
+                    {
+                        <div class="row">
+                            <div class="col answer" data-id="@Model.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).Id">
+                                <input type="hidden" asp-for="QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).Answer" />
+                                <input type="hidden" asp-for="QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).IsRight" />
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value="true"
+                                           asp-for="QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).IsSelected">
+                                    <label class="form-check-label" asp-for="QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).IsSelected">
+                                        @Model.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).Answer
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <hr />
+        <br />
+    }
+
+    <br />
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="button" id="sendEvaluation" value="Enviar" class="float-right btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#sendEvaluation').on("click", function () {
+                let id = $('#Id').val();
+                let name = $('#Name').val();
+                let date = $('#Date').val();
+                let questions = [];
+                $(".question").each(function (index) {
+                    let questionId = "0";
+                    let question = $("#Question_Question").val();
+                    let answers = [];
+                    if (typeof $(this).data('id') !== 'undefined') {
+                        questionId = $(this).data('id');
+                    }
+
+                    $(this).find(".answer").each(function (index) {
+                        let answerId = "0";
+                        let answer = $(this).find("#Answer").val();
+                        let isRight = $(this).find("#IsRight").val();
+                        let isSelected = $(this).find('#IsSelected').is(':checked');
+                        if (typeof $(this).data('id') !== 'undefined') {
+                            answerId = $(this).data('id');
+                        }
+
+                        if (answerId !== "0") {
+                            answers.push({
+                                Id: answerId,
+                                Answer: answer,
+                                IsRight: isRight,
+                                IsSelected: isSelected
+                            });
+                        }
+                    });
+
+                    if (questionId !== "0") {
+                        questions.push({
+                            Id: questionId,
+                            Question: question,
+                            Answers: answers
+                        });
+                    }
+                });
+
+                let evaluation = {
+                    Id: id,
+                    Name: name,
+                    Date: date,
+                    Questions: questions
+                };
+
+                $.ajax({
+                    url: '@Url.Action("Start", "Evaluations")',
+                    method: 'POST',
+                    data: {
+                        Id: id,
+                        Name: name,
+                        Date: date,
+                        Questions: questions
+                    },
+                    success: function (data) {
+                        let dataObj = JSON.parse(data);
+                        if (dataObj && dataObj.result == 1) {
+                            console.log(data);
+                            alert(dataObj.message);
+                        }
+                        else if (dataObj && dataObj.result == 0) {
+                            window.location.href = '/Evaluations/MyEvaluations/';
+                        }
+                        else {
+                            console.log(data);
+                            alert("Ocurrió un error, intente más tarde por favor");
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        alert("Ocurrió un error, intente más tarde por favor");
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
