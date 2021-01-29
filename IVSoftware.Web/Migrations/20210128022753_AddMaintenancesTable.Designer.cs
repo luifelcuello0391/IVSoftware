@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210128022753_AddMaintenancesTable")]
+    partial class AddMaintenancesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1305,11 +1307,6 @@ namespace IVSoftware.Web.Migrations
 
                     b.Property<int>("EvaluationId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ResultJson")
-                        .HasMaxLength(2147483647)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PersonId", "EvaluationId");
 

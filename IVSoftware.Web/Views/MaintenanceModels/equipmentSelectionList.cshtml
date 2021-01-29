@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Equipment>
+
+<head>
+    <style>
+        td:last-child {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<div class="modal-header">
+    <h5 class="modal-title" style="float:left; color:yellowgreen">Seleccione un equipo</h5>
+    <button id="btn_hide_client_modal" type="button" data-dismiss="modal" class="close" style="color:red; margin-right:5px">
+        X
+    </button>
+</div>
+
+@if (Model != null && Model.Count() > 0)
+{
+    <table class="table table-striped table-sm" style="display:block; overflow:auto">
+        <thead style="background-color:yellowgreen; color:white">
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EquipBrand)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Model)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Serie)
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td style="white-space:nowrap">
+                    <button class="btn btn-primary" onclick="selectEquipment(@item.Id)">Seleccionar</button>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BrandName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Serie)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    // No items
+    <div><label>No hay equipos registrados</label></div>
+}
+

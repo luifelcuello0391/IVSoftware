@@ -1,0 +1,62 @@
+﻿@model Equipment
+
+@if (Model != null)
+{
+<div class="row">
+    <input id="txt_equipment_id" asp-for="Id" hidden/>
+
+    <div class="row" style="margin-left:20px">
+        <table>
+            <tr>
+                <td style="padding: 0 15px 0 0">
+                    <div><b>@Html.DisplayNameFor(model => model.Code)</b></div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
+                    <div><b>@Html.DisplayNameFor(model => model.Name)</b></div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
+                    <div><b>@Html.DisplayNameFor(model => model.EquipBrand)</b></div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
+                    <div><b>@Html.DisplayNameFor(model => model.Model)</b></div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
+                    <div><b>@Html.DisplayNameFor(model => model.Serie)</b></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="padding: 0 15px 0 0">
+                    <div> @Html.DisplayFor(model => model.Code)</div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
+                    <div>@Html.DisplayFor(model => model.Name)</div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
+                    <div>@Html.DisplayFor(model => model.BrandName)</div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
+                    <div>@Html.DisplayFor(model => model.Model)</div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
+                    <div>@Html.DisplayFor(model => model.Serie)</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+}
+else
+{
+    <label>No hay información del equipo</label>
+}
+
+<hr />

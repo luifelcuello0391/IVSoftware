@@ -1,89 +1,351 @@
 ﻿@model IVSoftware.Data.Models.MaintenanceModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar registro";
 }
 
-<h1>Edit</h1>
+<h1>Bitácora de mantenimiento y calibración</h1>
 
-<h4>MaintenanceModel</h4>
+<h4>Editar registro</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div>
+    <div>
         <form asp-action="Edit">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="TypeOfMaintenanceId" class="control-label"></label>
-                <input asp-for="TypeOfMaintenanceId" class="form-control" />
-                <span asp-validation-for="TypeOfMaintenanceId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EquipId" class="control-label"></label>
-                <select asp-for="EquipId" class="form-control" asp-items="ViewBag.EquipId"></select>
-                <span asp-validation-for="EquipId" class="text-danger"></span>
-            </div>
+
+            <input hidden asp-for="Name" value="Mantenimiento" />
+            <input hidden asp-for="EquipId" id="txt_equip_id" />
+            <input hidden asp-for="ProviderId" id="txt_selected_provider_id" />
+            <input hidden asp-for="PersonId" id="txt_responsable_id" />
+
+            <!--Maintenance date-->
             <div class="form-group">
                 <label asp-for="MaintenanceDate" class="control-label"></label>
                 <input asp-for="MaintenanceDate" class="form-control" />
                 <span asp-validation-for="MaintenanceDate" class="text-danger"></span>
             </div>
+
+            <!--Maintenance type-->
+            <div class="form-group">
+                <label class="control-label">Tipo</label>
+                <select id="cbx_maintenance_type" asp-for="TypeOfMaintenanceId" class="form-control" onchange="onMaintenanceTypeSelectedChanged()">
+                    @if (Model.TypeOfMaintenanceId.Equals("M"))
+                    {
+                        <option value="M" selected>Mantenimiento</option>
+                    }
+                    else
+                    {
+                        <option value="M">Mantenimiento</option>
+                    }
+
+                    @if (Model.TypeOfMaintenanceId.Equals("C"))
+                    {
+                        <option value="C" selected>Calibración</option>
+                    }
+                    else
+                    {
+                        <option value="C">Calibración</option>
+                    }
+
+                </select>
+                <span asp-validation-for="TypeOfMaintenanceId" class="text-danger"></span>
+            </div>
+
+            <!--Equipment information-->
+            <div class="form-group">
+                <h5 class="control-label" style="color:yellowgreen">Información del equipo</h5>
+                <hr />
+
+                <button id="btnShowModalEquipment"
+                        type="button"
+                        style="background-color:yellowgreen; color:white"
+                        class="btn btn-primary"
+                        onclick="ShowEquipmentModal()">
+                    Seleccionar equipo
+                </button>
+
+                <div id="div_equipment_info"></div>
+            </div>
+
+            <!--Service provider-->
+            <div class="form-group">
+                <h5 class="control-label" style="color:yellowgreen">Información del proveedor</h5>
+                <hr />
+
+                <button id="btnShowModalProvider"
+                        type="button"
+                        style="background-color:yellowgreen; color:white"
+                        class="btn btn-primary"
+                        onclick="ShowProviderModal()">
+                    Seleccionar proveedor
+                </button>
+
+                <div id="div_provider_info"></div>
+            </div>
+
+            <!--Diagnostic-->
             <div class="form-group">
                 <label asp-for="Diagnostic" class="control-label"></label>
-                <input asp-for="Diagnostic" class="form-control" />
+                @Html.TextAreaFor(model => model.Diagnostic, new { @class = "form-control", @rows = 4 })
                 <span asp-validation-for="Diagnostic" class="text-danger"></span>
             </div>
+
+            <!--Work executed-->
             <div class="form-group">
                 <label asp-for="WorkExecuted" class="control-label"></label>
-                <input asp-for="WorkExecuted" class="form-control" />
+                @Html.TextAreaFor(model => model.WorkExecuted, new { @class = "form-control", @rows = 4 })
                 <span asp-validation-for="WorkExecuted" class="text-danger"></span>
             </div>
+
+            <!--Observations-->
             <div class="form-group">
+                <label asp-for="Observations" class="control-label"></label>
+                @Html.TextAreaFor(model => model.Observations, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="Observations" class="text-danger"></span>
+            </div>
+
+            <!--Next calibration date, only appears for Calibration maintenance type-->
+            <div class="form-group" id="div_next_calibration_date" style="display:none">
                 <label asp-for="NextCalibrationDate" class="control-label"></label>
                 <input asp-for="NextCalibrationDate" class="form-control" />
                 <span asp-validation-for="NextCalibrationDate" class="text-danger"></span>
             </div>
+
+            <!--Responsable-->
             <div class="form-group">
-                <label asp-for="Observations" class="control-label"></label>
-                <input asp-for="Observations" class="form-control" />
-                <span asp-validation-for="Observations" class="text-danger"></span>
+                <h5 class="control-label" style="color:yellowgreen">Responsable</h5>
+                <hr />
+
+                <button id="btnShowModalResponsable"
+                        type="button"
+                        style="background-color:yellowgreen; color:white"
+                        class="btn btn-primary"
+                        onclick="ShowResponsableModal()">
+                    Seleccionar empleado
+                </button>
+
+                <div id="div_responsable"></div>
             </div>
-            <div class="form-group">
-                <label asp-for="ProviderId" class="control-label"></label>
-                <select asp-for="ProviderId" class="form-control" asp-items="ViewBag.ProviderId"></select>
-                <span asp-validation-for="ProviderId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+
+            <div class="form-group" hidden>
                 <label asp-for="RegisterStatus" class="control-label"></label>
-                <input asp-for="RegisterStatus" class="form-control" />
+                <input asp-for="RegisterStatus" class="form-control" value="1" />
                 <span asp-validation-for="RegisterStatus" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="CreationDatetime" class="control-label"></label>
                 <input asp-for="CreationDatetime" class="form-control" />
                 <span asp-validation-for="CreationDatetime" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="ModificationDatetime" class="control-label"></label>
-                <input asp-for="ModificationDatetime" class="form-control" />
+                <input asp-for="ModificationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
                 <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Regresar</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<!--Modal para seleccionar el equipo-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalEquipment" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para seleccionar el proveedor-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalProvider" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para seleccionar el responsable-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalResponsable" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+
+    $(window).on('load', function () {
+        selectResponsableOnLoad();
+        selectedProviderOnLoad();
+        selectedEquipmentOnLoad();
+        onMaintenanceTypeSelectedChanged();
+    });
+
+    function selectResponsableOnLoad() {
+        selectPersonOnLoad($("#txt_responsable_id").val());
+    }
+
+    function selectedProviderOnLoad() {
+        selectProviderOnLoad($("#txt_selected_provider_id").val());
+    }
+
+    function selectedEquipmentOnLoad() {
+        selectEquipmentOnLoad($("#txt_equip_id").val());
+    }
+
+    function onMaintenanceTypeSelectedChanged() {
+        var type = $("#cbx_maintenance_type").val();
+
+        if (type === "C") {
+            document.getElementById("div_next_calibration_date").style.display = "block";
+        }
+        else {
+            document.getElementById("div_next_calibration_date").style.display = "none";
+        }
+    }
+
+    function ShowEquipmentModal() {
+        var url = "@Url.Action("GetEquipments")";
+
+        // Show modal for responsable
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#modalEquipment").modal('show');
+        });
+    }
+
+    function ShowProviderModal() {
+        var url = "@Url.Action("GetProviders")";
+
+        // Show modal for provider
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#modalProvider").modal('show');
+        });
+    }
+
+    function ShowResponsableModal() {
+        var url = "@Url.Action("GetPersons")";
+
+        // Show modal for responsable
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#modalResponsable").modal('show');
+        });
+    }
+
+    function HideEquipmentModal() {
+        $("#modalEquipment").modal('hide');
+        $('.modal-content').html("");
+    }
+
+    function HideProviderModal() {
+        $("#modalProvider").modal('hide');
+        $('.modal-content').html("");
+    }
+
+    function HideResponsableModal() {
+        $("#modalResponsable").modal('hide');
+        $('.modal-content').html("");
+    }
+
+    function selectPerson(id) {
+        HideResponsableModal();
+
+        var url = "@Url.Action("GetPerson")";
+
+        // Obtains the person data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_responsable").html(data);
+                $("#txt_responsable_id").val($("#txt_person_id").val());
+            }
+        });
+    }
+
+    function selectProvider(id) {
+        HideProviderModal();
+
+        var url = "@Url.Action("GetProvider")";
+
+        // Obtains the povider data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_provider_info").html(data);
+                $("#txt_selected_provider_id").val($("#txt_provider_id").val());
+            }
+        });
+    }
+
+    function selectEquipment(id) {
+        HideEquipmentModal();
+
+        var url = "@Url.Action("GetEquipment")";
+
+        // Obtains the equipment data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_equipment_info").html(data);
+                $("#txt_equip_id").val($("#txt_equipment_id").val());
+            }
+        });
+    }
+
+    function selectPersonOnLoad(id) {
+        var url = "@Url.Action("GetPersonByGuid")";
+
+        // Obtains the person data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_responsable").html(data);
+            }
+        });
+    }
+
+    function selectProviderOnLoad(id) {
+        var url = "@Url.Action("GetProvider")";
+
+        // Obtains the povider data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_provider_info").html(data);
+            }
+        });
+    }
+
+    function selectEquipmentOnLoad(id) {
+        var url = "@Url.Action("GetEquipment")";
+
+        // Obtains the equipment data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_equipment_info").html(data);
+            }
+        });
+    }
+</script>

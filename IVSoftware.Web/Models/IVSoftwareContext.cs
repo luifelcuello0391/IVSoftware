@@ -166,10 +166,10 @@ namespace IVSoftware.Web.Models
                 .HasForeignKey(m => m.ProviderId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // Maintenance - Equipment relationship ************************************************************************************
+            //Maintenance - Equipment relationship************************************************************************************
             modelBuilder.Entity<MaintenanceModel>()
                 .HasOne(m => m.Equip)
-                .WithMany(e => e.Maintenances)
+                .WithMany(e => e.MaintenancesForEquipment)
                 .HasForeignKey(m => m.EquipId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -180,13 +180,12 @@ namespace IVSoftware.Web.Models
                 .HasForeignKey(d => d.HeaderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // ChecklistResponseHeader - Person relationship***************************************************************************
-            //modelBuilder.Entity<ChecklistResponseHeader>()
-            //    .HasOne(h => h.ValidatedBy)
-            //    .WithMany()
-            //    .HasForeignKey(h => h.ValidatedById)
-            //    .OnDelete(DeleteBehavior.SetNull);
-
+            // Maintenance - Person relationship***************************************************************************
+            modelBuilder.Entity<MaintenanceModel>()
+                .HasOne(m => m.Responsable)
+                .WithMany()
+                .HasForeignKey(m => m.PersonId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Gender
             new GenderConfiguration("Gender", "Id").Map(modelBuilder);
