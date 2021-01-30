@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210128021110_EvaluationResult")]
+    partial class EvaluationResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -766,9 +768,6 @@ namespace IVSoftware.Web.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("PercentageToPass")
-                        .HasColumnType("int");
-
                     b.Property<int?>("PeriodicityAmount")
                         .HasColumnType("int");
 
@@ -993,9 +992,6 @@ namespace IVSoftware.Web.Migrations
                     b.Property<string>("Observations")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PersonId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int?>("ProviderId")
                         .HasColumnType("int");
 
@@ -1011,8 +1007,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EquipId");
-
-                    b.HasIndex("PersonId");
 
                     b.HasIndex("ProviderId");
 
@@ -3245,15 +3239,10 @@ namespace IVSoftware.Web.Migrations
             modelBuilder.Entity("IVSoftware.Data.Models.MaintenanceModel", b =>
                 {
                     b.HasOne("IVSoftware.Data.Models.Equipment", "Equip")
-                        .WithMany("MaintenancesForEquipment")
+                        .WithMany("Maintenances")
                         .HasForeignKey("EquipId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("IVSoftware.Data.Models.Person", "Responsable")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("IVSoftware.Data.Models.Provider", "ServiceProvider")
                         .WithMany()
@@ -3261,8 +3250,6 @@ namespace IVSoftware.Web.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Equip");
-
-                    b.Navigation("Responsable");
 
                     b.Navigation("ServiceProvider");
                 });
@@ -4018,7 +4005,7 @@ namespace IVSoftware.Web.Migrations
 
             modelBuilder.Entity("IVSoftware.Data.Models.Equipment", b =>
                 {
-                    b.Navigation("MaintenancesForEquipment");
+                    b.Navigation("Maintenances");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.EquipmentCheckList", b =>

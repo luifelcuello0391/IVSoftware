@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -287,8 +288,107 @@ namespace IVSoftware.Web.Controllers
             Person person = (await _personService.FindByConditionAsync(p => p.UserId == user.Id)).FirstOrDefault();
             if (person == null) { return NotFound(); }
 
-            IEnumerable<Evaluation> evaluations = await _evaluationService.FindByConditionAsync(e => e.PersonEvaluations.Any(pe => pe.PersonId == person.Id));
-            return View(evaluations);
+            if(person.PersonEvaluations != null)
+            {
+                var result = person.PersonEvaluations.Select(pe => new PersonEvaluation()
+                {
+                    Evaluation = pe.Evaluation,
+                    EvaluationId = pe.EvaluationId,
+                    IsApproved = EvaluationResult(pe.ResultJson),
+                    Person = pe.Person,
+                    PersonId = pe.PersonId,
+                    ResultJson = pe.ResultJson
+                });
+                return View(result);
+            }
+
+            return View(new List<PersonEvaluation>());
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            try
+            {
+                User user = await _userManager.GetUserAsync(User);
+                if (user == null) { return NotFound(); }
+
+                Person person = (await _personService.FindByConditionAsync(p => p.UserId == user.Id)).FirstOrDefault();
+                if (person == null) { return NotFound(); }
+
+                PersonEvaluation evaluation = _context.PersonEvaluations.Where(pe => pe.EvaluationId == id && pe.PersonId == person.Id).FirstOrDefault();
+                if (evaluation == null) { return NotFound(); }
+
+                if (string.IsNullOrEmpty(evaluation.ResultJson)) { return NotFound(); }
+
+                EvaluationVM evaluationVM = JsonConvert.DeserializeObject<EvaluationVM>(evaluation.ResultJson);
+
+                return View(evaluationVM);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Name", ex.Message);
+                return View(new EvaluationVM());
+            }
+        }
+
+        public async Task<IActionResult> Start(int id)
+        {
+            Evaluation evaluation = await _evaluationService.GetByIdAsync(id);
+            if(evaluation == null) { return NotFound(); }
+
+            return View(evaluation);
+        }
+
+        [HttpPost]
+        public async Task<string> Start(EvaluationVM evaluation)
+        {
+            try
+            {
+                User user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return JsonConvert.SerializeObject(
+                        new
+                        {
+                            result = 1,
+                            message = "No fue encontrado el usuario autenticado"
+                        });
+                }
+
+                Person person = (await _personService.FindByConditionAsync(p => p.UserId == user.Id)).FirstOrDefault();
+                if (person == null)
+                {
+                    return JsonConvert.SerializeObject(
+                        new
+                        {
+                            result = 1,
+                            message = "No fue encontrada la persona"
+                        });
+                }
+
+                PersonEvaluation personEvaluation =
+                    _context.PersonEvaluations.Where(
+                        pe => pe.EvaluationId == evaluation.Id && pe.PersonId == person.Id
+                    ).FirstOrDefault();
+                if (personEvaluation == null)
+                {
+                    return JsonConvert.SerializeObject(
+                        new {
+                            result = 1,
+                            message = "No fue encontrada la asignación de la evaluación a la persona " + person.FullName
+                        });
+                }
+
+                personEvaluation.ResultJson = JsonConvert.SerializeObject(evaluation);
+                _context.PersonEvaluations.Update(personEvaluation);
+                await _context.SaveChangesAsync();
+
+                return JsonConvert.SerializeObject(new { result = 0, message = "OK" });
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new { result = 1, message = ex.Message });
+            }
         }
 
         private async Task<bool> EvaluationExists(int id)
@@ -305,6 +405,35 @@ namespace IVSoftware.Web.Controllers
             }).ToList();
 
             return periodicities;
+        }
+
+        private bool EvaluationResult(string resultJson)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(resultJson)) { return false; }
+
+                EvaluationVM evaluationVM = JsonConvert.DeserializeObject<EvaluationVM>(resultJson);
+                var rightAnswers = evaluationVM.Questions.Select(q => q.Answers.Where(a => a.IsSelected && a.IsRight)).ToList();
+                var selectedAnswers = evaluationVM.Questions.Select(q => q.Answers.Where(a => a.IsSelected)).ToList();
+
+                int rights = 0;
+                for (int i = 0; i < rightAnswers.Count; i++)
+                {
+                    if (rightAnswers.ElementAtOrDefault(i).Count() == selectedAnswers.ElementAtOrDefault(i).Count())
+                    {
+                        rights += 1;
+                    }
+                }
+
+                int PercentageToPass = (rights * 100) / evaluationVM.Questions.Count;
+
+                return PercentageToPass >= evaluationVM.PercentageToPass;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

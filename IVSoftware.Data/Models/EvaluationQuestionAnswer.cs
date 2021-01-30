@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IVSoftware.Data.Models
 {
@@ -21,5 +22,8 @@ namespace IVSoftware.Data.Models
         public Guid EvaluationQuestionBankId { get; set; }
 
         public virtual EvaluationQuestionBank EvaluationQuestionBank { get; set; }
+
+        [NotMapped]
+        public bool IsSelected { get; set; }
     }
 }

@@ -25,6 +25,11 @@ namespace IVSoftware.Data.Models
         [DisplayName("Cantidad")]
         public int? PeriodicityAmount { get; set; }
 
+        [DisplayName("Porcentaje para aprobar")]
+        [Range(50, 100, ErrorMessage = "El Porcentaje para aprobar debe estar entre 50 y 100 porciento")]
+        [Required(ErrorMessage = "El {0} es requerido.")]
+        public int PercentageToPass { get; set; } = 50;
+
         public virtual ICollection<PersonEvaluation> PersonEvaluations { get; set; }
 
         public virtual ICollection<QuestionEvaluation> QuestionsEvaluation { get; set; }

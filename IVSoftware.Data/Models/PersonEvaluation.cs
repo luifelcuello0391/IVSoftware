@@ -13,8 +13,12 @@ namespace IVSoftware.Data.Models
 
         public virtual Evaluation Evaluation { get; set; }
 
+        public string ResultJson { get; set; }
 
         [NotMapped]
         public bool IsSelected { get; set; }
+
+        [NotMapped]
+        public bool IsApproved { get; set; }
     }
 }

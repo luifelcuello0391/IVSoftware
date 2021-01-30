@@ -12,6 +12,12 @@ namespace IVSoftware.Data.Configurations
                 .HasKey(pjr => new { pjr.PersonId, pjr.EvaluationId });
 
             builder
+                .Property(x => x.ResultJson)
+                .IsRequired(false)
+                .IsUnicode()
+                .HasMaxLength(int.MaxValue);
+
+            builder
                 .HasOne(pjr => pjr.Person)
                 .WithMany(p => p.PersonEvaluations)
                 .HasForeignKey(pjr => pjr.PersonId)

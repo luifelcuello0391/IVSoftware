@@ -27,6 +27,10 @@ namespace IVSoftware.Data.Configurations
                 .IsRequired(false);
 
             builder
+                .Property(x => x.PercentageToPass)
+                .IsRequired(true);
+
+            builder
                 .HasOne(e => e.Periodicity)
                 .WithMany(p => p.Evaluations)
                 .HasForeignKey(e => e.PeriodicityId);
