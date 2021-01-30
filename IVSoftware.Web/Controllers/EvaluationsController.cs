@@ -296,6 +296,32 @@ namespace IVSoftware.Web.Controllers
             return View(new List<PersonEvaluation>());
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            try
+            {
+                User user = await _userManager.GetUserAsync(User);
+                if (user == null) { return NotFound(); }
+
+                Person person = (await _personService.FindByConditionAsync(p => p.UserId == user.Id)).FirstOrDefault();
+                if (person == null) { return NotFound(); }
+
+                PersonEvaluation evaluation = _context.PersonEvaluations.Where(pe => pe.EvaluationId == id && pe.PersonId == person.Id).FirstOrDefault();
+                if (evaluation == null) { return NotFound(); }
+
+                if (string.IsNullOrEmpty(evaluation.ResultJson)) { return NotFound(); }
+
+                EvaluationVM evaluationVM = JsonConvert.DeserializeObject<EvaluationVM>(evaluation.ResultJson);
+
+                return View(evaluationVM);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Name", ex.Message);
+                return View(new EvaluationVM());
+            }
+        }
+
         public async Task<IActionResult> Start(int id)
         {
             Evaluation evaluation = await _evaluationService.GetByIdAsync(id);
@@ -370,6 +396,26 @@ namespace IVSoftware.Web.Controllers
             }).ToList();
 
             return periodicities;
+        }
+
+        private int EvaluationResult(string resultJson)
+        {
+            if (string.IsNullOrEmpty(resultJson)) { return 0; }
+
+            EvaluationVM evaluationVM = JsonConvert.DeserializeObject<EvaluationVM>(resultJson);
+            var rightAnswers = evaluationVM.Questions.Select(q => q.Answers.Where(a => a.IsSelected && a.IsRight)).ToList();
+            var selectedAnswers = evaluationVM.Questions.Select(q => q.Answers.Where(a => a.IsSelected)).ToList();
+
+            int rights = 0;
+            for (int i = 0; i < rightAnswers.Count; i++)
+            {
+                if(rightAnswers.ElementAtOrDefault(i).Count() == selectedAnswers.ElementAtOrDefault(i).Count())
+                {
+                    rights += 1;
+                }
+            }
+
+            return rights;
         }
     }
 }
