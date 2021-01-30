@@ -290,7 +290,16 @@ namespace IVSoftware.Web.Controllers
 
             if(person.PersonEvaluations != null)
             {
-                return View(person.PersonEvaluations);
+                var result = person.PersonEvaluations.Select(pe => new PersonEvaluation()
+                {
+                    Evaluation = pe.Evaluation,
+                    EvaluationId = pe.EvaluationId,
+                    IsApproved = EvaluationResult(pe.ResultJson),
+                    Person = pe.Person,
+                    PersonId = pe.PersonId,
+                    ResultJson = pe.ResultJson
+                });
+                return View(result);
             }
 
             return View(new List<PersonEvaluation>());
@@ -398,24 +407,33 @@ namespace IVSoftware.Web.Controllers
             return periodicities;
         }
 
-        private int EvaluationResult(string resultJson)
+        private bool EvaluationResult(string resultJson)
         {
-            if (string.IsNullOrEmpty(resultJson)) { return 0; }
-
-            EvaluationVM evaluationVM = JsonConvert.DeserializeObject<EvaluationVM>(resultJson);
-            var rightAnswers = evaluationVM.Questions.Select(q => q.Answers.Where(a => a.IsSelected && a.IsRight)).ToList();
-            var selectedAnswers = evaluationVM.Questions.Select(q => q.Answers.Where(a => a.IsSelected)).ToList();
-
-            int rights = 0;
-            for (int i = 0; i < rightAnswers.Count; i++)
+            try
             {
-                if(rightAnswers.ElementAtOrDefault(i).Count() == selectedAnswers.ElementAtOrDefault(i).Count())
-                {
-                    rights += 1;
-                }
-            }
+                if (string.IsNullOrEmpty(resultJson)) { return false; }
 
-            return rights;
+                EvaluationVM evaluationVM = JsonConvert.DeserializeObject<EvaluationVM>(resultJson);
+                var rightAnswers = evaluationVM.Questions.Select(q => q.Answers.Where(a => a.IsSelected && a.IsRight)).ToList();
+                var selectedAnswers = evaluationVM.Questions.Select(q => q.Answers.Where(a => a.IsSelected)).ToList();
+
+                int rights = 0;
+                for (int i = 0; i < rightAnswers.Count; i++)
+                {
+                    if (rightAnswers.ElementAtOrDefault(i).Count() == selectedAnswers.ElementAtOrDefault(i).Count())
+                    {
+                        rights += 1;
+                    }
+                }
+
+                int PercentageToPass = (rights * 100) / evaluationVM.Questions.Count;
+
+                return PercentageToPass >= evaluationVM.PercentageToPass;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

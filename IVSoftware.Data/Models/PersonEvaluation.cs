@@ -17,5 +17,8 @@ namespace IVSoftware.Data.Models
 
         [NotMapped]
         public bool IsSelected { get; set; }
+
+        [NotMapped]
+        public bool IsApproved { get; set; }
     }
 }

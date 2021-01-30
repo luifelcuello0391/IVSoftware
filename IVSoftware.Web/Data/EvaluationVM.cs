@@ -11,6 +11,8 @@ namespace IVSoftware.Web.Data
 
         public DateTime Date { get; set; }
 
+        public int PercentageToPass { get; set; }
+
         public ICollection<QuestionVM> Questions { get; set; }
     }
 }

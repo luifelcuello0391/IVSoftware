@@ -12,6 +12,7 @@
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="Name" />
     <input type="hidden" asp-for="Date" />
+    <input type="hidden" asp-for="PercentageToPass" />
     @for (int i = 0; i < Model.QuestionsEvaluation.Count; i++)
     {
         <div>
@@ -64,6 +65,7 @@
                 let id = $('#Id').val();
                 let name = $('#Name').val();
                 let date = $('#Date').val();
+                let percentageToPass = $('#PercentageToPass').val();
                 let questions = [];
                 $(".question").each(function (index) {
                     let questionId = "0";
@@ -101,13 +103,6 @@
                     }
                 });
 
-                let evaluation = {
-                    Id: id,
-                    Name: name,
-                    Date: date,
-                    Questions: questions
-                };
-
                 $.ajax({
                     url: '@Url.Action("Start", "Evaluations")',
                     method: 'POST',
@@ -115,6 +110,7 @@
                         Id: id,
                         Name: name,
                         Date: date,
+                        PercentageToPass: percentageToPass,
                         Questions: questions
                     },
                     success: function (data) {
