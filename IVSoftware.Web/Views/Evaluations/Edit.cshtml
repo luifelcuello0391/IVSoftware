@@ -129,16 +129,31 @@
                         <th>
                             @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().Person.FullName)
                         </th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.PersonEvaluations)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Person.FullName)
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Person.FullName)
+                        </td>
+                        <td>
+                            @if (string.IsNullOrEmpty(item.ResultJson))
+                            {
+                                <span class="badge badge-pill badge-warning">No realizado</span>
+                            }
+                            else if (item.IsApproved)
+                            {
+                                <span class="badge badge-success">Aprobado</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-pill badge-danger">No aprobado</span>
+                            }
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>

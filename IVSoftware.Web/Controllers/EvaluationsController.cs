@@ -78,6 +78,18 @@ namespace IVSoftware.Web.Controllers
             }
 
             ViewBag.Periodicity = await GetPeriodicityList();
+
+            var resultPersonEvaluation = evaluation.PersonEvaluations.Select(pe => new PersonEvaluation()
+            {
+                Evaluation = pe.Evaluation,
+                EvaluationId = pe.EvaluationId,
+                IsApproved = EvaluationResult(pe.ResultJson),
+                Person = pe.Person,
+                PersonId = pe.PersonId,
+                ResultJson = pe.ResultJson
+            });
+
+            evaluation.PersonEvaluations = resultPersonEvaluation.ToList();
             return View(evaluation);
         }
 
