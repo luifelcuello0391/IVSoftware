@@ -13,12 +13,17 @@
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Evaluation.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Date)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Evaluation.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().IsApproved)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Date)
             </th>
-            <th>Estado</th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Score)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -33,20 +38,27 @@
                 @Html.DisplayFor(modelItem => item.Evaluation.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
                 @if (string.IsNullOrEmpty(item.ResultJson))
                 {
                     <span class="badge badge-pill badge-warning">No realizado</span>
                 }
-                else if (item.IsApproved)
+                else if (item.IsApproved.HasValue && item.IsApproved.Value)
                 {
                     <span class="badge badge-success">Aprobado</span>
                 }
-                else
+                else if (item.IsApproved.HasValue)
                 {
                     <span class="badge badge-pill badge-danger">No aprobado</span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Score)
+                @if (item.Score.HasValue)
+                {
+                    <span>%</span>
                 }
             </td>
             <td align="right" style="white-space:nowrap">

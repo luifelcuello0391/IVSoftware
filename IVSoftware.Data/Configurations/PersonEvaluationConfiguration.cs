@@ -22,6 +22,14 @@ namespace IVSoftware.Data.Configurations
                 .IsRequired(false);
 
             builder
+                .Property(x => x.Score)
+                .IsRequired(false);
+
+            builder
+                .Property(x => x.IsApproved)
+                .IsRequired(false);
+
+            builder
                 .HasOne(pjr => pjr.Person)
                 .WithMany(p => p.PersonEvaluations)
                 .HasForeignKey(pjr => pjr.PersonId)

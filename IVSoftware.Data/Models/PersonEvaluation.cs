@@ -19,10 +19,13 @@ namespace IVSoftware.Data.Models
         [DisplayName("Fecha de realización")]
         public DateTime? Date { get; set; }
 
-        [NotMapped]
-        public bool IsSelected { get; set; }
+        [DisplayName("Puntaje obtenido (%)")]
+        public int? Score { get; set; }
+
+        [DisplayName("Estado")]
+        public bool? IsApproved { get; set; }
 
         [NotMapped]
-        public bool IsApproved { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

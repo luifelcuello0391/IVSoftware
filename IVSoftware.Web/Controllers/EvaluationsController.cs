@@ -83,11 +83,12 @@ namespace IVSoftware.Web.Controllers
             {
                 Evaluation = pe.Evaluation,
                 EvaluationId = pe.EvaluationId,
-                IsApproved = EvaluationResult(pe.ResultJson),
+                IsApproved = pe.IsApproved,
                 Person = pe.Person,
                 PersonId = pe.PersonId,
                 ResultJson = pe.ResultJson,
-                Date = pe.Date
+                Date = pe.Date,
+                Score = pe.Score
             });
 
             evaluation.PersonEvaluations = resultPersonEvaluation.ToList();
@@ -307,11 +308,12 @@ namespace IVSoftware.Web.Controllers
                 {
                     Evaluation = pe.Evaluation,
                     EvaluationId = pe.EvaluationId,
-                    IsApproved = EvaluationResult(pe.ResultJson),
+                    IsApproved = pe.IsApproved,
                     Person = pe.Person,
                     PersonId = pe.PersonId,
                     ResultJson = pe.ResultJson,
-                    Date = pe.Date
+                    Date = pe.Date,
+                    Score = pe.Score
                 });
                 return View(result);
             }
@@ -395,6 +397,8 @@ namespace IVSoftware.Web.Controllers
 
                 personEvaluation.ResultJson = JsonConvert.SerializeObject(evaluation);
                 personEvaluation.Date = DateTime.Now;
+                personEvaluation.Score = EvaluationResult(personEvaluation.ResultJson);
+                personEvaluation.IsApproved = personEvaluation.Score >= evaluation.PercentageToPass;
                 _context.PersonEvaluations.Update(personEvaluation);
                 await _context.SaveChangesAsync();
 
@@ -422,11 +426,11 @@ namespace IVSoftware.Web.Controllers
             return periodicities;
         }
 
-        private bool EvaluationResult(string resultJson)
+        private int EvaluationResult(string resultJson)
         {
             try
             {
-                if (string.IsNullOrEmpty(resultJson)) { return false; }
+                if (string.IsNullOrEmpty(resultJson)) { return 0; }
 
                 EvaluationVM evaluationVM = JsonConvert.DeserializeObject<EvaluationVM>(resultJson);
                 var rightAnswers = evaluationVM.Questions.Select(q => q.Answers.Where(a => a.IsSelected && a.IsRight)).ToList();
@@ -443,11 +447,11 @@ namespace IVSoftware.Web.Controllers
 
                 int PercentageToPass = (rights * 100) / evaluationVM.Questions.Count;
 
-                return PercentageToPass >= evaluationVM.PercentageToPass;
+                return PercentageToPass;
             }
             catch (Exception)
             {
-                return false;
+                return 0;
             }
         }
     }
