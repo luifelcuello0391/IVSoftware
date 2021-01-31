@@ -18,6 +18,10 @@ namespace IVSoftware.Data.Configurations
                 .HasMaxLength(int.MaxValue);
 
             builder
+                .Property(x => x.Date)
+                .IsRequired(false);
+
+            builder
                 .HasOne(pjr => pjr.Person)
                 .WithMany(p => p.PersonEvaluations)
                 .HasForeignKey(pjr => pjr.PersonId)

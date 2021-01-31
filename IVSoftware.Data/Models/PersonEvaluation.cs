@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IVSoftware.Data.Models
@@ -14,6 +15,9 @@ namespace IVSoftware.Data.Models
         public virtual Evaluation Evaluation { get; set; }
 
         public string ResultJson { get; set; }
+
+        [DisplayName("Fecha de realización")]
+        public DateTime? Date { get; set; }
 
         [NotMapped]
         public bool IsSelected { get; set; }

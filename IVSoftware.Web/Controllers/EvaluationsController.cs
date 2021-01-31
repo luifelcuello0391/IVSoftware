@@ -86,7 +86,8 @@ namespace IVSoftware.Web.Controllers
                 IsApproved = EvaluationResult(pe.ResultJson),
                 Person = pe.Person,
                 PersonId = pe.PersonId,
-                ResultJson = pe.ResultJson
+                ResultJson = pe.ResultJson,
+                Date = pe.Date
             });
 
             evaluation.PersonEvaluations = resultPersonEvaluation.ToList();
@@ -309,7 +310,8 @@ namespace IVSoftware.Web.Controllers
                     IsApproved = EvaluationResult(pe.ResultJson),
                     Person = pe.Person,
                     PersonId = pe.PersonId,
-                    ResultJson = pe.ResultJson
+                    ResultJson = pe.ResultJson,
+                    Date = pe.Date
                 });
                 return View(result);
             }
@@ -392,6 +394,7 @@ namespace IVSoftware.Web.Controllers
                 }
 
                 personEvaluation.ResultJson = JsonConvert.SerializeObject(evaluation);
+                personEvaluation.Date = DateTime.Now;
                 _context.PersonEvaluations.Update(personEvaluation);
                 await _context.SaveChangesAsync();
 

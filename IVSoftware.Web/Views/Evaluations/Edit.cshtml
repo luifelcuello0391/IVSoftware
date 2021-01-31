@@ -129,6 +129,9 @@
                         <th>
                             @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().Person.FullName)
                         </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().Date)
+                        </th>
                         <th>Estado</th>
                     </tr>
                 </thead>
@@ -138,6 +141,9 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.Person.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
                         </td>
                         <td>
                             @if (string.IsNullOrEmpty(item.ResultJson))
