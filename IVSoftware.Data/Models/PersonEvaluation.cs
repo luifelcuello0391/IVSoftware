@@ -1,10 +1,11 @@
-﻿using System;
+﻿using IVSoftware.Data.Models.Core;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IVSoftware.Data.Models
 {
-    public class PersonEvaluation
+    public class PersonEvaluation : BaseModel<Guid>
     {
         public Guid PersonId { get; set; }
 
