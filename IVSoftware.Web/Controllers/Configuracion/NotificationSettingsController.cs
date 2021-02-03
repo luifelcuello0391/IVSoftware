@@ -51,6 +51,8 @@ namespace IVSoftware.Web.Controllers.Configuracion
         {
             if (ModelState.IsValid)
             {
+                string password = ClsCipher.Encrypt(model.Password, ClsCipher.PasswordKey);
+                model.Password = password;
                 NotificationSetting notificationSetting = await _notificationService.CreateAsync(model);
                 return RedirectToAction(nameof(Index));
             }
@@ -86,6 +88,8 @@ namespace IVSoftware.Web.Controllers.Configuracion
             {
                 try
                 {
+                    string password = ClsCipher.Encrypt(model.Password, ClsCipher.PasswordKey);
+                    model.Password = password;
                     NotificationSetting notificationSetting = await _notificationService.UpdateAsync(model);
                     return RedirectToAction(nameof(Index));
                 }
