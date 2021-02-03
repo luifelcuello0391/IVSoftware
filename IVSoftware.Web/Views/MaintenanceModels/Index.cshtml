@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<IVSoftware.Data.Models.MaintenanceModel>
 
 @{
-    ViewData["Title"] = "Bitácora de mantenimiento y calibración";
+    ViewData["Title"] = "Mantenimiento y calibración de equipos de laboratorio";
 }
 
-<h1>Bitácora de mantenimiento y calibración</h1>
+<h2>Mantenimiento y calibración de equipos de laboratorio</h2>
 
 <p>
     <a asp-action="Create">Agregar registro</a>
@@ -25,7 +25,7 @@
             </th>
 
             <th style="white-space:nowrap">
-                @Html.DisplayNameFor(model => model.ServiceProvider)
+                @Html.Raw("Contratista de mantenimiento")
             </th>
 
             <th style="white-space:nowrap">

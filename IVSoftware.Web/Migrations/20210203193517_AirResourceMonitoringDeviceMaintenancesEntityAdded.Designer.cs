@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210203193517_AirResourceMonitoringDeviceMaintenancesEntityAdded")]
+    partial class AirResourceMonitoringDeviceMaintenancesEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,9 +75,6 @@ namespace IVSoftware.Web.Migrations
                     b.Property<string>("Observations")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PersonId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ProviderAddress")
                         .HasColumnType("nvarchar(max)");
 
@@ -106,8 +105,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EquipId");
-
-                    b.HasIndex("PersonId");
 
                     b.ToTable("AirResourceMonitoringDevideMaintenances");
                 });
@@ -3081,14 +3078,7 @@ namespace IVSoftware.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IVSoftware.Data.Models.Person", "Responsable")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("Equipment");
-
-                    b.Navigation("Responsable");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.BasicEducation", b =>
