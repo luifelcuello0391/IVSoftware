@@ -214,7 +214,7 @@ namespace IVSoftware.Web.Models
             // Evaluation
             new PeriodicityConfiguration("Periodicity", "Id").Map(modelBuilder);
             new EvaluationConfiguration("Evaluation", "Id").Map(modelBuilder);
-            new PersonEvaluationConfiguration().Map(modelBuilder.Entity<PersonEvaluation>());
+            new PersonEvaluationConfiguration("PersonEvaluations", "Id").Map(modelBuilder);
             new EvaluationQuestionBankConfiguration("EvaluationQuestionBank", "Id").Map(modelBuilder);
             new EvaluationQuestionAnswerConfiguration("EvaluationQuestionAnswer", "Id").Map(modelBuilder);
             new QuestionEvaluationConfiguration().Map(modelBuilder.Entity<QuestionEvaluation>());

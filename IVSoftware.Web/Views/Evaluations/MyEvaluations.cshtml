@@ -15,45 +15,63 @@
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Evaluation.Date)
             </th>
-            <th>Estado</th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().IsApproved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Score)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Evaluation.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Evaluation.Date)
-                </td>
-                <td>
-                    @if (string.IsNullOrEmpty(item.ResultJson))
-                    {
-                        <span class="badge badge-pill badge-warning">No realizado</span>
-                    }
-                    else if (item.IsApproved)
-                    {
-                        <span class="badge badge-success">Aprobado</span>
-                    }
-                    else
-                    {
-                        <span class="badge badge-pill badge-danger">No aprobado</span>
-                    }
-                </td>
-                <td align="right" style="white-space:nowrap">
-                    @if (string.IsNullOrEmpty(item.ResultJson))
-                    {
-                        <a asp-action="Start" asp-route-id="@item.EvaluationId" title="Iniciar"><i class="fas fa-play" style="font-size:larger"></i></a>
-                    }
-                    else
-                    {
-                        <a asp-action="Details" asp-route-id="@item.EvaluationId" title="Ver"><i class="fas fa-eye" style="font-size:larger"></i></a>
-                    }
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Evaluation.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Evaluation.Date)
+            </td>
+            <td>
+                @if (string.IsNullOrEmpty(item.ResultJson))
+                {
+                    <span class="badge badge-pill badge-warning">No realizado</span>
+                }
+                else if (item.IsApproved.HasValue && item.IsApproved.Value)
+                {
+                    <span class="badge badge-success">Aprobado</span>
+                }
+                else if (item.IsApproved.HasValue)
+                {
+                    <span class="badge badge-pill badge-danger">No aprobado</span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Score)
+                @if (item.Score.HasValue)
+                {
+                    <span>%</span>
+                }
+            </td>
+            <td align="right" style="white-space:nowrap">
+                @if (string.IsNullOrEmpty(item.ResultJson))
+                {
+                    <a asp-action="Start" asp-route-id="@item.EvaluationId" title="Iniciar"><i class="fas fa-play" style="font-size:larger"></i></a>
+                }
+                else
+                {
+                    <a asp-action="Details" asp-route-id="@item.EvaluationId" title="Ver"><i class="fas fa-eye" style="font-size:larger"></i></a>
+                }
+            </td>
+        </tr>
         }
     </tbody>
 </table>

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using IVSoftware.Data.Models.Core;
+using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IVSoftware.Data.Models
 {
-    public class PersonEvaluation
+    public class PersonEvaluation : BaseModel<Guid>
     {
         public Guid PersonId { get; set; }
 
@@ -15,10 +17,16 @@ namespace IVSoftware.Data.Models
 
         public string ResultJson { get; set; }
 
-        [NotMapped]
-        public bool IsSelected { get; set; }
+        [DisplayName("Fecha de realización")]
+        public DateTime? Date { get; set; }
+
+        [DisplayName("Puntaje obtenido (%)")]
+        public int? Score { get; set; }
+
+        [DisplayName("Estado")]
+        public bool? IsApproved { get; set; }
 
         [NotMapped]
-        public bool IsApproved { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

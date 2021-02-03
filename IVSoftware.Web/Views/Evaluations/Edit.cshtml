@@ -129,16 +129,60 @@
                         <th>
                             @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().Person.FullName)
                         </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().IsApproved)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().Date)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().Score)
+                        </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.PersonEvaluations)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Person.FullName)
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Person.FullName)
+                        </td>
+                        <td>
+                            @if (string.IsNullOrEmpty(item.ResultJson))
+                            {
+                                <span class="badge badge-pill badge-warning">No realizado</span>
+                            }
+                            else if (item.IsApproved.HasValue && item.IsApproved.Value)
+                            {
+                                <span class="badge badge-success">Aprobado</span>
+                            }
+                            else if (item.IsApproved.HasValue)
+                            {
+                                <span class="badge badge-pill badge-danger">No aprobado</span>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Score)
+                            @if (item.Score.HasValue)
+                            {
+                                <span>%</span>
+                            }
+                        </td>
+                        <td align="right" style="white-space:nowrap">
+                            @if (item.IsApproved.HasValue && !item.IsApproved.Value)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm"
+                                        data-toggle="modal" id="RescheduleBtn"
+                                        data-id="@item.Id">
+                                    Reprogramar
+                                </button>
+                            }
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -192,6 +236,23 @@
 
                 $.ajax({
                     url: AssignQuestionsURL,
+                    data: { id: data_id },
+                    success: function (data) {
+                        $('.modal-content').html(data);
+                        $('#assignModal').modal('show');
+                    }
+                });
+            });
+
+            const rescheduleURL = '@Url.Action("Reschedule", "Evaluations")';
+            $('#RescheduleBtn').on("click", function () {
+                let data_id = "0";
+                if (typeof $(this).data('id') !== 'undefined') {
+                    data_id = $(this).data('id');
+                }
+
+                $.ajax({
+                    url: rescheduleURL,
                     data: { id: data_id },
                     success: function (data) {
                         $('.modal-content').html(data);

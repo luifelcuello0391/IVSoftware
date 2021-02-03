@@ -1,21 +1,44 @@
-﻿using IVSoftware.Data.Models;
+﻿using IVSoftware.Data.Configurations.Core;
+using IVSoftware.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace IVSoftware.Data.Configurations
 {
-    public class PersonEvaluationConfiguration
+    public class PersonEvaluationConfiguration : BaseEntityMap<PersonEvaluation, Guid>
     {
-        public void Map(EntityTypeBuilder<PersonEvaluation> builder)
+        public PersonEvaluationConfiguration(string TableName, string IdName) : base(TableName, IdName)
+        {
+        }
+
+        protected override void InternalMap(EntityTypeBuilder<PersonEvaluation> builder)
         {
             builder
-                .HasKey(pjr => new { pjr.PersonId, pjr.EvaluationId });
+                .Property(x => x.PersonId)
+                .IsRequired();
+
+            builder
+                .Property(x => x.EvaluationId)
+                .IsRequired();
 
             builder
                 .Property(x => x.ResultJson)
                 .IsRequired(false)
                 .IsUnicode()
                 .HasMaxLength(int.MaxValue);
+
+            builder
+                .Property(x => x.Date)
+                .IsRequired(false);
+
+            builder
+                .Property(x => x.Score)
+                .IsRequired(false);
+
+            builder
+                .Property(x => x.IsApproved)
+                .IsRequired(false);
 
             builder
                 .HasOne(pjr => pjr.Person)

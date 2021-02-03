@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210131193904_PersonEvaluationDate")]
+    partial class PersonEvaluationDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,80 +38,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AcademicLevel");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.AirResourceMonitoringDeviceMaintenance", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EquipId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("MaintenanceDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("NextMaintenanceDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Observations")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("PersonId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ProviderAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProviderContactName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProviderIdentificaton")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProviderName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProviderPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SparePartsChanged")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StockNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TypeOfMaintenanceId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EquipId");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("AirResourceMonitoringDevideMaintenances");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.Arl", b =>
@@ -729,9 +657,6 @@ namespace IVSoftware.Web.Migrations
 
                     b.Property<DateTime?>("PurchaseDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<double>("PurchaseValue")
-                        .HasColumnType("float");
 
                     b.Property<string>("Range")
                         .HasColumnType("nvarchar(max)");
@@ -1380,36 +1305,23 @@ namespace IVSoftware.Web.Migrations
 
             modelBuilder.Entity("IVSoftware.Data.Models.PersonEvaluation", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
-
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("EvaluationId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsApproved")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ResultJson")
                         .HasMaxLength(2147483647)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Score")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("PersonId", "EvaluationId");
 
                     b.HasIndex("EvaluationId");
-
-                    b.HasIndex("PersonId");
 
                     b.ToTable("PersonEvaluations");
                 });
@@ -3089,24 +3001,6 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.AirResourceMonitoringDeviceMaintenance", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.Equipment", "Equipment")
-                        .WithMany("MaintenancesForAirResourceMonitoringDevice")
-                        .HasForeignKey("EquipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IVSoftware.Data.Models.Person", "Responsable")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Equipment");
-
-                    b.Navigation("Responsable");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.BasicEducation", b =>
                 {
                     b.HasOne("IVSoftware.Data.Models.Person", "Person")
@@ -4129,8 +4023,6 @@ namespace IVSoftware.Web.Migrations
 
             modelBuilder.Entity("IVSoftware.Data.Models.Equipment", b =>
                 {
-                    b.Navigation("MaintenancesForAirResourceMonitoringDevice");
-
                     b.Navigation("MaintenancesForEquipment");
                 });
 

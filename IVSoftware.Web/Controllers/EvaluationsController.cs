@@ -21,6 +21,7 @@ namespace IVSoftware.Web.Controllers
         private readonly IEntityService<Periodicity, int> _periodicityService;
         private readonly IEntityService<Person, Guid> _personService;
         private readonly IEntityService<EvaluationQuestionBank, Guid> _questionService;
+        private readonly IEntityService<PersonEvaluation, Guid> _personEvaluationService;
         private readonly IVSoftwareContext _context;
         private readonly UserManager<User> _userManager;
 
@@ -28,6 +29,7 @@ namespace IVSoftware.Web.Controllers
             IEntityService<Periodicity, int> periodicityService,
             IEntityService<Person, Guid> personService,
             IEntityService<EvaluationQuestionBank, Guid> questionService,
+            IEntityService<PersonEvaluation, Guid> personEvaluationService,
             IVSoftwareContext context,
             UserManager<User> userManager)
         {
@@ -35,6 +37,7 @@ namespace IVSoftware.Web.Controllers
             _periodicityService = periodicityService;
             _personService = personService;
             _questionService = questionService;
+            _personEvaluationService = personEvaluationService;
             _context = context;
             _userManager = userManager;
         }
@@ -78,6 +81,21 @@ namespace IVSoftware.Web.Controllers
             }
 
             ViewBag.Periodicity = await GetPeriodicityList();
+
+            var resultPersonEvaluation = evaluation.PersonEvaluations.Select(pe => new PersonEvaluation()
+            {
+                Evaluation = pe.Evaluation,
+                EvaluationId = pe.EvaluationId,
+                IsApproved = pe.IsApproved,
+                Person = pe.Person,
+                PersonId = pe.PersonId,
+                ResultJson = pe.ResultJson,
+                Date = pe.Date,
+                Score = pe.Score,
+                Id = pe.Id
+            });
+
+            evaluation.PersonEvaluations = resultPersonEvaluation.ToList();
             return View(evaluation);
         }
 
@@ -149,7 +167,7 @@ namespace IVSoftware.Web.Controllers
         public async Task<IActionResult> AssignPeople(int id)
         {
             List<PersonEvaluation> currentPeople =
-                        _context.PersonEvaluations.Where(pe => pe.EvaluationId == id).ToList();
+                (await _personEvaluationService.FindByConditionAsync(pe => pe.EvaluationId == id)).ToList();
             IEnumerable<Person> people = await _personService.GetAllAsync();
             List<PersonEvaluation> personEvaluations = people.Select(p => new PersonEvaluation()
             {
@@ -177,9 +195,10 @@ namespace IVSoftware.Web.Controllers
                 {
                     bool commitChanges = false;
                     List<PersonEvaluation> currentPeople =
-                        _context.PersonEvaluations.Where(pe => pe.EvaluationId == model.Id).ToList();
+                        (await _personEvaluationService.FindByConditionAsync(pe => pe.EvaluationId == model.Id)).ToList();
 
-                    List<PersonEvaluation> newPeople = model.PersonEvaluations != null ? model.PersonEvaluations.ToList() : new List<PersonEvaluation>();
+                    List<PersonEvaluation> newPeople = model.PersonEvaluations != null ?
+                        model.PersonEvaluations.ToList() : new List<PersonEvaluation>();
 
                     List<PersonEvaluation> personEvaluationToDelete =
                         currentPeople.Where(p => !newPeople.Any(np => np.PersonId == p.PersonId)).ToList();
@@ -294,10 +313,13 @@ namespace IVSoftware.Web.Controllers
                 {
                     Evaluation = pe.Evaluation,
                     EvaluationId = pe.EvaluationId,
-                    IsApproved = EvaluationResult(pe.ResultJson),
+                    IsApproved = pe.IsApproved,
                     Person = pe.Person,
                     PersonId = pe.PersonId,
-                    ResultJson = pe.ResultJson
+                    ResultJson = pe.ResultJson,
+                    Date = pe.Date,
+                    Score = pe.Score,
+                    Id = pe.Id
                 });
                 return View(result);
             }
@@ -315,7 +337,12 @@ namespace IVSoftware.Web.Controllers
                 Person person = (await _personService.FindByConditionAsync(p => p.UserId == user.Id)).FirstOrDefault();
                 if (person == null) { return NotFound(); }
 
-                PersonEvaluation evaluation = _context.PersonEvaluations.Where(pe => pe.EvaluationId == id && pe.PersonId == person.Id).FirstOrDefault();
+                PersonEvaluation evaluation =
+                    (
+                        await _personEvaluationService
+                            .FindByConditionAsync(pe => pe.EvaluationId == id && pe.PersonId == person.Id)
+                    ).FirstOrDefault();
+
                 if (evaluation == null) { return NotFound(); }
 
                 if (string.IsNullOrEmpty(evaluation.ResultJson)) { return NotFound(); }
@@ -367,9 +394,13 @@ namespace IVSoftware.Web.Controllers
                 }
 
                 PersonEvaluation personEvaluation =
-                    _context.PersonEvaluations.Where(
-                        pe => pe.EvaluationId == evaluation.Id && pe.PersonId == person.Id
-                    ).FirstOrDefault();
+                (
+                    await _personEvaluationService.FindByConditionAsync(
+                        pe => pe.EvaluationId == evaluation.Id &&
+                        pe.PersonId == person.Id &&
+                        string.IsNullOrEmpty(pe.ResultJson)
+                    )
+                ).FirstOrDefault();
                 if (personEvaluation == null)
                 {
                     return JsonConvert.SerializeObject(
@@ -380,6 +411,9 @@ namespace IVSoftware.Web.Controllers
                 }
 
                 personEvaluation.ResultJson = JsonConvert.SerializeObject(evaluation);
+                personEvaluation.Date = DateTime.Now;
+                personEvaluation.Score = EvaluationResult(personEvaluation.ResultJson);
+                personEvaluation.IsApproved = personEvaluation.Score >= evaluation.PercentageToPass;
                 _context.PersonEvaluations.Update(personEvaluation);
                 await _context.SaveChangesAsync();
 
@@ -389,6 +423,53 @@ namespace IVSoftware.Web.Controllers
             {
                 return JsonConvert.SerializeObject(new { result = 1, message = ex.Message });
             }
+        }
+
+        public async Task<IActionResult> Reschedule(Guid id)
+        {
+            PersonEvaluation personEvaluation =
+                await _personEvaluationService.GetByIdAsync(id);
+            if(personEvaluation == null) { return NotFound(); }
+
+            return PartialView("_ModalReschedule", personEvaluation);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reschedule(RescheduleVM model)
+        {
+            PersonEvaluation personEvaluation = await _personEvaluationService.GetByIdAsync(model.Id);
+            if (personEvaluation != null)
+            {
+                if(model.Date > personEvaluation.Date)
+                {
+                    try
+                    {
+                        PersonEvaluation newPersonEvaluation = new PersonEvaluation()
+                        {
+                            Date = model.Date,
+                            EvaluationId = personEvaluation.EvaluationId,
+                            PersonId = personEvaluation.PersonId
+                        };
+
+                        await _personEvaluationService.CreateAsync(newPersonEvaluation);
+                        return RedirectToAction(nameof(Edit), new { id = personEvaluation.EvaluationId });
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("Id", ex.Message);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Id", "La fecha debe ser mayor a la inicial");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("Id", "Asignación no encontrada");
+            }
+
+            return PartialView("_ModalReschedule", personEvaluation);
         }
 
         private async Task<bool> EvaluationExists(int id)
@@ -407,11 +488,11 @@ namespace IVSoftware.Web.Controllers
             return periodicities;
         }
 
-        private bool EvaluationResult(string resultJson)
+        private int EvaluationResult(string resultJson)
         {
             try
             {
-                if (string.IsNullOrEmpty(resultJson)) { return false; }
+                if (string.IsNullOrEmpty(resultJson)) { return 0; }
 
                 EvaluationVM evaluationVM = JsonConvert.DeserializeObject<EvaluationVM>(resultJson);
                 var rightAnswers = evaluationVM.Questions.Select(q => q.Answers.Where(a => a.IsSelected && a.IsRight)).ToList();
@@ -428,11 +509,11 @@ namespace IVSoftware.Web.Controllers
 
                 int PercentageToPass = (rights * 100) / evaluationVM.Questions.Count;
 
-                return PercentageToPass >= evaluationVM.PercentageToPass;
+                return PercentageToPass;
             }
             catch (Exception)
             {
-                return false;
+                return 0;
             }
         }
     }
