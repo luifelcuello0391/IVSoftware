@@ -166,7 +166,7 @@ namespace IVSoftware.Web.Models
                 .HasForeignKey(m => m.ProviderId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            //Maintenance - Equipment relationship************************************************************************************
+            //Maintenance - Equipment relationship**************************************************************************************
             modelBuilder.Entity<MaintenanceModel>()
                 .HasOne(m => m.Equip)
                 .WithMany(e => e.MaintenancesForEquipment)
@@ -180,8 +180,22 @@ namespace IVSoftware.Web.Models
                 .HasForeignKey(d => d.HeaderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Maintenance - Person relationship***************************************************************************
+            // Maintenance - Person relationship****************************************************************************************
             modelBuilder.Entity<MaintenanceModel>()
+                .HasOne(m => m.Responsable)
+                .WithMany()
+                .HasForeignKey(m => m.PersonId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Air resource monitoring equipment maintenance - Equipment relationship***************************************************
+            modelBuilder.Entity<AirResourceMonitoringDeviceMaintenance>()
+                .HasOne(m => m.Equipment)
+                .WithMany(e => e.MaintenancesForAirResourceMonitoringDevice)
+                .HasForeignKey(m => m.EquipId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Air resource monitoring equipment maintenance - Person relationship****************************************************************************************
+            modelBuilder.Entity<AirResourceMonitoringDeviceMaintenance>()
                 .HasOne(m => m.Responsable)
                 .WithMany()
                 .HasForeignKey(m => m.PersonId)
@@ -268,5 +282,7 @@ namespace IVSoftware.Web.Models
         public DbSet<MaintenanceModel> Maintenances { get; set; }
 
         public DbSet<QuestionEvaluation> QuestionEvaluations { get; set; }
+
+        public DbSet<AirResourceMonitoringDeviceMaintenance> AirResourceMonitoringDevideMaintenances { get; set; }
     }
 }

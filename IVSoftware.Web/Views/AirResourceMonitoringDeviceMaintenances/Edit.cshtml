@@ -1,0 +1,119 @@
+﻿@model IVSoftware.Data.Models.AirResourceMonitoringDeviceMaintenance
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>AirResourceMonitoringDeviceMaintenance</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="TypeOfMaintenanceId" class="control-label"></label>
+                <input asp-for="TypeOfMaintenanceId" class="form-control" />
+                <span asp-validation-for="TypeOfMaintenanceId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EquipId" class="control-label"></label>
+                <select asp-for="EquipId" class="form-control" asp-items="ViewBag.EquipId"></select>
+                <span asp-validation-for="EquipId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaintenanceDate" class="control-label"></label>
+                <input asp-for="MaintenanceDate" class="form-control" />
+                <span asp-validation-for="MaintenanceDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProviderName" class="control-label"></label>
+                <input asp-for="ProviderName" class="form-control" />
+                <span asp-validation-for="ProviderName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProviderIdentificaton" class="control-label"></label>
+                <input asp-for="ProviderIdentificaton" class="form-control" />
+                <span asp-validation-for="ProviderIdentificaton" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProviderAddress" class="control-label"></label>
+                <input asp-for="ProviderAddress" class="form-control" />
+                <span asp-validation-for="ProviderAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProviderPhoneNumber" class="control-label"></label>
+                <input asp-for="ProviderPhoneNumber" class="form-control" />
+                <span asp-validation-for="ProviderPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProviderContactName" class="control-label"></label>
+                <input asp-for="ProviderContactName" class="form-control" />
+                <span asp-validation-for="ProviderContactName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SparePartsChanged" class="control-label"></label>
+                <input asp-for="SparePartsChanged" class="form-control" />
+                <span asp-validation-for="SparePartsChanged" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NextMaintenanceDate" class="control-label"></label>
+                <input asp-for="NextMaintenanceDate" class="form-control" />
+                <span asp-validation-for="NextMaintenanceDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observations" class="control-label"></label>
+                <input asp-for="Observations" class="form-control" />
+                <span asp-validation-for="Observations" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StockNumber" class="control-label"></label>
+                <input asp-for="StockNumber" class="form-control" />
+                <span asp-validation-for="StockNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegisterStatus" class="control-label"></label>
+                <input asp-for="RegisterStatus" class="form-control" />
+                <span asp-validation-for="RegisterStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreationDatetime" class="control-label"></label>
+                <input asp-for="CreationDatetime" class="form-control" />
+                <span asp-validation-for="CreationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModificationDatetime" class="control-label"></label>
+                <input asp-for="ModificationDatetime" class="form-control" />
+                <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

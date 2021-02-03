@@ -15,11 +15,11 @@ else
 <div>
     @if (Model.ValidationResult)
     {
-        <h4 style="color:green">Conforme</h4>
+        <h4>@Html.DisplayNameFor(model => model.ValidationResult):</h4> <h4 style="color:green">Conforme</h4>
     }
     else
     {
-        <h4 style="color:red">No conforme</h4>
+        <h4>@Html.DisplayNameFor(model => model.ValidationResult):</h4> <h4 style="color:red">No conforme</h4>
     }
 
     <div>

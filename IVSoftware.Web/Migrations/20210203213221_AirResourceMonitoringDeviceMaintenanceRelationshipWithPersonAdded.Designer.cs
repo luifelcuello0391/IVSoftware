@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210203213221_AirResourceMonitoringDeviceMaintenanceRelationshipWithPersonAdded")]
+    partial class AirResourceMonitoringDeviceMaintenanceRelationshipWithPersonAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1181,31 +1183,6 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("Municipality");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.NotificationSetting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NotificationSetting");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.OtherTechnicalKnowledge", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1405,36 +1382,20 @@ namespace IVSoftware.Web.Migrations
 
             modelBuilder.Entity("IVSoftware.Data.Models.PersonEvaluation", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
-
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("EvaluationId")
                         .HasColumnType("int");
-
-                    b.Property<bool?>("IsApproved")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ResultJson")
                         .HasMaxLength(2147483647)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Score")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("PersonId", "EvaluationId");
 
                     b.HasIndex("EvaluationId");
-
-                    b.HasIndex("PersonId");
 
                     b.ToTable("PersonEvaluations");
                 });

@@ -52,5 +52,8 @@ namespace IVSoftware.Data.Models
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public int RequestedProviderId { get; set; }
         public virtual List<MaintenanceModel> MaintenancesForEquipment { get; set; }
+        public virtual List<AirResourceMonitoringDeviceMaintenance> MaintenancesForAirResourceMonitoringDevice { get; set; }
+        [DisplayName("Valor de compra")]
+        public double PurchaseValue { get; set; } = 0;
     }
 }

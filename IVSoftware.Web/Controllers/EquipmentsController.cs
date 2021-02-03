@@ -87,7 +87,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Model,Serie,PurchaseDate,Magnitude,Range,MinimumRead,Accuracy,PowerSupply,Observation,OtherRecomendation,Name,RegisterStatus,CreationDatetime,ModificationDatetime,SelectedBrandId,RequestedProviderId")] Equipment equipment)
+        public async Task<IActionResult> Create([Bind("Id,Code,Model,Serie,PurchaseDate,Magnitude,Range,MinimumRead,Accuracy,PowerSupply,Observation,OtherRecomendation,Name,RegisterStatus,CreationDatetime,ModificationDatetime,SelectedBrandId,RequestedProviderId,PurchaseValue")] Equipment equipment)
         {
             if (ModelState.IsValid)
             {
@@ -172,7 +172,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Model,Serie,PurchaseDate,Magnitude,Range,MinimumRead,Accuracy,PowerSupply,Observation,OtherRecomendation,Name,RegisterStatus,CreationDatetime,ModificationDatetime,SelectedBrandId,RequestedProviderId")] Equipment equipment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Model,Serie,PurchaseDate,Magnitude,Range,MinimumRead,Accuracy,PowerSupply,Observation,OtherRecomendation,Name,RegisterStatus,CreationDatetime,ModificationDatetime,SelectedBrandId,RequestedProviderId,PurchaseValue")] Equipment equipment)
         {
             if (id != equipment.Id)
             {
