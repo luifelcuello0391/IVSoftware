@@ -24,6 +24,7 @@ namespace IVSoftware.Web.Controllers
         private readonly IEntityService<PersonEvaluation, Guid> _personEvaluationService;
         private readonly IVSoftwareContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IMailService _mailService;
 
         public EvaluationsController(IEntityService<Evaluation, int> evaluationService,
             IEntityService<Periodicity, int> periodicityService,
@@ -31,7 +32,8 @@ namespace IVSoftware.Web.Controllers
             IEntityService<EvaluationQuestionBank, Guid> questionService,
             IEntityService<PersonEvaluation, Guid> personEvaluationService,
             IVSoftwareContext context,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IMailService mailService)
         {
             _evaluationService = evaluationService;
             _periodicityService = periodicityService;
@@ -40,6 +42,7 @@ namespace IVSoftware.Web.Controllers
             _personEvaluationService = personEvaluationService;
             _context = context;
             _userManager = userManager;
+            _mailService = mailService;
         }
 
         public async Task<IActionResult> Index()
@@ -218,7 +221,26 @@ namespace IVSoftware.Web.Controllers
                         commitChanges = true;
                     }
 
-                    if (commitChanges) { await _context.SaveChangesAsync(); }
+                    if (commitChanges)
+                    {
+                        await _context.SaveChangesAsync();
+                        foreach(PersonEvaluation personEvaluation in personEvaluationToAdd)
+                        {
+                            Person person = await _personService.GetByIdAsync(personEvaluation.PersonId);
+                            Evaluation evaluation = await _evaluationService.GetByIdAsync(personEvaluation.EvaluationId);
+                            if (person != null && !string.IsNullOrEmpty(person.Email))
+                            {
+                                MailRequest request = new MailRequest()
+                                {
+                                    ToEmail = personEvaluation.Person.Email,
+                                    Subject = "Evaluación Asignada",
+                                    Body = $"Se le ha asignado la evaluación: {evaluation?.Name}"
+                                };
+
+                                await _mailService.SendEmailAsync(request);
+                            }
+                        }
+                    }
 
                     return RedirectToAction(nameof(Edit), new { id = model.Id });
                 }
@@ -452,6 +474,18 @@ namespace IVSoftware.Web.Controllers
                         };
 
                         await _personEvaluationService.CreateAsync(newPersonEvaluation);
+                        if (personEvaluation.Person != null && !string.IsNullOrEmpty(personEvaluation.Person.Email))
+                        {
+                            MailRequest request = new MailRequest()
+                            {
+                                ToEmail = personEvaluation.Person.Email,
+                                Subject = "Evaluación Reprogramada",
+                                Body = $"Se le ha reprogramado la evaluación: {personEvaluation.Evaluation?.Name}"
+                            };
+
+                            await _mailService.SendEmailAsync(request);
+                        }
+
                         return RedirectToAction(nameof(Edit), new { id = personEvaluation.EvaluationId });
                     }
                     catch (Exception ex)
