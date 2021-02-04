@@ -45,6 +45,7 @@ namespace IVSoftware.Web
             services.AddTransient<SeedDb>();
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped(typeof(IEntityService<,>), typeof(EntityService<,>));
+            services.AddScoped<IMailService, MailService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

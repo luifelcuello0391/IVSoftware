@@ -219,6 +219,9 @@ namespace IVSoftware.Web.Models
             new EvaluationQuestionAnswerConfiguration("EvaluationQuestionAnswer", "Id").Map(modelBuilder);
             new QuestionEvaluationConfiguration().Map(modelBuilder.Entity<QuestionEvaluation>());
 
+            // NotificationSetting
+            new NotificationSettingConfiguration("NotificationSetting", "Id").Map(modelBuilder);
+
             base.OnModelCreating(modelBuilder);
         }
 
