@@ -194,12 +194,26 @@ namespace IVSoftware.Web.Models
                 .HasForeignKey(m => m.EquipId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Air resource monitoring equipment maintenance - Person relationship****************************************************************************************
+            // Air resource monitoring equipment maintenance - Person relationship******************************************************
             modelBuilder.Entity<AirResourceMonitoringDeviceMaintenance>()
                 .HasOne(m => m.Responsable)
                 .WithMany()
                 .HasForeignKey(m => m.PersonId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            // Equipment purchase request - Responsible analyst (Person) relationship *************************************************
+            modelBuilder.Entity<EquipmentPurchaseRequest>()
+                .HasOne(epr => epr.ResponsibleAnalyst)
+                .WithMany()
+                .HasForeignKey(epr => epr.AnalystPersonId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Equipment purchase request - Responsible for Aprove/Reject request (Person) *******************************************
+            modelBuilder.Entity<EquipmentPurchaseRequest>()
+                .HasOne(epr => epr.StatusChangePerson)
+                .WithMany()
+                .HasForeignKey(epr => epr.ResponsePersonId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Gender
             new GenderConfiguration("Gender", "Id").Map(modelBuilder);
@@ -284,5 +298,7 @@ namespace IVSoftware.Web.Models
         public DbSet<QuestionEvaluation> QuestionEvaluations { get; set; }
 
         public DbSet<AirResourceMonitoringDeviceMaintenance> AirResourceMonitoringDevideMaintenances { get; set; }
+
+        public DbSet<EquipmentPurchaseRequest> EquipmentPurchaseRequests { get; set; }
     }
 }
