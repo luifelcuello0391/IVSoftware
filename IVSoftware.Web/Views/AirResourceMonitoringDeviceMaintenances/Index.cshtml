@@ -17,11 +17,19 @@
             </th>
 
             <th>
+                @Html.Raw("Tipo")
+            </th>
+
+            <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
 
             <th>
                 @Html.DisplayNameFor(model => model.Equipment)
+            </th>
+
+            <th style="white-space:nowrap">
+                @Html.Raw("Serie del equipo")
             </th>
 
             <th>
@@ -54,8 +62,12 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td style="white-space:nowrap">
                 @Html.DisplayFor(modelItem => item.MaintenanceDate)
+            </td>
+
+            <td style="white-space:nowrap">
+                @Html.DisplayFor(modelItem => item.TypeOfMaintenance)
             </td>
 
             <td style="white-space:nowrap">
@@ -72,6 +84,19 @@
             {
                 <td style="white-space:nowrap">
                     @Html.Raw("No especificado")
+                </td>
+            }
+
+            @if (item.Equipment != null && item.Equipment.Serie != null && !string.IsNullOrEmpty(item.Equipment.Serie.Replace(" ", string.Empty)))
+            {
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.Equipment.Serie)
+                </td>
+            }
+            else
+            {
+                <td style="white-space:nowrap">
+                    @Html.Raw("No especificada")
                 </td>
             }
 
@@ -97,18 +122,18 @@
 
             @if (item.Responsable != null && item.Responsable.FullName != null && !string.IsNullOrEmpty(item.Responsable.FullName.Replace(" ", string.Empty)))
             {
-                <td>
+                <td style="white-space:nowrap">
                     @Html.DisplayFor(modelItem => item.Responsable.FullName)
                 </td>
             }
             else
             {
-                <td>
+                <td style="white-space:nowrap">
                     @Html.Raw("No especificado")
                 </td>
             }
 
-            <td>
+            <td style="white-space:nowrap">
                 <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
                 <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
                 <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>

@@ -1,118 +1,378 @@
 ﻿@model IVSoftware.Data.Models.AirResourceMonitoringDeviceMaintenance
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar registro";
 }
 
-<h1>Edit</h1>
+<h1>Mantenimiento y/o calibración de equipo recurso aire</h1>
 
-<h4>AirResourceMonitoringDeviceMaintenance</h4>
+<h4>Editar registro</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div>
+    <div>
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="TypeOfMaintenanceId" class="control-label"></label>
-                <input asp-for="TypeOfMaintenanceId" class="form-control" />
-                <span asp-validation-for="TypeOfMaintenanceId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EquipId" class="control-label"></label>
-                <select asp-for="EquipId" class="form-control" asp-items="ViewBag.EquipId"></select>
-                <span asp-validation-for="EquipId" class="text-danger"></span>
-            </div>
+            <input hidden asp-for="EquipId" id="txt_equip_id" />
+            <input hidden asp-for="PersonId" id="txt_responsable_id" />
+
+            <!--Maintenance date-->
             <div class="form-group">
                 <label asp-for="MaintenanceDate" class="control-label"></label>
                 <input asp-for="MaintenanceDate" class="form-control" />
                 <span asp-validation-for="MaintenanceDate" class="text-danger"></span>
             </div>
+
+            <!--Maintenance type-->
             <div class="form-group">
-                <label asp-for="ProviderName" class="control-label"></label>
-                <input asp-for="ProviderName" class="form-control" />
-                <span asp-validation-for="ProviderName" class="text-danger"></span>
+                <label class="control-label">Tipo</label>
+                <select id="cbx_maintenance_type" asp-for="TypeOfMaintenanceId" class="form-control">
+                    @if (Model.TypeOfMaintenanceId.Equals("P"))
+                    {
+                        <option value="P" selected>Mantenimiento preventivo</option>
+                    }
+                    else
+                    {
+                        <option value="P">Mantenimiento preventivo</option>
+                    }
+
+                    @if (Model.TypeOfMaintenanceId.Equals("R"))
+                    {
+                        <option value="R" selected>Mantenimiento correctivo (reparación)</option>
+                    }
+                    else
+                    {
+                        <option value="R">Mantenimiento correctivo (reparación)</option>
+                    }
+
+                    @if (Model.TypeOfMaintenanceId.Equals("C"))
+                    {
+                        <option value="C" selected>Calibración</option>
+                    }
+                    else
+                    {
+                        <option value="C">Calibración</option>
+                    }
+                </select>
+                <span asp-validation-for="TypeOfMaintenanceId" class="text-danger"></span>
             </div>
+
+            <!--Responsable-->
             <div class="form-group">
-                <label asp-for="ProviderIdentificaton" class="control-label"></label>
-                <input asp-for="ProviderIdentificaton" class="form-control" />
-                <span asp-validation-for="ProviderIdentificaton" class="text-danger"></span>
+                <h5 class="control-label" style="color:yellowgreen">Responsable</h5>
+                <hr />
+
+                <button id="btnShowModalResponsable"
+                        type="button"
+                        style="background-color:yellowgreen; color:white"
+                        class="btn btn-primary"
+                        onclick="ShowResponsableModal()">
+                    Seleccionar empleado
+                </button>
+
+                <div id="div_responsable"></div>
             </div>
+
+            <!--Equipment information-->
             <div class="form-group">
-                <label asp-for="ProviderAddress" class="control-label"></label>
-                <input asp-for="ProviderAddress" class="form-control" />
-                <span asp-validation-for="ProviderAddress" class="text-danger"></span>
+                <h5 class="control-label" style="color:yellowgreen">Información del equipo</h5>
+                <hr />
+
+                <button id="btnShowModalEquipment"
+                        type="button"
+                        style="background-color:yellowgreen; color:white"
+                        class="btn btn-primary"
+                        onclick="ShowEquipmentModal()">
+                    Seleccionar equipo
+                </button>
+
+                <div id="div_equipment_info"></div>
             </div>
-            <div class="form-group">
-                <label asp-for="ProviderPhoneNumber" class="control-label"></label>
-                <input asp-for="ProviderPhoneNumber" class="form-control" />
-                <span asp-validation-for="ProviderPhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProviderContactName" class="control-label"></label>
-                <input asp-for="ProviderContactName" class="form-control" />
-                <span asp-validation-for="ProviderContactName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SparePartsChanged" class="control-label"></label>
-                <input asp-for="SparePartsChanged" class="form-control" />
-                <span asp-validation-for="SparePartsChanged" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NextMaintenanceDate" class="control-label"></label>
-                <input asp-for="NextMaintenanceDate" class="form-control" />
-                <span asp-validation-for="NextMaintenanceDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Observations" class="control-label"></label>
-                <input asp-for="Observations" class="form-control" />
-                <span asp-validation-for="Observations" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Location" class="control-label"></label>
                 <input asp-for="Location" class="form-control" />
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="StockNumber" class="control-label"></label>
                 <input asp-for="StockNumber" class="form-control" />
                 <span asp-validation-for="StockNumber" class="text-danger"></span>
             </div>
+
             <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!--Service provider-->
+            <div class="form-group">
+                <h5 class="control-label" style="color:yellowgreen">Información del contratista de mantenimiento</h5>
+                <hr />
+
+                <button id="btnShowModalProvider"
+                        type="button"
+                        style="background-color:yellowgreen; color:white"
+                        class="btn btn-primary"
+                        onclick="ShowProviderModal()">
+                    Seleccionar contratista
+                </button>
+
+                <div class="form-group">
+                    <label asp-for="ProviderIdentificaton" class="control-label"></label>
+                    <input asp-for="ProviderIdentificaton" class="form-control" id="txt_provider_identification" />
+                    <span asp-validation-for="ProviderIdentificaton" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ProviderName" class="control-label"></label>
+                    <input asp-for="ProviderName" class="form-control" id="txt_provider_name" />
+                    <span asp-validation-for="ProviderName" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="ProviderAddress" class="control-label"></label>
+                    <input asp-for="ProviderAddress" class="form-control" id="txt_provider_address" />
+                    <span asp-validation-for="ProviderAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProviderPhoneNumber" class="control-label"></label>
+                    <input asp-for="ProviderPhoneNumber" class="form-control" id="txt_provider_phone_number" />
+                    <span asp-validation-for="ProviderPhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProviderContactName" class="control-label"></label>
+                    <input asp-for="ProviderContactName" class="form-control" id="txt_provider_contact_name" />
+                    <span asp-validation-for="ProviderContactName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!--Other maintenance data-->
+            <h5 style="color:yellowgreen">Otra información</h5>
+            <hr />
+
+            <div class="form-group">
+                <label asp-for="SparePartsChanged" class="control-label"></label>
+                @Html.TextAreaFor(model => model.SparePartsChanged, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="SparePartsChanged" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Observations" class="control-label"></label>
+                @Html.TextAreaFor(model => model.Observations, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="Observations" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NextMaintenanceDate" class="control-label"></label>
+                <input asp-for="NextMaintenanceDate" class="form-control" />
+                <span asp-validation-for="NextMaintenanceDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" value="Mantenimiento" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="RegisterStatus" class="control-label"></label>
-                <input asp-for="RegisterStatus" class="form-control" />
+                <input asp-for="RegisterStatus" class="form-control" value="1" />
                 <span asp-validation-for="RegisterStatus" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="CreationDatetime" class="control-label"></label>
-                <input asp-for="CreationDatetime" class="form-control" />
+                <input asp-for="CreationDatetime" class="form-control" type="datetime" />
                 <span asp-validation-for="CreationDatetime" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="ModificationDatetime" class="control-label"></label>
-                <input asp-for="ModificationDatetime" class="form-control" />
+                <input asp-for="ModificationDatetime" class="form-control" type="datetime" />
                 <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen;color:white" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Regresar</a>
 </div>
+
+<!--Modal para seleccionar el equipo-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalEquipment" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para seleccionar el proveedor-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalProvider" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para seleccionar el responsable-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalResponsable" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+    $(window).on('load', function () {
+        selectResponsableOnLoad();
+        selectedEquipmentOnLoad();
+    });
+
+    function selectResponsableOnLoad() {
+        selectPersonOnLoad($("#txt_responsable_id").val());
+    }
+
+    function selectedEquipmentOnLoad() {
+        selectEquipmentOnLoad($("#txt_equip_id").val());
+    }
+
+    function ShowEquipmentModal() {
+        var url = "@Url.Action("GetEquipments")";
+
+        // Show modal for responsable
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#modalEquipment").modal('show');
+        });
+    }
+
+    function ShowProviderModal() {
+        var url = "@Url.Action("GetProviders")";
+
+        // Show modal for provider
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#modalProvider").modal('show');
+        });
+    }
+
+    function ShowResponsableModal() {
+        var url = "@Url.Action("GetPersons")";
+
+        // Show modal for responsable
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#modalResponsable").modal('show');
+        });
+    }
+
+    function HideEquipmentModal() {
+        $("#modalEquipment").modal('hide');
+        $('.modal-content').html("");
+    }
+
+    function HideProviderModal() {
+        $("#modalProvider").modal('hide');
+        $('.modal-content').html("");
+    }
+
+    function HideResponsableModal() {
+        $("#modalResponsable").modal('hide');
+        $('.modal-content').html("");
+    }
+
+    function selectPerson(id) {
+        HideResponsableModal();
+
+        var url = "@Url.Action("GetPerson")";
+
+        // Obtains the person data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_responsable").html(data);
+                $("#txt_responsable_id").val($("#txt_person_id").val());
+            }
+        });
+    }
+
+    function selectProvider(id) {
+        HideProviderModal();
+
+        var url = "@Url.Action("GetProvider")";
+
+        // Obtains the povider data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                var info = data.split(";");
+                if (info.length > 0)
+                {
+                    $("#txt_provider_identification").val(info[0]);
+                    $("#txt_provider_name").val(info[1]);
+                    $("#txt_provider_address").val(info[2]);
+                    $("#txt_provider_phone_number").val(info[3]);
+                    $("#txt_provider_contact_name").val(info[4]);
+                }
+            }
+        });
+    }
+
+    function selectEquipment(id) {
+        HideEquipmentModal();
+
+        var url = "@Url.Action("GetEquipment")";
+
+        // Obtains the equipment data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_equipment_info").html(data);
+                $("#txt_equip_id").val($("#txt_equipment_id").val());
+            }
+        });
+    }
+
+    function selectPersonOnLoad(id) {
+        var url = "@Url.Action("GetPersonByGuid")";
+
+        // Obtains the person data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_responsable").html(data);
+            }
+        });
+    }
+
+    function selectEquipmentOnLoad(id) {
+        var url = "@Url.Action("GetEquipment")";
+
+        // Obtains the equipment data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_equipment_info").html(data);
+            }
+        });
+    }
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
