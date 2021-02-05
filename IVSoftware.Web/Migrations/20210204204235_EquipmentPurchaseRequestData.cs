@@ -3,44 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IVSoftware.Web.Migrations
 {
-    public partial class EquipmentPurchaseRequestAdded : Migration
+    public partial class EquipmentPurchaseRequestData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_PersonEvaluations",
-                table: "PersonEvaluations");
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "Id",
-                table: "PersonEvaluations",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "Date",
-                table: "PersonEvaluations",
-                type: "datetime2",
-                nullable: true);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "IsApproved",
-                table: "PersonEvaluations",
-                type: "bit",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "Score",
-                table: "PersonEvaluations",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_PersonEvaluations",
-                table: "PersonEvaluations",
-                column: "Id");
-
             migrationBuilder.CreateTable(
                 name: "EquipmentPurchaseRequests",
                 columns: table => new
@@ -88,25 +54,6 @@ namespace IVSoftware.Web.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "NotificationSetting",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NotificationSetting", x => x.Id);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PersonEvaluations_PersonId",
-                table: "PersonEvaluations",
-                column: "PersonId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_EquipmentPurchaseRequests_AnalystPersonId",
                 table: "EquipmentPurchaseRequests",
@@ -121,39 +68,7 @@ namespace IVSoftware.Web.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EquipmentPurchaseRequests");
-
-            migrationBuilder.DropTable(
-                name: "NotificationSetting");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_PersonEvaluations",
-                table: "PersonEvaluations");
-
-            migrationBuilder.DropIndex(
-                name: "IX_PersonEvaluations_PersonId",
-                table: "PersonEvaluations");
-
-            migrationBuilder.DropColumn(
-                name: "Id",
-                table: "PersonEvaluations");
-
-            migrationBuilder.DropColumn(
-                name: "Date",
-                table: "PersonEvaluations");
-
-            migrationBuilder.DropColumn(
-                name: "IsApproved",
-                table: "PersonEvaluations");
-
-            migrationBuilder.DropColumn(
-                name: "Score",
-                table: "PersonEvaluations");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_PersonEvaluations",
-                table: "PersonEvaluations",
-                columns: new[] { "PersonId", "EvaluationId" });
+                name: "EquipmentPurchaseRequests");            
         }
     }
 }

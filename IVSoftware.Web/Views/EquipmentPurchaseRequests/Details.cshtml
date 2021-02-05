@@ -1,0 +1,280 @@
+﻿@model IVSoftware.Data.Models.EquipmentPurchaseRequest
+
+@{
+    ViewData["Title"] = "Solicitud de compra";
+}
+
+<h1>Solicitud de compra # @Html.DisplayFor(model => model.Id)</h1>
+
+<div>
+    @if (Model.RequestStatus == 2)
+    {
+        <dl class="row">
+            <dt class="col-sm-2" style="white-space:nowrap">@Html.DisplayNameFor(model => model.RequestStatus)</dt>
+            <dd class="col-sm-10" style="margin-left:5px; color:yellowgreen"> Aprobada</dd>
+        </dl>
+    }
+    else if (Model.RequestStatus == 3)
+    {
+        <dl class="row">
+            <dt class="col-sm-2" style="white-space:nowrap">@Html.DisplayNameFor(model => model.RequestStatus)</dt>
+            <dd class="col-sm-10" style="margin-left:5px; color:red"> Rechazada</dd>
+        </dl>
+    }
+    else
+    {
+        <dl class="row">
+            <dt class="col-sm-2" style="white-space:nowrap">@Html.DisplayNameFor(model => model.RequestStatus)</dt>
+            <dd class="col-sm-10" style="margin-left:5px"> Sin respuesta</dd>
+        </dl>
+    }
+
+    @if (Model.RequestStatus == 2 || Model.RequestStatus == 3)
+    {
+        <dl class="row">
+            <dt class="col-sm-2" style="white-space:nowrap">@Html.DisplayNameFor(model => model.RequestStatusDate)</dt>
+            <dd class="col-sm-10" style="margin-left:5px">@Html.DisplayFor(model => model.RequestStatusDate)</dd>
+
+            <dt class="col-sm-2" style="white-space:nowrap">@Html.DisplayNameFor(model => model.StatusChangePerson)</dt>
+            @if (Model.StatusChangePerson != null && Model.StatusChangePerson.FullName != null && !string.IsNullOrEmpty(Model.StatusChangePerson.FullName.Replace(" ", string.Empty)))
+            {
+                <dd class="col-sm-10" style="margin-left:5px">@Html.DisplayFor(model => model.StatusChangePerson.FullName)</dd>
+            }
+            else
+            {
+                <dd class="col-sm-10" style="margin-left:5px">@Html.Raw("No especificado")</dd>
+            }
+        </dl>
+    }
+
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RequestDate)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RequestDate)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.EquipmentName)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.EquipmentName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Parameters)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Parameters)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Justification)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Justification)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ResponsibleAnalyst)
+        </dt>
+        @if (Model.ResponsibleAnalyst != null && Model.ResponsibleAnalyst.FullName != null && !string.IsNullOrEmpty(Model.ResponsibleAnalyst.FullName.Replace(" ", string.Empty)))
+        {
+            <dd class="col-sm-10" style="margin-left:5px">
+                @Html.DisplayFor(model => model.ResponsibleAnalyst.FullName)
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10" style="margin-left:5px">
+                @Html.Raw("No especificado")
+            </dd>
+        }
+    </dl>
+
+    <h5 style="color:yellowgreen">Especificaciones técnicas generales</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.WorkRange)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.WorkRange)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Voltage)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Voltage)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Accuracy)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Accuracy)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.MinimumRead)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.MinimumRead)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.NetworkCompatibility)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.NetworkCompatibility)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Frequency)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Frequency)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.EnvironmentConditions)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.EnvironmentConditions)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Accessories)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Accessories)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RequiresLearning)
+        </dt>
+
+        @if (Model.RequiresLearning)
+        {
+            <dd class="col-sm-10" style="margin-left:5px">
+                @Html.Raw("Sí")
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10" style="margin-left:5px">
+                @Html.Raw("No")
+            </dd>
+        }
+
+        @if (Model.RequiresLearning)
+        {
+            <dt class="col-sm-2" style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.HourlyIntensity)
+            </dt>
+            <dd class="col-sm-10" style="margin-left:5px">
+                @Html.DisplayFor(model => model.HourlyIntensity)
+            </dd>
+        }
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Warranty)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Warranty)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Observations)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.Observations)
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Información adicional</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegisterStatus)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RegisterStatusName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.CreationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.CreationDatetime)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ModificationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>
+    </dl>
+
+</div>
+
+<!--Add buttons-->
+@if (Model.RequestStatus < 2 || Model.RequestStatus > 3)
+{
+    <div>
+        <button class="btn btn-primary" style="background-color:yellowgreen; color:white" onclick="AproveRequest(@Model.Id)">Aprobar solicitud</button>
+        <button class="btn btn-danger" style="color:white" onclick="RejectRequest(@Model.Id)">Rechazar solicitud</button>
+    </div>
+    
+}
+
+<div>
+    <a asp-action="Index" id="link_back">Regresar</a>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+    function AproveRequest(_id) {
+        var r = confirm("¿Realmente desea APROBAR la solicitud?");
+
+        if (r == true)
+        {
+            var url = "@Url.Action("AproveRequest")";
+
+            // Show modal for responsable
+            $.get(url, { id: _id }, function (data) {
+                if (data == "Ok") {
+                    var evt = document.createEvent("MouseEvents");
+                    evt.initMouseEvent("click", true, true, window,
+                        0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                    var a = document.getElementById("link_back");
+                    a.dispatchEvent(evt);
+                }
+                else
+                {
+                    alert(data);
+                }
+            });
+        }
+    }
+
+    function RejectRequest(_id) {
+        var r = confirm("¿Realmente desea RECHAZAR la solicitud?");
+
+        if (r == true)
+        {
+            var url = "@Url.Action("RejectRequest")";
+
+            // Show modal for responsable
+            $.get(url, { id: _id }, function (data) {
+                if (data == "Ok") {
+                    var evt = document.createEvent("MouseEvents");
+                    evt.initMouseEvent("click", true, true, window,
+                        0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                    var a = document.getElementById("link_back");
+                    a.dispatchEvent(evt);
+                }
+                else {
+                    alert(data);
+                }
+            });
+        }
+    }
+</script>
+

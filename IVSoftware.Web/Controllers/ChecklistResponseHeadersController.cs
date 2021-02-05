@@ -89,7 +89,7 @@ namespace IVSoftware.Web.Controllers
                     User currentUser = await _userManager.GetUserAsync(User);
                     if (currentUser != null)
                     {
-                        header.ValidatedBy = await _personService.GetByIdAsync(Guid.Parse(currentUser.Id));
+                        header.ValidatedBy = (await _personService.FindByConditionAsync(x => x.UserId != null && x.UserId.Equals(currentUser.Id))).FirstOrDefault();
                     }
                 }
                 catch(Exception ex)

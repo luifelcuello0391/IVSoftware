@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -26,6 +27,7 @@ namespace IVSoftware.Data.Models
         [DisplayName("Justificación")]
         public string Justification { get; set; }
 
+        [Required(ErrorMessage = "No se ha seleccionado el analista responsable.")]
         public Guid? AnalystPersonId { get; set; }
 
         [DisplayName("Analista responsable")]
@@ -49,7 +51,7 @@ namespace IVSoftware.Data.Models
         [DisplayName("Frecuencia")]
         public string Frequency { get; set; }
 
-        [DisplayName("Conficiones ambientales")]
+        [DisplayName("Condiciones ambientales")]
         public string EnvironmentConditions { get; set; }
 
         [DisplayName("Accesorios")]
@@ -78,10 +80,10 @@ namespace IVSoftware.Data.Models
                 switch(RequestStatus)
                 {
                     case 2:
-                        return "Aprobado";
+                        return "Aprobada";
 
                     case 3:
-                        return "Rechazado";
+                        return "Rechazada";
 
                     default:
                         return "Nueva";

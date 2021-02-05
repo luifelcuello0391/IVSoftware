@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    [Migration("20210204185032_EquipmentPurchaseRequestAdded")]
-    partial class EquipmentPurchaseRequestAdded
+    [Migration("20210204204235_EquipmentPurchaseRequestData")]
+    partial class EquipmentPurchaseRequestData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

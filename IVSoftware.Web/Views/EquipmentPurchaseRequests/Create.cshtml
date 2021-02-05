@@ -1,0 +1,254 @@
+﻿@model IVSoftware.Data.Models.EquipmentPurchaseRequest
+
+@{
+    ViewData["Title"] = "Solicitud de compra de equipo";
+}
+
+<h1>Crear</h1>
+
+<h4>Solicitud de compra de equipo</h4>
+<hr />
+<div>
+    <div>
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input hidden asp-for="AnalystPersonId" class="form-control" id="txt_responsable_id" />
+
+            <div class="form-group">
+                <label asp-for="RequestDate" class="control-label"></label>
+                <input asp-for="RequestDate" class="form-control" value="@DateTime.Now" />
+                <span asp-validation-for="RequestDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EquipmentName" class="control-label"></label>
+                <input asp-for="EquipmentName" class="form-control" />
+                <span asp-validation-for="EquipmentName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Parameters" class="control-label"></label>
+                <input asp-for="Parameters" class="form-control" />
+                <span asp-validation-for="Parameters" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Justification" class="control-label"></label>
+                @Html.TextAreaFor(model => model.Justification, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="Justification" class="text-danger"></span>
+            </div>
+
+            <!--Responsable-->
+            <div class="form-group">
+                <h5 class="control-label" style="color:yellowgreen">Analista responsable</h5>
+                <hr />
+
+                <button id="btnShowModalResponsable"
+                        type="button"
+                        style="background-color:yellowgreen; color:white"
+                        class="btn btn-primary"
+                        onclick="ShowResponsableModal()">
+                    Seleccionar responsable
+                </button>
+
+                <div id="div_responsable"></div>
+            </div>
+
+            <h5 style="color:yellowgreen">Especificaciones técnicas generales</h5>
+            <hr />
+            <div class="form-group">
+                <label asp-for="WorkRange" class="control-label"></label>
+                <input asp-for="WorkRange" class="form-control" />
+                <span asp-validation-for="WorkRange" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Voltage" class="control-label"></label>
+                <input asp-for="Voltage" class="form-control" />
+                <span asp-validation-for="Voltage" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Accuracy" class="control-label"></label>
+                <input asp-for="Accuracy" class="form-control" />
+                <span asp-validation-for="Accuracy" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MinimumRead" class="control-label"></label>
+                <input asp-for="MinimumRead" class="form-control" />
+                <span asp-validation-for="MinimumRead" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NetworkCompatibility" class="control-label"></label>
+                <input asp-for="NetworkCompatibility" class="form-control" />
+                <span asp-validation-for="NetworkCompatibility" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Frequency" class="control-label"></label>
+                <input asp-for="Frequency" class="form-control" />
+                <span asp-validation-for="Frequency" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EnvironmentConditions" class="control-label"></label>
+                <input asp-for="EnvironmentConditions" class="form-control" />
+                <span asp-validation-for="EnvironmentConditions" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Accessories" class="control-label"></label>
+                @Html.TextAreaFor(model => model.Accessories, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="Accessories" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input id="chk_learning" type="checkbox" class="form-check-input" asp-for="RequiresLearning" onclick="onLearningCheckedChanged()" /> @Html.DisplayNameFor(model => model.RequiresLearning)
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HourlyIntensity" class="control-label"></label>
+                <input id="txt_hourly" asp-for="HourlyIntensity" class="form-control" disabled value="0" min="0" />
+                <span asp-validation-for="HourlyIntensity" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Warranty" class="control-label"></label>
+                <input asp-for="Warranty" class="form-control" />
+                <span asp-validation-for="Warranty" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Observations" class="control-label"></label>
+                @Html.TextAreaFor(model => model.Observations, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="Observations" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="RequestStatus" class="control-label"></label>
+                <input asp-for="RequestStatus" class="form-control" value="1" />
+                <span asp-validation-for="RequestStatus" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="RequestStatusDate" class="control-label"></label>
+                <input asp-for="RequestStatusDate" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="RequestStatusDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" value="Solicitud de compra" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="RegisterStatus" class="control-label"></label>
+                <input asp-for="RegisterStatus" class="form-control" value="1" />
+                <span asp-validation-for="RegisterStatus" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="CreationDatetime" class="control-label"></label>
+                <input asp-for="CreationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="CreationDatetime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="ModificationDatetime" class="control-label"></label>
+                <input asp-for="ModificationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar</a>
+</div>
+
+<!--Modal para seleccionar el responsable-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalResponsable" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+<script>
+    function onLearningCheckedChanged() {
+        var confirm = document.getElementById("chk_learning");
+
+        if (confirm.checked)
+        {
+            $("#txt_hourly").val(1);
+            $("#txt_hourly").attr({
+                'min': '1'
+            });
+            $("#txt_hourly").removeAttr('disabled');
+        }
+        else
+        {
+            $("#txt_hourly").attr({
+                'min': '0'
+            });
+            $("#txt_hourly").val(0);
+            $("#txt_hourly").attr({
+                'disabled': 'disabled'
+            });
+        }
+    }
+
+    function ShowResponsableModal() {
+        var url = "@Url.Action("GetPersons")";
+
+        // Show modal for responsable
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#modalResponsable").modal('show');
+        });
+    }
+
+    function HideResponsableModal() {
+        $("#modalResponsable").modal('hide');
+        $('.modal-content').html("");
+    }
+
+    function selectPerson(id) {
+        HideResponsableModal();
+
+        var url = "@Url.Action("GetPerson")";
+
+        // Obtains the person data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#div_responsable").html(data);
+                $("#txt_responsable_id").val($("#txt_person_id").val());
+            }
+        });
+    }
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
