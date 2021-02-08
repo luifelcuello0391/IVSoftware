@@ -7,6 +7,8 @@ namespace IVSoftware.Web.Data
     {
         public int Id { get; set; }
 
+        public Guid PersonEvaluationId { get; set; }
+
         public string Name { get; set; }
 
         public DateTime Date { get; set; }

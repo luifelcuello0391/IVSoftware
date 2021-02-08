@@ -29,6 +29,10 @@ namespace IVSoftware.Data.Configurations
                 .HasMaxLength(int.MaxValue);
 
             builder
+                .Property(x => x.AssignedDate)
+                .IsRequired();
+
+            builder
                 .Property(x => x.Date)
                 .IsRequired(false);
 

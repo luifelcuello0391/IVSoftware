@@ -17,6 +17,9 @@ namespace IVSoftware.Data.Models
 
         public string ResultJson { get; set; }
 
+        [DisplayName("Fecha de asignación")]
+        public DateTime AssignedDate { get; set; }
+
         [DisplayName("Fecha de realización")]
         public DateTime? Date { get; set; }
 
