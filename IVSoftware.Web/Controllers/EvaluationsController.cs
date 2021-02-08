@@ -95,7 +95,8 @@ namespace IVSoftware.Web.Controllers
                 ResultJson = pe.ResultJson,
                 Date = pe.Date,
                 Score = pe.Score,
-                Id = pe.Id
+                Id = pe.Id,
+                AssignedDate = pe.AssignedDate
             });
 
             evaluation.PersonEvaluations = resultPersonEvaluation.ToList();
@@ -217,6 +218,11 @@ namespace IVSoftware.Web.Controllers
 
                     if (personEvaluationToAdd != null && personEvaluationToAdd.Count > 0)
                     {
+                        foreach (var personEvaluation in personEvaluationToAdd)
+                        {
+                            personEvaluation.AssignedDate = DateTime.Now;
+                        }
+
                         _context.PersonEvaluations.AddRange(personEvaluationToAdd);
                         commitChanges = true;
                     }
@@ -341,7 +347,8 @@ namespace IVSoftware.Web.Controllers
                     ResultJson = pe.ResultJson,
                     Date = pe.Date,
                     Score = pe.Score,
-                    Id = pe.Id
+                    Id = pe.Id,
+                    AssignedDate = pe.AssignedDate
                 });
                 return View(result);
             }

@@ -130,6 +130,9 @@
                             @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().Person.FullName)
                         </th>
                         <th>
+                            @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().AssignedDate)
+                        </th>
+                        <th>
                             @Html.DisplayNameFor(model => model.PersonEvaluations.FirstOrDefault().IsApproved)
                         </th>
                         <th>
@@ -147,6 +150,9 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.Person.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AssignedDate)
                         </td>
                         <td>
                             @if (string.IsNullOrEmpty(item.ResultJson))
