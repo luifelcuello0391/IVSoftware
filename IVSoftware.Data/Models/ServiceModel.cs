@@ -12,7 +12,7 @@ namespace IVSoftware.Data.Models
     public class ServiceModel : BaseModelData
     {
         public int Id { get; set; }
-        [DisplayName("Código")]
+        [DisplayName("Código de facturación")]
         public int Code { get; set; }
         [DisplayName("Observaciones particulares de la prestación del servicio")]
         public string Description { get; set; }

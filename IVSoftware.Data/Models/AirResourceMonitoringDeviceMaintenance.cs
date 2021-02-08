@@ -55,7 +55,7 @@ namespace IVSoftware.Data.Models
         public string ProviderContactName { get; set; }
         #endregion
 
-        [DisplayName("Respuestos cambiados")]
+        [DisplayName("Repuestos cambiados")]
         public string SparePartsChanged { get; set; }
         [DisplayName("Próximo mantenimiento")]
         public DateTime NextMaintenanceDate { get; set; }
