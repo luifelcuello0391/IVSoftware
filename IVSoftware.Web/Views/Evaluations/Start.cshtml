@@ -1,41 +1,42 @@
-﻿@model Evaluation
+﻿@model PersonEvaluation
 
 @{
     ViewData["Title"] = "Mis evaluaciones";
 }
 
-<h5 class="text-primary titulo">Evaluación - @Model.Name</h5>
+<h5 class="text-primary titulo">Evaluación - @Model.Evaluation.Name</h5>
 <br />
 <br />
 
 <form asp-action="Start">
     <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="Name" />
-    <input type="hidden" asp-for="Date" />
-    <input type="hidden" asp-for="PercentageToPass" />
-    @for (int i = 0; i < Model.QuestionsEvaluation.Count; i++)
+    <input type="hidden" asp-for="EvaluationId" />
+    <input type="hidden" asp-for="Evaluation.Name" />
+    <input type="hidden" asp-for="Evaluation.Date" />
+    <input type="hidden" asp-for="Evaluation.PercentageToPass" />
+    @for (int i = 0; i < Model.Evaluation.QuestionsEvaluation.Count; i++)
     {
         <div>
             <div class="row">
-                <div class="col question" data-id="@Model.QuestionsEvaluation.ElementAtOrDefault(i).Question.Id">
-                    <input type="hidden" asp-for="QuestionsEvaluation.ElementAtOrDefault(i).Question.Question" />
+                <div class="col question" data-id="@Model.Evaluation.QuestionsEvaluation.ElementAtOrDefault(i).Question.Id">
+                    <input type="hidden" asp-for="Evaluation.QuestionsEvaluation.ElementAtOrDefault(i).Question.Question" />
                     <p>
-                        @Model.QuestionsEvaluation.ElementAtOrDefault(i).Question.Question
+                        @Model.Evaluation.QuestionsEvaluation.ElementAtOrDefault(i).Question.Question
                     </p>
 
-                    @for (int j = 0; j < @Model.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.Count; j++)
+                    @for (int j = 0; j < @Model.Evaluation.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.Count; j++)
                     {
                         <div class="row">
-                            <div class="col answer" data-id="@Model.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).Id">
-                                <input type="hidden" asp-for="QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).Answer" />
-                                <input type="hidden" asp-for="QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).IsRight" />
+                            <div class="col answer" data-id="@Model.Evaluation.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).Id">
+                                <input type="hidden" asp-for="Evaluation.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).Answer" />
+                                <input type="hidden" asp-for="Evaluation.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).IsRight" />
                                 <div class="form-check">
                                     <input class="form-check-input"
                                            type="checkbox"
                                            value="true"
-                                           asp-for="QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).IsSelected">
-                                    <label class="form-check-label" asp-for="QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).IsSelected">
-                                        @Model.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).Answer
+                                           asp-for="Evaluation.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).IsSelected">
+                                    <label class="form-check-label" asp-for="Evaluation.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).IsSelected">
+                                        @Model.Evaluation.QuestionsEvaluation.ElementAtOrDefault(i).Question.QuestionAnswers.ElementAtOrDefault(j).Answer
                                     </label>
                                 </div>
                             </div>
@@ -62,14 +63,15 @@
     <script>
         $(document).ready(function () {
             $('#sendEvaluation').on("click", function () {
-                let id = $('#Id').val();
-                let name = $('#Name').val();
-                let date = $('#Date').val();
-                let percentageToPass = $('#PercentageToPass').val();
+                let id = $('#EvaluationId').val();
+                let personEvaluationId = $('#Id').val();
+                let name = $('#Evaluation_Name').val();
+                let date = $('#Evaluation_Date').val();
+                let percentageToPass = $('#Evaluation_PercentageToPass').val();
                 let questions = [];
                 $(".question").each(function (index) {
                     let questionId = "0";
-                    let question = $("#Question_Question").val();
+                    let question = $(this).find("#Question_Question").val();
                     let answers = [];
                     if (typeof $(this).data('id') !== 'undefined') {
                         questionId = $(this).data('id');
@@ -108,6 +110,7 @@
                     method: 'POST',
                     data: {
                         Id: id,
+                        PersonEvaluationId: personEvaluationId,
                         Name: name,
                         Date: date,
                         PercentageToPass: percentageToPass,

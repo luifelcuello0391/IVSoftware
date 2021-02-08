@@ -18,13 +18,15 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+    <button type="button" class="btn btn-secondary" id="cancel" data-dismiss="modal">Cancelar</button>
     <button type="button" class="btn btn-primary" id="Reschedule">Reprogramar</button>
 </div>
 
 <script>
     $(document).ready(function () {
         $('#Reschedule').on("click", function () {
+            $(this).prop('disabled', true);
+            $('#cancel').prop('disabled', true);
             let Id = $('#oldId').val();
             let Date = $('#newDate').val();
 
@@ -41,6 +43,8 @@
                     if (data.lastIndexOf("<div", 6) != -1) {
                         $('.modal-content').html(data);
                         $('#assign-modal').modal('show');
+                        $('#Reschedule').prop('disabled', false);
+                        $('#cancel').prop('disabled', true);
                     }
                     else {
                         location.reload();

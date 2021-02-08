@@ -64,11 +64,11 @@
             <td align="right" style="white-space:nowrap">
                 @if (string.IsNullOrEmpty(item.ResultJson))
                 {
-                    <a asp-action="Start" asp-route-id="@item.EvaluationId" title="Iniciar"><i class="fas fa-play" style="font-size:larger"></i></a>
+                    <a asp-action="Start" asp-route-id="@item.Id" title="Iniciar"><i class="fas fa-play" style="font-size:larger"></i></a>
                 }
                 else
                 {
-                    <a asp-action="Details" asp-route-id="@item.EvaluationId" title="Ver"><i class="fas fa-eye" style="font-size:larger"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id" title="Ver"><i class="fas fa-eye" style="font-size:larger"></i></a>
                 }
             </td>
         </tr>

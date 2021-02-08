@@ -349,21 +349,12 @@ namespace IVSoftware.Web.Controllers
             return View(new List<PersonEvaluation>());
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(Guid id)
         {
             try
             {
-                User user = await _userManager.GetUserAsync(User);
-                if (user == null) { return NotFound(); }
-
-                Person person = (await _personService.FindByConditionAsync(p => p.UserId == user.Id)).FirstOrDefault();
-                if (person == null) { return NotFound(); }
-
                 PersonEvaluation evaluation =
-                    (
-                        await _personEvaluationService
-                            .FindByConditionAsync(pe => pe.EvaluationId == id && pe.PersonId == person.Id)
-                    ).FirstOrDefault();
+                    await _personEvaluationService.GetByIdAsync(id);
 
                 if (evaluation == null) { return NotFound(); }
 
@@ -380,12 +371,12 @@ namespace IVSoftware.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> Start(int id)
+        public async Task<IActionResult> Start(Guid id)
         {
-            Evaluation evaluation = await _evaluationService.GetByIdAsync(id);
-            if(evaluation == null) { return NotFound(); }
+            PersonEvaluation personEvaluation = await _personEvaluationService.GetByIdAsync(id);
+            if(personEvaluation == null || personEvaluation?.Evaluation == null) { return NotFound(); }
 
-            return View(evaluation);
+            return View(personEvaluation);
         }
 
         [HttpPost]
@@ -416,13 +407,8 @@ namespace IVSoftware.Web.Controllers
                 }
 
                 PersonEvaluation personEvaluation =
-                (
-                    await _personEvaluationService.FindByConditionAsync(
-                        pe => pe.EvaluationId == evaluation.Id &&
-                        pe.PersonId == person.Id &&
-                        string.IsNullOrEmpty(pe.ResultJson)
-                    )
-                ).FirstOrDefault();
+                    await _personEvaluationService.GetByIdAsync(evaluation.PersonEvaluationId);
+
                 if (personEvaluation == null)
                 {
                     return JsonConvert.SerializeObject(
@@ -468,7 +454,6 @@ namespace IVSoftware.Web.Controllers
                     {
                         PersonEvaluation newPersonEvaluation = new PersonEvaluation()
                         {
-                            Date = model.Date,
                             EvaluationId = personEvaluation.EvaluationId,
                             PersonId = personEvaluation.PersonId
                         };
