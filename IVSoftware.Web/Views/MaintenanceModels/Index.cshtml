@@ -25,6 +25,10 @@
             </th>
 
             <th style="white-space:nowrap">
+                @Html.Raw("Serie del equipo")
+            </th>
+
+            <th style="white-space:nowrap">
                 @Html.Raw("Contratista de mantenimiento")
             </th>
 
@@ -60,9 +64,31 @@
                 @Html.DisplayFor(modelItem => item.TypeOfMaintenance)
             </td>
 
-            <td style="white-space:nowrap">
-                @Html.DisplayFor(modelItem => item.Equip.Name)
-            </td>
+            @if (item.Equip != null && item.Equip.Name != null && !string.IsNullOrEmpty(item.Equip.Name.Replace(" ", string.Empty)))
+            {
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.Equip.Name)
+                </td>
+            }
+            else
+            {
+                <td style="white-space:nowrap">
+                    @Html.Raw("No especificada")
+                </td>
+            }
+
+            @if (item.Equip != null && item.Equip.Serie != null && !string.IsNullOrEmpty(item.Equip.Serie.Replace(" ", string.Empty)))
+            {
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.Equip.Serie)
+                </td>
+            }
+            else
+            {
+                <td style="white-space:nowrap">
+                    @Html.Raw("No especificada")
+                </td>
+            }
 
             <td style="white-space:nowrap">
                 @if (item.ServiceProvider != null)
