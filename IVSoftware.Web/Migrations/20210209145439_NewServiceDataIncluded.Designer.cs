@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210209145439_NewServiceDataIncluded")]
+    partial class NewServiceDataIncluded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3854,8 +3856,7 @@ namespace IVSoftware.Web.Migrations
 
                     b.HasOne("IVSoftware.Data.Models.Person", "BackupAnalyst")
                         .WithMany()
-                        .HasForeignKey("BackupAnalystId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("BackupAnalystId");
 
                     b.HasOne("IVSoftware.Data.Models.MatrixModel", "MatrixGroup")
                         .WithMany()
