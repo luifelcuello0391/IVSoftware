@@ -18,12 +18,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Periodicity)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PeriodicityAmount)
-                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -37,12 +34,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Periodicity.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PeriodicityAmount)
-                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
                 <td align="right" style="white-space:nowrap">
                     <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
                     <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>

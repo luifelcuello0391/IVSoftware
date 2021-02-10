@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-5 col-sm-12">
+        <div class="col-md-6 col-sm-12">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                     <label asp-for="Name" class="control-label" style="color:white"></label>
@@ -22,7 +22,18 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-4 col-sm-12">
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="PercentageToPass" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="PercentageToPass" class="form-control" min="50" max="100" step="10"/>
+                <span asp-validation-for="PercentageToPass" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                     <label asp-for="Date" class="control-label" style="color:white"></label>
@@ -31,13 +42,13 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-3 col-sm-12">
+        <div class="col-md-6 col-sm-12">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="PercentageToPass" class="control-label" style="color:white"></label>
+                    <label asp-for="EndDate" class="control-label" style="color:white"></label>
                 </div>
-                <input asp-for="PercentageToPass" class="form-control" min="50" max="100" step="10"/>
-                <span asp-validation-for="PercentageToPass" class="text-danger"></span>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
         </div>
     </div>
