@@ -12,7 +12,7 @@ namespace IVSoftware.Data.Models
     public class ServiceModel : BaseModelData
     {
         public int Id { get; set; }
-        [DisplayName("Código")]
+        [DisplayName("Código de facturación")]
         public int Code { get; set; }
         [DisplayName("Observaciones particulares de la prestación del servicio")]
         public string Description { get; set; }
@@ -63,13 +63,64 @@ namespace IVSoftware.Data.Models
         [DisplayName("Disponible para portal de clientes")]
         public bool AvailableForClients { get; set; } = true;
 
-        [DisplayName("Capacidad operativa semanal")]
+        [DisplayName("Capacidad de recepción de muestras semanal (promedio)")]
         public int WeeklyAssignmentQuantity { get; set; } = 1;
 
         public Guid? PersonId { get; set; }
-        [DisplayName("Responsable")]
+        [DisplayName("Analista responsable")]
 
         public virtual Person Responsable { get; set; }
+
+        // New data aded after february 5th reunion
+        public Guid? BackupPersonId { get; set; }
+
+        [DisplayName("Analista suplente")]
+        public virtual Person BackupAnalyst { get; set; }
+        
+        [DisplayName("Capacidad de recepción de muestras semanal (máximo)")]
+        public int MaximumWeeklyAssignment { get; set; } = 1;
+
+        [DisplayName("Tipo de análisis (Área)")]
+        public virtual AnalisysType AnalisysType { get; set; }
+
+        [DisplayName("Tipo de muestreo")]
+        public virtual SamplingType TypeOfSampling { get; set; }
+
+        [DisplayName("Volumen establecido por el laboratorio (mL, agua, gr suelo)")]
+        public double VolumeEstablishedByLaboratory { get; set; }
+
+        [DisplayName("Recipiente de almacenamiento")]
+        public virtual StorageContainer StorageContainer { get; set; }
+
+        [DisplayName("Lavado y condiciones de limpieza para recipiente")]
+        public string WashingCleaningConditionsForContainer { get; set; }
+
+        [DisplayName("Descripción de toma de muestras")]
+        public string SamplingCaptureDescription { get; set; }
+
+        [DisplayName("Sustancias preservantes su concentración y cantidad")]
+        public string PreservativesTheirConcentrationQuantity { get; set; }
+
+        [DisplayName("Temperatura de almacenamiento (°C)")]
+        public double StorageTemperature { get; set; }
+
+        [DisplayName("Analizar antes de (días)")]
+        public double AnalizeBefore { get; set; }
+
+        [DisplayName("Tiempo regulatorio de almacenamiento EPA (días)")]
+        public double RegulatoryStorageTime { get; set; }
+
+        [DisplayName("Días de recepción y condiciones particulares")]
+        public string ReceptionDays { get; set; }
+
+        [DisplayName("Tiempos de retención de ítem de ensayo (días)")]
+        public double TestItemRetentionTimeInDays { get; set; }
+
+        [DisplayName("Protocolo relacionado")]
+        public string RelatedProtocol { get; set; }
+
+        public virtual IEnumerable<TechnicalKnowledge> TechnicalKnowledges { get; set; }
+
 
         #region Data for working range
         [DisplayName("Precondición")]
@@ -120,8 +171,6 @@ namespace IVSoftware.Data.Models
 
         }
         #endregion
-
-        public virtual ICollection<TechnicalKnowledge> TechnicalKnowledges { get; set; }
 
     }
 }

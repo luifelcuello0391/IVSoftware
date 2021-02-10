@@ -215,6 +215,12 @@ namespace IVSoftware.Web.Models
                 .HasForeignKey(epr => epr.ResponsePersonId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            // Service - Person (Analyst) relationship ********************************************************************************
+            modelBuilder.Entity<ServiceModel>()
+                .HasOne(s => s.BackupAnalyst)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
             // Gender
             new GenderConfiguration("Gender", "Id").Map(modelBuilder);
 
