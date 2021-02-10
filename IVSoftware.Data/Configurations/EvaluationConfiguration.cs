@@ -23,6 +23,10 @@ namespace IVSoftware.Data.Configurations
                 .IsRequired();
 
             builder
+                .Property(x => x.EndDate)
+                .IsRequired();
+
+            builder
                 .Property(x => x.PeriodicityId)
                 .IsRequired(false);
 
