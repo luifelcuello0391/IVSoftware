@@ -76,7 +76,10 @@
             <td align="right" style="white-space:nowrap">
                 @if (string.IsNullOrEmpty(item.ResultJson))
                 {
-                    <a asp-action="Start" asp-route-id="@item.Id" title="Iniciar"><i class="fas fa-play" style="font-size:larger"></i></a>
+                    @if (item.Evaluation.Date <= DateTime.Now && DateTime.Now < item.Evaluation.EndDate)
+                    {
+                        <a asp-action="Start" asp-route-id="@item.Id" title="Iniciar"><i class="fas fa-play" style="font-size:larger"></i></a>
+                    }
                 }
                 else
                 {
