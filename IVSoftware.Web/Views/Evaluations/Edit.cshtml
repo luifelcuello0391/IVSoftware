@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-5 col-sm-12">
+        <div class="col-md-6 col-sm-12">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                     <label asp-for="Name" class="control-label" style="color:white"></label>
@@ -23,16 +23,7 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-4 col-sm-12">
-            <div class="form-group">
-                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="Date" class="control-label" style="color:white"></label>
-                </div>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-12">
+        <div class="col-md-6 col-sm-12">
             <div class="form-group">
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                     <label asp-for="PercentageToPass" class="control-label" style="color:white"></label>
@@ -42,28 +33,48 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Date" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="EndDate" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
     @*<div class="row">
-        <div class="col-md-4 col-sm-6">
-            <div class="form-group">
-                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="PeriodicityId" class="control-label" style="color:white"></label>
+            <div class="col-md-4 col-sm-6">
+                <div class="form-group">
+                    <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                        <label asp-for="PeriodicityId" class="control-label" style="color:white"></label>
+                    </div>
+                    <select asp-for="PeriodicityId" class="form-control"
+                            asp-items="(List<SelectListItem>) ViewBag.Periodicity">
+                    </select>
+                    <span asp-validation-for="PeriodicityId" class="text-danger"></span>
                 </div>
-                <select asp-for="PeriodicityId" class="form-control"
-                        asp-items="(List<SelectListItem>) ViewBag.Periodicity">
-                </select>
-                <span asp-validation-for="PeriodicityId" class="text-danger"></span>
             </div>
-        </div>
-        <div class="col-md-2 col-sm-6">
-            <div class="form-group">
-                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
-                    <label asp-for="PeriodicityAmount" class="control-label" style="color:white"></label>
+            <div class="col-md-2 col-sm-6">
+                <div class="form-group">
+                    <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                        <label asp-for="PeriodicityAmount" class="control-label" style="color:white"></label>
+                    </div>
+                    <input asp-for="PeriodicityAmount" class="form-control" min="0" />
+                    <span asp-validation-for="PeriodicityAmount" class="text-danger"></span>
                 </div>
-                <input asp-for="PeriodicityAmount" class="form-control" min="0" />
-                <span asp-validation-for="PeriodicityAmount" class="text-danger"></span>
             </div>
-        </div>
-    </div>*@
+        </div>*@
     <div class="row">
         <div class="col">
             <div class="form-group">
@@ -147,48 +158,48 @@
                 <tbody>
                     @foreach (var item in Model.PersonEvaluations)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Person.FullName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AssignedDate)
-                        </td>
-                        <td>
-                            @if (string.IsNullOrEmpty(item.ResultJson))
-                            {
-                                <span class="badge badge-pill badge-warning">No realizado</span>
-                            }
-                            else if (item.IsApproved.HasValue && item.IsApproved.Value)
-                            {
-                                <span class="badge badge-success">Aprobado</span>
-                            }
-                            else if (item.IsApproved.HasValue)
-                            {
-                                <span class="badge badge-pill badge-danger">No aprobado</span>
-                            }
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Score)
-                            @if (item.Score.HasValue)
-                            {
-                                <span>%</span>
-                            }
-                        </td>
-                        <td align="right" style="white-space:nowrap">
-                            @if (item.IsApproved.HasValue && !item.IsApproved.Value)
-                            {
-                                <button type="button" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" id="RescheduleBtn"
-                                        data-id="@item.Id">
-                                    Reprogramar
-                                </button>
-                            }
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Person.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AssignedDate)
+                            </td>
+                            <td>
+                                @if (string.IsNullOrEmpty(item.ResultJson))
+                                {
+                                    <span class="badge badge-pill badge-warning">No realizado</span>
+                                }
+                                else if (item.IsApproved.HasValue && item.IsApproved.Value)
+                                {
+                                    <span class="badge badge-success">Aprobado</span>
+                                }
+                                else if (item.IsApproved.HasValue)
+                                {
+                                    <span class="badge badge-pill badge-danger">No aprobado</span>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Score)
+                                @if (item.Score.HasValue)
+                                {
+                                    <span>%</span>
+                                }
+                            </td>
+                            <td align="right" style="white-space:nowrap">
+                                @if (item.IsApproved.HasValue && !item.IsApproved.Value)
+                                {
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            data-toggle="modal" id="RescheduleBtn"
+                                            data-id="@item.Id">
+                                        Reprogramar
+                                    </button>
+                                }
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -206,6 +217,7 @@
 @section Styles {
     <link href="~/lib/datatables.net/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="~/lib/datatables.net/select.dataTables.min.css" rel="stylesheet" />
+    <link href="~/lib/datatables.net/buttons.bootstrap4.min.css" rel="stylesheet" />
 }
 
 @section Scripts {
@@ -213,6 +225,9 @@
     <script src="~/lib/datatables.net/jquery.dataTables.min.js"></script>
     <script src="~/lib/datatables.net/dataTables.bootstrap4.min.js"></script>
     <script src="~/lib/datatables.net/dataTables.select.min.js"></script>
+    <script src="~/lib/datatables.net/pdfmake.min.js"></script>
+    <script src="~/lib/datatables.net/vfs_fonts.js"></script>
+    <script src="~/lib/datatables.net/datatables.buttons.min.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -270,7 +285,11 @@
             $('#AssignedUsers').DataTable({
                 language: {
                     url: '/lib/datatables.net/Spanish.json'
-                }
+                },
+                dom: '<Bf<t>ip>',
+                buttons: [
+                    'excel', 'pdf'
+                ]
             });
 
             $('#AssignedQuestions').DataTable({

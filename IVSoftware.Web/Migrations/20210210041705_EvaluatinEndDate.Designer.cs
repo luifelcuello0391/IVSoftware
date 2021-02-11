@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210210041705_EvaluatinEndDate")]
+    partial class EvaluatinEndDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,31 +112,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasIndex("PersonId");
 
                     b.ToTable("AirResourceMonitoringDevideMaintenances");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.AnalisysTechnique", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AnalisysTechnique");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.AnalisysType", b =>
@@ -1967,12 +1944,6 @@ namespace IVSoftware.Web.Migrations
                     b.Property<bool>("AcredditedByIdeam")
                         .HasColumnType("bit");
 
-                    b.Property<string>("AnalisysObservations")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("AnalisysTechniqueId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("AnalisysTypeId")
                         .HasColumnType("int");
 
@@ -2013,9 +1984,6 @@ namespace IVSoftware.Web.Migrations
                         .HasColumnType("real");
 
                     b.Property<int>("MaximumWeeklyAssignment")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MeasurementUnitId")
                         .HasColumnType("int");
 
                     b.Property<float>("MinimumValue")
@@ -2064,9 +2032,8 @@ namespace IVSoftware.Web.Migrations
                     b.Property<int?>("StorageContainerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StorageTemperature")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("StorageTemperature")
+                        .HasColumnType("float");
 
                     b.Property<double>("TestItemRetentionTimeInDays")
                         .HasColumnType("float");
@@ -2091,15 +2058,11 @@ namespace IVSoftware.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnalisysTechniqueId");
-
                     b.HasIndex("AnalisysTypeId");
 
                     b.HasIndex("BackupAnalystId");
 
                     b.HasIndex("MatrixGroupId");
-
-                    b.HasIndex("MeasurementUnitId");
 
                     b.HasIndex("PersonId");
 
@@ -3889,11 +3852,6 @@ namespace IVSoftware.Web.Migrations
 
             modelBuilder.Entity("IVSoftware.Data.Models.ServiceModel", b =>
                 {
-                    b.HasOne("IVSoftware.Data.Models.AnalisysTechnique", "AnalisysTechnique")
-                        .WithMany()
-                        .HasForeignKey("AnalisysTechniqueId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("IVSoftware.Data.Models.AnalisysType", "AnalisysType")
                         .WithMany()
                         .HasForeignKey("AnalisysTypeId")
@@ -3907,11 +3865,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasOne("IVSoftware.Data.Models.MatrixModel", "MatrixGroup")
                         .WithMany()
                         .HasForeignKey("MatrixGroupId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.MeasurementUnitModel", "MeasurementUnit")
-                        .WithMany()
-                        .HasForeignKey("MeasurementUnitId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("IVSoftware.Data.Models.Person", "Responsable")
@@ -3939,15 +3892,11 @@ namespace IVSoftware.Web.Migrations
                         .HasForeignKey("TypeOfSamplingId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("AnalisysTechnique");
-
                     b.Navigation("AnalisysType");
 
                     b.Navigation("BackupAnalyst");
 
                     b.Navigation("MatrixGroup");
-
-                    b.Navigation("MeasurementUnit");
 
                     b.Navigation("ReferenceMethod");
 

@@ -12,9 +12,13 @@ namespace IVSoftware.Data.Models
         [Required(ErrorMessage = "El {0} es requerido.")]
         public string Name { get; set; }
 
-        [DisplayName("Fecha de Evaluación")]
+        [DisplayName("Fecha inicio de Evaluación")]
         [Required(ErrorMessage = "La {0} es requerida.")]
         public DateTime Date { get; set; }
+
+        [DisplayName("Fecha fin de Evaluación")]
+        [Required(ErrorMessage = "La {0} es requerida.")]
+        public DateTime EndDate { get; set; }
 
         [DisplayName("Periodicidad")]
         public int? PeriodicityId { get; set; }

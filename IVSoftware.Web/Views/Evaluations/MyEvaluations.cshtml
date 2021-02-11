@@ -13,6 +13,12 @@
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Evaluation.Name)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Evaluation.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Evaluation.EndDate)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().AssignedDate)
             </th>
             <th>
@@ -33,6 +39,12 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Evaluation.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Evaluation.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Evaluation.EndDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AssignedDate)
