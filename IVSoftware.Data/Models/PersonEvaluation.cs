@@ -1,6 +1,7 @@
 ﻿using IVSoftware.Data.Models.Core;
 using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IVSoftware.Data.Models
@@ -16,6 +17,14 @@ namespace IVSoftware.Data.Models
         public virtual Evaluation Evaluation { get; set; }
 
         public string ResultJson { get; set; }
+
+        [DisplayName("Fecha inicio de Evaluación")]
+        [Required(ErrorMessage = "La {0} es requerida.")]
+        public DateTime StartDate { get; set; }
+
+        [DisplayName("Fecha fin de Evaluación")]
+        [Required(ErrorMessage = "La {0} es requerida.")]
+        public DateTime EndDate { get; set; }
 
         [DisplayName("Fecha de asignación")]
         public DateTime AssignedDate { get; set; }

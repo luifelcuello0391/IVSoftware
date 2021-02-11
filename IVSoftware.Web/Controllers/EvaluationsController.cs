@@ -198,6 +198,7 @@ namespace IVSoftware.Web.Controllers
                 if (model.Id > 0)
                 {
                     bool commitChanges = false;
+                    Evaluation evaluation = await _evaluationService.GetByIdAsync(model.Id);
                     List<PersonEvaluation> currentPeople =
                         (await _personEvaluationService.FindByConditionAsync(pe => pe.EvaluationId == model.Id)).ToList();
 
@@ -221,6 +222,8 @@ namespace IVSoftware.Web.Controllers
                         foreach (var personEvaluation in personEvaluationToAdd)
                         {
                             personEvaluation.AssignedDate = DateTime.Now;
+                            personEvaluation.StartDate = evaluation.Date;
+                            personEvaluation.EndDate = evaluation.EndDate;
                         }
 
                         _context.PersonEvaluations.AddRange(personEvaluationToAdd);
@@ -233,7 +236,6 @@ namespace IVSoftware.Web.Controllers
                         foreach(PersonEvaluation personEvaluation in personEvaluationToAdd)
                         {
                             Person person = await _personService.GetByIdAsync(personEvaluation.PersonId);
-                            Evaluation evaluation = await _evaluationService.GetByIdAsync(personEvaluation.EvaluationId);
                             if (person != null && !string.IsNullOrEmpty(person.Email))
                             {
                                 MailRequest request = new MailRequest()
@@ -337,20 +339,7 @@ namespace IVSoftware.Web.Controllers
 
             if(person.PersonEvaluations != null)
             {
-                var result = person.PersonEvaluations.Select(pe => new PersonEvaluation()
-                {
-                    Evaluation = pe.Evaluation,
-                    EvaluationId = pe.EvaluationId,
-                    IsApproved = pe.IsApproved,
-                    Person = pe.Person,
-                    PersonId = pe.PersonId,
-                    ResultJson = pe.ResultJson,
-                    Date = pe.Date,
-                    Score = pe.Score,
-                    Id = pe.Id,
-                    AssignedDate = pe.AssignedDate
-                });
-                return View(result);
+                return View(person.PersonEvaluations);
             }
 
             return View(new List<PersonEvaluation>());
@@ -455,14 +444,21 @@ namespace IVSoftware.Web.Controllers
             PersonEvaluation personEvaluation = await _personEvaluationService.GetByIdAsync(model.Id);
             if (personEvaluation != null)
             {
-                if(model.Date > personEvaluation.Date)
+                if(model.StartDate >= model.EndDate)
+                {
+                    ModelState.AddModelError("Id", "La fecha fin debe ser mayor a la inicial");
+                }
+                else if(model.EndDate >= personEvaluation.EndDate)
                 {
                     try
                     {
                         PersonEvaluation newPersonEvaluation = new PersonEvaluation()
                         {
                             EvaluationId = personEvaluation.EvaluationId,
-                            PersonId = personEvaluation.PersonId
+                            PersonId = personEvaluation.PersonId,
+                            StartDate = model.StartDate,
+                            EndDate = model.EndDate,
+                            AssignedDate = DateTime.Now
                         };
 
                         await _personEvaluationService.CreateAsync(newPersonEvaluation);
@@ -487,7 +483,7 @@ namespace IVSoftware.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("Id", "La fecha debe ser mayor a la inicial");
+                    ModelState.AddModelError("Id", "La fecha fin debe ser mayor o igual a la original");
                 }
             }
             else
