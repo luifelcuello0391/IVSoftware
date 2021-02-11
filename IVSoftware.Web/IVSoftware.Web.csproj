@@ -43,6 +43,9 @@
     <None Update="InitialScripts\JobRolesData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="InitialScripts\OverdueEvaluationsSP.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="InitialScripts\PeriodicityData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

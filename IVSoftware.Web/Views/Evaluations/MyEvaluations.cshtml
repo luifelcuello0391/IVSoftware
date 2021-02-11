@@ -13,10 +13,10 @@
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Evaluation.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Evaluation.Date)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().StartDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Evaluation.EndDate)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().EndDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().AssignedDate)
@@ -41,10 +41,10 @@
                 @Html.DisplayFor(modelItem => item.Evaluation.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Evaluation.Date)
+                @Html.DisplayFor(modelItem => item.StartDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Evaluation.EndDate)
+                @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AssignedDate)
@@ -76,7 +76,10 @@
             <td align="right" style="white-space:nowrap">
                 @if (string.IsNullOrEmpty(item.ResultJson))
                 {
-                    <a asp-action="Start" asp-route-id="@item.Id" title="Iniciar"><i class="fas fa-play" style="font-size:larger"></i></a>
+                    @if (item.StartDate <= DateTime.Now && DateTime.Now < item.EndDate)
+                    {
+                        <a asp-action="Start" asp-route-id="@item.Id" title="Iniciar"><i class="fas fa-play" style="font-size:larger"></i></a>
+                    }
                 }
                 else
                 {

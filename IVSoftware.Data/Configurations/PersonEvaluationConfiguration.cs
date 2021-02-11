@@ -33,6 +33,14 @@ namespace IVSoftware.Data.Configurations
                 .IsRequired();
 
             builder
+                .Property(x => x.StartDate)
+                .IsRequired();
+
+            builder
+                .Property(x => x.EndDate)
+                .IsRequired();
+
+            builder
                 .Property(x => x.Date)
                 .IsRequired(false);
 

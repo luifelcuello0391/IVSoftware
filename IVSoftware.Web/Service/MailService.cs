@@ -23,27 +23,30 @@ namespace IVSoftware.Web.Service
             try
             {
                 NotificationSetting notificationSetting = (await _notificationService.GetAllAsync()).FirstOrDefault();
-                _mailSettings = new MailSettings()
+                if(notificationSetting != null)
                 {
-                    DisplayName = "Sistema de Notificación",
-                    Host = "smtp.gmail.com",
-                    Mail = notificationSetting.Email,
-                    Password = ClsCipher.Decrypt(notificationSetting.Password, ClsCipher.PasswordKey),
-                    Port = 587
-                };
+                    _mailSettings = new MailSettings()
+                    {
+                        DisplayName = "Sistema de Notificación",
+                        Host = "smtp.gmail.com",
+                        Mail = notificationSetting.Email,
+                        Password = ClsCipher.Decrypt(notificationSetting.Password, ClsCipher.PasswordKey),
+                        Port = 587
+                    };
 
-                var email = new MimeMessage();
-                email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
-                email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
-                email.Subject = mailRequest.Subject;
-                var builder = new BodyBuilder();
-                builder.HtmlBody = mailRequest.Body;
-                email.Body = builder.ToMessageBody();
-                using var smtp = new SmtpClient();
-                smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
-                smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
-                await smtp.SendAsync(email);
-                smtp.Disconnect(true);
+                    var email = new MimeMessage();
+                    email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+                    email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
+                    email.Subject = mailRequest.Subject;
+                    var builder = new BodyBuilder();
+                    builder.HtmlBody = mailRequest.Body;
+                    email.Body = builder.ToMessageBody();
+                    using var smtp = new SmtpClient();
+                    smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+                    smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+                    await smtp.SendAsync(email);
+                    smtp.Disconnect(true);
+                }
             }
             catch (System.Exception ex)
             {
