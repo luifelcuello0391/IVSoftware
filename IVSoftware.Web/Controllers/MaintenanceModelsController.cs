@@ -23,10 +23,24 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: MaintenanceModels
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter = "All")
         {
-            var iVSoftwareContext = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable);
-            return View(await iVSoftwareContext.ToListAsync());
+            ViewBag.filter = filter;
+
+            switch(filter)
+            {
+                case "M":
+                    var iVSoftwareContextM = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable).Where(m => "M".Equals(m.TypeOfMaintenanceId));
+                    return View(await iVSoftwareContextM.ToListAsync());
+
+                case "C":
+                    var iVSoftwareContextC = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable).Where(m => "C".Equals(m.TypeOfMaintenanceId));
+                    return View(await iVSoftwareContextC.ToListAsync());
+
+                default:
+                    var iVSoftwareContext = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable);
+                    return View(await iVSoftwareContext.ToListAsync());
+            }
         }
 
         // GET: MaintenanceModels/Details/5

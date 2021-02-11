@@ -23,10 +23,28 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: AirResourceMonitoringDeviceMaintenances
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter = "All")
         {
-            var iVSoftwareContext = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment);
-            return View(await iVSoftwareContext.ToListAsync());
+            ViewBag.filter = filter;
+
+            switch(filter)
+            {
+                case "R":
+                    var iVSoftwareContextR = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment).Where(m => "R".Equals(m.TypeOfMaintenanceId));
+                    return View(await iVSoftwareContextR.ToListAsync());
+
+                case "P":
+                    var iVSoftwareContextP = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment).Where(m => "P".Equals(m.TypeOfMaintenanceId));
+                    return View(await iVSoftwareContextP.ToListAsync());
+
+                case "C":
+                    var iVSoftwareContextC = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment).Where(m => "C".Equals(m.TypeOfMaintenanceId));
+                    return View(await iVSoftwareContextC.ToListAsync());
+
+                default:
+                    var iVSoftwareContext = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment);
+                    return View(await iVSoftwareContext.ToListAsync());
+            }
         }
 
         // GET: AirResourceMonitoringDeviceMaintenances/Details/5
