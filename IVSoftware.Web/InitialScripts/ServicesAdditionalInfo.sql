@@ -1,0 +1,101 @@
+﻿INSERT INTO AnalisysType ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Caracterización', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysType ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Caracterización B', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysType ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Cromatografía', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysType ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Fisicoquímico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysType ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Metal AA', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysType ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Metal Voltametría', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysType ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Microbiología', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysType ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelos', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysType ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Voltametría', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+GO
+
+
+INSERT INTO [SamplingType] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('No aplica', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [SamplingType] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('No disponible', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [SamplingType] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Simple (Puntual)', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [SamplingType] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Simple (Puntual), Compuesto', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+GO
+
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Bolsa de cierre hermético', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Botella Winkler', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Frasco Shott', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('No almacenar', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('No disponible', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Plástico (Polietileno)', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Plástico opaco (Polietileno)', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Vidrio', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Vidrio ambar', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Vidrio ambar (tapa revestida TFE)', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Vidrio boca ancha 1 litro', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO [StorageContainer] ([Name], RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Vidrio, vial ámbar HeadSpace', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+GO
+
+
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Volumétrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Colorimétrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Comparación Visual', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Espectrofotométrico, Longitud de onda simple', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Espectrofotométrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Volumétrico con EDTA', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Argentométrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Electrometría', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Nefelométrica', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Filtración, Incubación 5 días, Luminiscencia', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Incubación 5 días, Luminiscencia', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Reflujo cerrado y volumétrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Extracción Soxhlet', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Extracción Soxhlet - Hidrocarburos', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Turbidimétrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Luminiscencia', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Yodometrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Yodométrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Filtración, Incubación 5 días, Electrodo membrana', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Incubación 5 días, Electrodo membrana', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Colorimétrico - Acido ascórbico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Filtración, Digestión acido nítrico, acido sulfúrico - acido ascórbico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Fenantrolina', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Reducción con cadmio', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Destilación - Volumétrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Semi-micro Kjeldahl, Destilación - Volumétrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Digestión acido nítrico, acido sulfúrico - acido ascórbico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Gravimétrica', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Surfactantes aniónicos como SAAM', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Flujo segmentado, ácido ascorbico, fotométrico con flujo a través del detector', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Flujo segmentado, digestión UV, ácido ascorbico, fotométrico con flujo a través del detector', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Filtración, flujo segmentado, digestión UV, ácido ascorbico, fotométrico con flujo a través del detector', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Flujo segmentado, reducción con cadmio, fotometrico con flujo a través del detector', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Flujo segmentado, fotometrico con flujo a través del detector.', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Filtración, flujo segmentado, digestión UV, reducción con cadmio, fotométrico con flujo a través del detectro', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Flujo segmentado, digestión UV, reducción con cadmio, fotométrico con flujo a través del detectro', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Flujo segmentado, microdestilación, fotométrico con flujo a través del detector', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Filtración, AA - Llama aire  - Acetileno', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Digestión, AA - Llama oxido nitroso - Acetileno', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Digestión, AA - Llama aire  - Acetileno', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Filtración, AA - Llama oxido nitroso - Acetileno', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelo - Absorción Atómica', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelo - Argentométrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelo - Electrometría', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelo', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelo - Flujo segmentado', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelo - extracción bicarbonato y cuantificación con azul de molibdeno', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelo - Gravimétrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelo - Turbidimétrico', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Gravimétrico, Secado 180°C', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Volumétrico - Cono Imhoff', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Gravimétrica, Secado a 103-105°C', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Gravimétrica, Ignición 550°C', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Cromatografía Gaseosa Detector de masas', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Cromatografía gaseosa/FID', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Filtración, Voltametría', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Voltametría', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Polarografía de pulso diferencial', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Extracción liquido-liquido, Cromatografía de Gases', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Electrodo ion selectivo', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Detector de masas', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Filtración, Voltametría de redisolución anódica', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Extracción acetonitrilo y particionamiento con sulfato de magnesio', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Sustrato enzimático multicelda', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Filtración por membrana', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelo - Método de Sedimentación', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO AnalisysTechnique (Name, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('Suelo - Volumetría', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+GO
