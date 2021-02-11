@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210210211505_AnalisysTechniqueTableAdded")]
+    partial class AnalisysTechniqueTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1964,9 +1966,6 @@ namespace IVSoftware.Web.Migrations
                     b.Property<bool>("AcredditedByIdeam")
                         .HasColumnType("bit");
 
-                    b.Property<string>("AnalisysObservations")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("AnalisysTechniqueId")
                         .HasColumnType("int");
 
@@ -2010,9 +2009,6 @@ namespace IVSoftware.Web.Migrations
                         .HasColumnType("real");
 
                     b.Property<int>("MaximumWeeklyAssignment")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MeasurementUnitId")
                         .HasColumnType("int");
 
                     b.Property<float>("MinimumValue")
@@ -2061,9 +2057,8 @@ namespace IVSoftware.Web.Migrations
                     b.Property<int?>("StorageContainerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StorageTemperature")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("StorageTemperature")
+                        .HasColumnType("float");
 
                     b.Property<double>("TestItemRetentionTimeInDays")
                         .HasColumnType("float");
@@ -2095,8 +2090,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasIndex("BackupAnalystId");
 
                     b.HasIndex("MatrixGroupId");
-
-                    b.HasIndex("MeasurementUnitId");
 
                     b.HasIndex("PersonId");
 
@@ -3906,11 +3899,6 @@ namespace IVSoftware.Web.Migrations
                         .HasForeignKey("MatrixGroupId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("IVSoftware.Data.Models.MeasurementUnitModel", "MeasurementUnit")
-                        .WithMany()
-                        .HasForeignKey("MeasurementUnitId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("IVSoftware.Data.Models.Person", "Responsable")
                         .WithMany("Services")
                         .HasForeignKey("PersonId")
@@ -3943,8 +3931,6 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("BackupAnalyst");
 
                     b.Navigation("MatrixGroup");
-
-                    b.Navigation("MeasurementUnit");
 
                     b.Navigation("ReferenceMethod");
 

@@ -5,13 +5,8 @@ using System.Text;
 
 namespace IVSoftware.Data.Models
 {
-    public class SamplingType : BaseModelData
+    public class AnalisysTechnique : BaseModelData
     {
         public int Id { get; set; }
-
-        public override int GetRegisterType()
-        {
-            return 1;
-        }
     }
 }

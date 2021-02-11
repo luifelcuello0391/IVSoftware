@@ -24,7 +24,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="HasUncertainty" /> @Html.DisplayNameFor(model => model.HasUncertainty)
+                    <input id="chk_has_uncertaintly" class="form-check-input" asp-for="HasUncertainty" onchange="HasUncertaintlyChange()"/> @Html.DisplayNameFor(model => model.HasUncertainty)
                 </label>
             </div>
             <div class="form-group form-check">
@@ -32,14 +32,14 @@
                     <input class="form-check-input" asp-for="IsPercentage" /> @Html.DisplayNameFor(model => model.IsPercentage)
                 </label>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display:none" id="div_lower">
                 <label asp-for="MeasurementUncertaintyLowerValue" class="control-label"></label>
-                <input asp-for="MeasurementUncertaintyLowerValue" class="form-control" />
+                <input id="txt_lower" asp-for="MeasurementUncertaintyLowerValue" class="form-control" value="0"/>
                 <span asp-validation-for="MeasurementUncertaintyLowerValue" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display:none" id="div_upper">
                 <label asp-for="MeasurementUncertaintyUpperValue" class="control-label"></label>
-                <input asp-for="MeasurementUncertaintyUpperValue" class="form-control" />
+                <input id="txt_upper" asp-for="MeasurementUncertaintyUpperValue" class="form-control" value="0" />
                 <span asp-validation-for="MeasurementUncertaintyUpperValue" class="text-danger"></span>
             </div>
 
@@ -69,6 +69,43 @@
 <div>
     <a asp-action="Index">Regresar</a>
 </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+<script>
+    function HasUncertaintlyChange() {
+
+        var x = document.getElementById("chk_has_uncertaintly");
+
+        if (x.checked) {
+            var txtMin = document.getElementById("div_lower");
+            var txtMax = document.getElementById("div_upper");
+
+            txtMin.style.display = "block";
+            txtMax.style.display = "block";
+        }
+        else
+        {
+            var txtMin = document.getElementById("div_lower");
+            var txtMax = document.getElementById("div_upper");
+
+            document.getElementById("txt_lower").value = "0";
+            document.getElementById("txt_upper").value = "0";
+
+            txtMin.style.display = "none";
+            txtMax.style.display = "none";
+        }
+
+        //if ($("#chk_has_uncertaintly").val() == 'true')
+        //{
+        //    alert("Mostrar");
+        //}
+        //else
+        //{
+        //    alert("Ocultar");
+        //}
+    }
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

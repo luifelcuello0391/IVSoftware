@@ -8,5 +8,10 @@ namespace IVSoftware.Data.Models
     public class StorageContainer : BaseModelData
     {
         public int Id { get; set; }
+
+        public override int GetRegisterType()
+        {
+            return 3;
+        }
     }
 }
