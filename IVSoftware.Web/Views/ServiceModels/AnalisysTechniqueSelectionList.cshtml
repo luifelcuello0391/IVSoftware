@@ -1,0 +1,50 @@
+﻿@model IEnumerable<AnalisysTechnique>
+
+<head>
+    <style>
+        td:last-child {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<div class="modal-header">
+    <h5 class="modal-title" style="float:left; color:yellowgreen">Seleccione la técnica de análisis</h5>
+    <button id="btn_hide_client_modal" type="button" data-dismiss="modal" class="close" style="color:red; margin-right:5px">
+        X
+    </button>
+</div>
+
+
+@if (Model != null && Model.Count() > 0)
+{
+    <table class="table table-striped table-sm" style="display:block; overflow:auto">
+        <thead style="background-color:yellowgreen; color:white">
+            <tr>
+                <th></th>
+                <th style="white-space:nowrap">
+                    @Html.Raw("Tipo")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="white-space:nowrap">
+                        <button class="btn btn-primary" onclick="selectAnalisysTechnique(@item.Id)">Seleccionar</button>
+                    </td>
+                    <td style="white-space:nowrap">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    // No items
+    <div><label>No hay técnicas de análisis registradas</label></div>
+}
+

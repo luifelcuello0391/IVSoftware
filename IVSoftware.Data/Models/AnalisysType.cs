@@ -8,5 +8,10 @@ namespace IVSoftware.Data.Models
     public class AnalisysType : BaseModelData
     {
         public int Id { get; set; }
+
+        public override int GetRegisterType()
+        {
+            return 2;
+        }
     }
 }

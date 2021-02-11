@@ -30,5 +30,10 @@ namespace IVSoftware.Models
         {
             return value ? "Sí" : "No";
         }
+
+        public virtual int GetRegisterType()
+        {
+            return 0;
+        }
     }
 }

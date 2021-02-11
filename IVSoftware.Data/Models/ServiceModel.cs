@@ -3,6 +3,8 @@ using IVSoftware.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +14,15 @@ namespace IVSoftware.Data.Models
     public class ServiceModel : BaseModelData
     {
         public int Id { get; set; }
-        [DisplayName("Código de facturación")]
+
+        [Required(ErrorMessage = "Este campo es obligatorio")]
+        [DisplayName("Código")]
         public int Code { get; set; }
+
         [DisplayName("Observaciones particulares de la prestación del servicio")]
         public string Description { get; set; }
+
+        [Required(ErrorMessage = "Este campo es obligatorio")]
         [DisplayName("Valor unitario")]
         public float UnitValue { get; set; }
         public int? ServiceTypeId { get; set; }
@@ -47,7 +54,7 @@ namespace IVSoftware.Data.Models
         public bool AcredditedByIdeam { get; set; }
         [DisplayName("Autorizado INS - Min. salud")]
         public bool AuthorizedByINS { get; set; }
-        [DisplayName("Tiempo de entrega de informe (días)")]
+        [DisplayName("Tiempo de entrega de informe (días hábiles)")]
         public int ReportDeliveryTime { get; set; }
         [DisplayName("Vigente")]
         public bool Valid { get; set; }
@@ -63,6 +70,7 @@ namespace IVSoftware.Data.Models
         [DisplayName("Disponible para portal de clientes")]
         public bool AvailableForClients { get; set; } = true;
 
+        [Required(ErrorMessage = "Este campo es obligatorio")]
         [DisplayName("Capacidad de recepción de muestras semanal (promedio)")]
         public int WeeklyAssignmentQuantity { get; set; } = 1;
 
@@ -75,49 +83,117 @@ namespace IVSoftware.Data.Models
         public Guid? BackupPersonId { get; set; }
 
         [DisplayName("Analista suplente")]
-        public virtual Person BackupAnalyst { get; set; }
-        
+        public virtual Person BackupAnalyst { get; set; } // OK
+
+        [Required(ErrorMessage = "Este campo es obligatorio")]
         [DisplayName("Capacidad de recepción de muestras semanal (máximo)")]
-        public int MaximumWeeklyAssignment { get; set; } = 1;
+        public int MaximumWeeklyAssignment { get; set; } = 1; // OK
+
+        [NotMapped]
+        public int SelectedAnalisysTechniqueId { get; set; }
+
+        [DisplayName("Técnica de análisis")]
+        public virtual AnalisysTechnique AnalisysTechnique { get; set; }
+
+        [NotMapped]
+        public int SelectedAnalisysTypeId { get; set; }
 
         [DisplayName("Tipo de análisis (Área)")]
-        public virtual AnalisysType AnalisysType { get; set; }
+        public virtual AnalisysType AnalisysType { get; set; } // OK - falta hacer modal
+
+        [Required(ErrorMessage = "Este campo es obligatorio")]
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public int SelectedTypeOfSamplingId { get; set; }
 
         [DisplayName("Tipo de muestreo")]
-        public virtual SamplingType TypeOfSampling { get; set; }
+        public virtual SamplingType TypeOfSampling { get; set; } // OK - falta hacer modal
 
+        [Required(ErrorMessage = "Este campo es obligatorio")]
         [DisplayName("Volumen establecido por el laboratorio (mL, agua, gr suelo)")]
-        public double VolumeEstablishedByLaboratory { get; set; }
+        public double VolumeEstablishedByLaboratory { get; set; } // OK
+
+        [Required(ErrorMessage = "Este campo es obligatorio")]
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public int SelectedStorageContainerId { get; set; }
 
         [DisplayName("Recipiente de almacenamiento")]
-        public virtual StorageContainer StorageContainer { get; set; }
+        public virtual StorageContainer StorageContainer { get; set; } // OK - falta hacer modal
 
         [DisplayName("Lavado y condiciones de limpieza para recipiente")]
-        public string WashingCleaningConditionsForContainer { get; set; }
+        public string WashingCleaningConditionsForContainer { get; set; } // OK
 
         [DisplayName("Descripción de toma de muestras")]
-        public string SamplingCaptureDescription { get; set; }
+        public string SamplingCaptureDescription { get; set; } // OK
 
         [DisplayName("Sustancias preservantes su concentración y cantidad")]
-        public string PreservativesTheirConcentrationQuantity { get; set; }
+        public string PreservativesTheirConcentrationQuantity { get; set; } // OK
 
-        [DisplayName("Temperatura de almacenamiento (°C)")]
-        public double StorageTemperature { get; set; }
+        [Required(ErrorMessage = "Este campo es obligatorio")]
+        [DisplayName("Temperatura de almacenamiento")]
+        public string StorageTemperature { get; set; } // OK
 
+        [Required(ErrorMessage = "Este campo es obligatorio")]
         [DisplayName("Analizar antes de (días)")]
-        public double AnalizeBefore { get; set; }
+        public double AnalizeBefore { get; set; } // OK
 
+        [Required(ErrorMessage = "Este campo es obligatorio")]
         [DisplayName("Tiempo regulatorio de almacenamiento EPA (días)")]
-        public double RegulatoryStorageTime { get; set; }
+        public double RegulatoryStorageTime { get; set; } // OK
+
+        [NotMapped]
+        public bool ReceptionOnMonday { get; set; } = true;
+
+        [NotMapped]
+        public bool ReceptionOnTuesday { get; set; } = true;
+
+        [NotMapped]
+        public bool ReceptionOnWednesday { get; set; } = true;
+
+        [NotMapped]
+        public bool ReceptionOnThursday { get; set; } = true;
+
+        [NotMapped]
+        public bool ReceptionOnFriday { get; set; } = true;
+
+        [NotMapped]
+        public bool ReceptionOnSaturday { get; set; } = true;
+
+        [NotMapped]
+        public bool ReceptionOnSunday { get; set; } = true;
+
+        public string ObtainsReceptionDays()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            if (ReceptionOnMonday) builder.Append("M;");
+            if (ReceptionOnTuesday) builder.Append("Tu;");
+            if (ReceptionOnWednesday) builder.Append("W;");
+            if (ReceptionOnThursday) builder.Append("Th;");
+            if (ReceptionOnFriday) builder.Append("F;");
+            if (ReceptionOnSaturday) builder.Append("S;");
+            if (ReceptionOnSunday) builder.Append("Su");
+
+            return builder.ToString();
+        }
+
+        [DisplayName("Observaciones")]
+        public string AnalisysObservations { get; set; }
 
         [DisplayName("Días de recepción y condiciones particulares")]
-        public string ReceptionDays { get; set; }
+        public string ReceptionDays { get; set; } // OK
 
+        [Required(ErrorMessage = "Este campo es obligatorio")]
         [DisplayName("Tiempos de retención de ítem de ensayo (días)")]
-        public double TestItemRetentionTimeInDays { get; set; }
+        public double TestItemRetentionTimeInDays { get; set; } // OK
 
         [DisplayName("Protocolo relacionado")]
-        public string RelatedProtocol { get; set; }
+        public string RelatedProtocol { get; set; } // OK
+
+        [NotMapped]
+        public int SelectedUnitId { get; set; }
+
+        [DisplayName("Unidades")]
+        public virtual MeasurementUnitModel MeasurementUnit { get; set; }
 
         public virtual IEnumerable<TechnicalKnowledge> TechnicalKnowledges { get; set; }
 
@@ -125,10 +201,15 @@ namespace IVSoftware.Data.Models
         #region Data for working range
         [DisplayName("Precondición")]
         public string Precondition { get; set; }
+
+        [Required(ErrorMessage = "Este campo es obligatorio")]
         [DisplayName("Valor mínimo")]
         public float MinimumValue { get; set; }
+
+        [Required(ErrorMessage = "Este campo es obligatorio")]
         [DisplayName("Valor máximo")]
         public float MaximumValue { get; set; }
+
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public string WorkingRange
         {

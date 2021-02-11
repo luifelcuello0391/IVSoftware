@@ -52,6 +52,15 @@ namespace IVSoftware.Web.Controllers
         {
             try
             {
+                ViewBag.Units = await _context.MeasurementUnitModel.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on Create.Units >> " + ex.ToString());
+            }
+
+            try
+            {
                 ViewBag.ServiceTypes = await _context.TypeOfService.ToListAsync();
             }
             catch (Exception ex)
@@ -94,7 +103,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId")] ServiceModel serviceModel)
+        public async Task<IActionResult> Create([Bind("Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId,AvailableForClients,WeeklyAssignmentQuantity,BackupPersonId,MaximumWeeklyAssignment,SelectedAnalisysTypeId,SelectedTypeOfSamplingId,VolumeEstablishedByLaboratory,SelectedStorageContainerId,WashingCleaningConditionsForContainer,SamplingCaptureDescription,PreservativesTheirConcentrationQuantity,StorageTemperature,AnalizeBefore,RegulatoryStorageTime,ReceptionDays,TestItemRetentionTimeInDays,RelatedProtocol,SelectedAnalisysTechniqueId,ReceptionOnMonday,ReceptionOnTuesday,ReceptionOnWednesday,ReceptionOnThursday,ReceptionOnFriday,ReceptionOnSaturday,ReceptionOnSunday,SelectedUnitId")] ServiceModel serviceModel)
         {
             if (ModelState.IsValid)
             {
@@ -126,13 +135,50 @@ namespace IVSoftware.Web.Controllers
                 Person responsable = null;
                 if(serviceModel.PersonId != null)
                 {
-                    IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.Id != null && x.Id.Equals(serviceModel.PersonId));
+                    IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.Id.Equals(serviceModel.PersonId));
                     if(persons != null && persons.Count() > 0)
                     {
                         responsable = persons.First();
                     }
                 }
                 serviceModel.Responsable = responsable;
+
+                AnalisysType analisys = null;
+                if(serviceModel.SelectedAnalisysTypeId > 0)
+                {
+                    analisys = await _context.AnalisysType.FirstOrDefaultAsync(x => x.Id == serviceModel.SelectedAnalisysTypeId);
+                }
+                serviceModel.AnalisysType = analisys;
+
+                AnalisysTechnique technique = null;
+                if(serviceModel.SelectedAnalisysTechniqueId > 0)
+                {
+                    technique = await _context.AnalisysTechnique.FirstOrDefaultAsync(x => x.Id == serviceModel.SelectedAnalisysTechniqueId);
+                }
+                serviceModel.AnalisysTechnique = technique;
+
+                SamplingType samplingType = null;
+                if(serviceModel.SelectedTypeOfSamplingId > 0)
+                {
+                    samplingType = await _context.SamplingType.FirstOrDefaultAsync(x => x.Id == serviceModel.SelectedTypeOfSamplingId);
+                }
+                serviceModel.TypeOfSampling = samplingType;
+
+                StorageContainer storage = null;
+                if(serviceModel.SelectedStorageContainerId > 0)
+                {
+                    storage = await _context.StorageContainer.FirstOrDefaultAsync(x => x.Id == serviceModel.SelectedStorageContainerId);
+                }
+                serviceModel.StorageContainer = storage;
+
+                MeasurementUnitModel unit = null;
+                if(serviceModel.SelectedUnitId > 0)
+                {
+                    unit = await _context.MeasurementUnitModel.FirstOrDefaultAsync(x => x.Id == serviceModel.SelectedUnitId);
+                }
+                serviceModel.MeasurementUnit = unit;
+
+                serviceModel.ReceptionDays = serviceModel.ObtainsReceptionDays();
 
                 _context.Add(serviceModel);
                 await _context.SaveChangesAsync();
@@ -215,7 +261,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId")] ServiceModel serviceModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId,AvailableForClients,WeeklyAssignmentQuantity,BackupPersonId,MaximumWeeklyAssignment,SelectedAnalisysTypeId,SelectedTypeOfSamplingId,VolumeEstablishedByLaboratory,SelectedStorageContainerId,WashingCleaningConditionsForContainer,SamplingCaptureDescription,PreservativesTheirConcentrationQuantity,StorageTemperature,AnalizeBefore,RegulatoryStorageTime,ReceptionDays,TestItemRetentionTimeInDays,RelatedProtocol,SelectedAnalisysTechniqueId,ReceptionOnMonday,ReceptionOnTuesday,ReceptionOnWednesday,ReceptionOnThursday,ReceptionOnFriday,ReceptionOnSaturday,ReceptionOnSunday,SelectedUnitId")] ServiceModel serviceModel)
         {
             if (id != serviceModel.Id)
             {
@@ -337,11 +383,26 @@ namespace IVSoftware.Web.Controllers
             try
             {
                 IEnumerable<Person> persons = await _personService.GetAllAsync();
-                return PartialView("personSelectionList", persons);
+                return PartialView("PersonSelectionList", persons);
             }
             catch(Exception ex)
             {
                 Console.WriteLine("Error on ServiceModelsController.GetPersons >> " + ex.ToString());
+            }
+
+            return null;
+        }
+
+        public async Task<IActionResult> GetBackupPersons()
+        {
+            try
+            {
+                IEnumerable<Person> persons = await _personService.GetAllAsync();
+                return PartialView("BackupPersonSelectionList", persons);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on ServiceModelsController.GetBackupPersons >> " + ex.ToString());
             }
 
             return null;
@@ -363,6 +424,96 @@ namespace IVSoftware.Web.Controllers
             }
 
             return PartialView("ResponsableData", null);
+        }
+
+        public async Task<IActionResult> GetBackupPerson(string identification)
+        {
+            try
+            {
+                IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.IdentificationNumber != null && x.IdentificationNumber.Equals(identification));
+                if (persons != null && persons.Count() > 0)
+                {
+                    return PartialView("BackupResponsableData", persons.First());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on ServiceModelsController.GetPerson >> " + ex.ToString());
+            }
+
+            return PartialView("BackupResponsableData", null);
+        }
+
+        public async Task<IActionResult> GetStorageContainers()
+        {
+            List<StorageContainer> containers = await _context.StorageContainer.ToListAsync();
+            return PartialView("StorageContainerSelectionList", containers);
+        }
+
+        public async Task<IActionResult> GetAnalisysTypes()
+        {
+            List<AnalisysType> analisysTypes = await _context.AnalisysType.ToListAsync();
+            return PartialView("AnalisysTypeSelectionList", analisysTypes);
+        }
+
+        public async Task<IActionResult> GetSamplingTypes()
+        {
+            List<SamplingType> samplingTypes = await _context.SamplingType.ToListAsync();
+            return PartialView("SamplingTypeSelectionList", samplingTypes);
+        }
+
+        public async Task<string> GetStorageContainer(int identification)
+        {
+            StorageContainer container = await _context.StorageContainer.FirstOrDefaultAsync(x => x.Id == identification);
+
+            if(container != null)
+            {
+                return string.Format("{0};{1}", container.Id, container.Name);
+            }
+
+            return null;
+        }
+
+        public async Task<string> GetSamplingType(int identification)
+        {
+            SamplingType sampling = await _context.SamplingType.FirstOrDefaultAsync(x => x.Id == identification);
+
+            if(sampling != null)
+            {
+                return string.Format("{0};{1}", sampling.Id, sampling.Name);
+            }
+
+            return null;
+        }
+
+        public async Task<string> GetAnalisysType(int identification)
+        {
+            AnalisysType analisys = await _context.AnalisysType.FirstOrDefaultAsync(x => x.Id == identification);
+
+            if(analisys != null)
+            {
+                return string.Format("{0};{1}", analisys.Id, analisys.Name);
+            }
+
+            return null;
+        }
+
+        public async Task<IActionResult> GetAnalisysTechniques()
+        {
+            List<AnalisysTechnique> techniques = await _context.AnalisysTechnique.ToListAsync();
+            return PartialView("AnalisysTechniqueSelectionList", techniques);
+        }
+
+        public async Task<string> GetAnalisysTechnique(int identification)
+        {
+            AnalisysTechnique analisys = await _context.AnalisysTechnique.FirstOrDefaultAsync(x => x.Id == identification);
+
+            if (analisys != null)
+            {
+                return string.Format("{0};{1}", analisys.Id, analisys.Name);
+            }
+
+            return null;
         }
     }
 }

@@ -306,5 +306,14 @@ namespace IVSoftware.Web.Models
         public DbSet<AirResourceMonitoringDeviceMaintenance> AirResourceMonitoringDevideMaintenances { get; set; }
 
         public DbSet<EquipmentPurchaseRequest> EquipmentPurchaseRequests { get; set; }
+
+        public DbSet<StorageContainer> StorageContainer { get; set; }
+
+        public DbSet<SamplingType> SamplingType { get; set; }
+
+        public DbSet<AnalisysType> AnalisysType { get; set; }
+
+        public DbSet<AnalisysTechnique> AnalisysTechnique { get; set; }
+
     }
 }
