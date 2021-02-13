@@ -315,5 +315,7 @@ namespace IVSoftware.Web.Models
 
         public DbSet<AnalisysTechnique> AnalisysTechnique { get; set; }
 
+        public DbSet<LaboratoryModel> Laboratories { get; set; }
+
     }
 }

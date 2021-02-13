@@ -52,6 +52,9 @@
     <None Update="InitialScripts\QuestionAndCheckListScript.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="InitialScripts\script_insert_laboratories.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="InitialScripts\ServicesAdditionalInfo.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

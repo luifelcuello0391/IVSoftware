@@ -185,13 +185,11 @@
                 <span asp-validation-for="PurchaseDate" class="text-danger"></span>
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="form-group">
                 <label asp-for="PurchaseValue" class="control-label"></label>
-                <div class="form-inline">
-                    <label style="display:block; float:left">$</label>
-                    <input asp-for="PurchaseValue" class="form-control" type="number" style="flex:1" />
-                </div>
+                <input asp-for="PurchaseValue" class="form-control" type="number" style="flex:1" />
                 <span asp-validation-for="PurchaseValue" class="text-danger"></span>
+
             </div>
 
             <div class="form-group">
@@ -207,17 +205,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="MinimumRead" class="control-label"></label>
-                <input asp-for="MinimumRead" class="form-control" />
+                <input asp-for="MinimumRead" class="form-control" type="number" />
                 <span asp-validation-for="MinimumRead" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Accuracy" class="control-label"></label>
-                <input asp-for="Accuracy" class="form-control" />
+                <input asp-for="Accuracy" class="form-control" type="number" />
                 <span asp-validation-for="Accuracy" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PowerSupply" class="control-label"></label>
-                <input asp-for="PowerSupply" class="form-control" />
+                <input asp-for="PowerSupply" class="form-control" type="number" />
                 <span asp-validation-for="PowerSupply" class="text-danger"></span>
             </div>
             <div class="form-group">
