@@ -22,6 +22,9 @@
             <tr>
                 <th></th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Laboratory)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Code)
                 </th>
                 <th>
@@ -36,7 +39,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Serie)
                 </th>
-                
+
             </tr>
         </thead>
         <tbody>
@@ -45,6 +48,16 @@
             <tr>
                 <td style="white-space:nowrap">
                     <button class="btn btn-primary" onclick="selectEquipment(@item.Id)">Seleccionar</button>
+                </td>
+                <td>
+                    @if (item.Laboratory != null && item.Laboratory.Name != null && !string.IsNullOrEmpty(item.Laboratory.Name.Replace(" ", string.Empty)))
+                    {
+                        @Html.DisplayFor(modelItem => item.Laboratory.Name)
+                    }
+                    else
+                    {
+                        @Html.Raw("Asignado")
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Code)

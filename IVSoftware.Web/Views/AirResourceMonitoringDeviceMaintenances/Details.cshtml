@@ -84,22 +84,6 @@
             </dd>
         }
 
-        <dt class="col-sm-2" style="white-space:nowrap">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-
-        @if (Model.Location != null && !string.IsNullOrEmpty(Model.Location.Replace(" ", string.Empty)))
-        {
-            <dd class="col-sm-10" style="margin-left:5px">
-                @Html.DisplayFor(model => model.Location)
-            </dd>
-        }
-        else
-        {
-            <dd class="col-sm-10" style="margin-left:5px">
-                @Html.Raw("Sin datos")
-            </dd>
-        }
 
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.Description)
@@ -127,7 +111,7 @@
     </dl>
 </div>
 
-<h5 style="color:yellowgreen">Información del contratista de mantenimiento</h5>
+<h5 style="color:yellowgreen">Información del proveedor de mantenimiento</h5>
 <hr />
 <div>
     <dl class="row">
