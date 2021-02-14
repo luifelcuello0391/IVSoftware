@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,13 +32,11 @@ namespace IVSoftware.Data.Models
         [DisplayName("Fecha de compra")]
         public DateTime? PurchaseDate { get; set; }
         [DisplayName("Magnitud")]
-        public string Magnitude { get; set; }
+        public string Magnitude { get; set; }  
         [DisplayName("Rango")]
         public string Range { get; set; }
-        [DataType(DataType.Currency, ErrorMessage = "Este campo es numérico")]
         [DisplayName("Lectura mínima (resolución)")]
         public float MinimumRead { get; set; }
-        [DataType(DataType.Currency, ErrorMessage = "Este campo es numérico")]
         [DisplayName("Exactitud")]
         public float Accuracy { get; set; }
         [DisplayName("Alimentación (Voltios)")]
@@ -58,6 +57,10 @@ namespace IVSoftware.Data.Models
         public virtual List<AirResourceMonitoringDeviceMaintenance> MaintenancesForAirResourceMonitoringDevice { get; set; }
         [DisplayName("Valor de compra")]
         public double PurchaseValue { get; set; } = 0;
+
+        [DisplayName("Laboratorio")]
         public virtual LaboratoryModel Laboratory { get; set; }
+        [NotMapped]
+        public int? SelectedLaboratoryId { get; set; }
     }
 }

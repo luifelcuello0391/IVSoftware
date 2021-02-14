@@ -16,6 +16,9 @@
                 @Html.DisplayNameFor(model => model.Code)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Laboratory)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -36,6 +39,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Code)
             </td>
+            @if (item.Laboratory != null && item.Laboratory.Name != null && !string.IsNullOrEmpty(item.Laboratory.Name))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Laboratory.Name)
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.Raw("No asignado")
+                </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
