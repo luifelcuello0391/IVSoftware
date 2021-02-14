@@ -10,8 +10,10 @@ namespace IVSoftware.Data.Models
     public class Provider : BaseModelData
     {
         public int Id { get; set; }
-        [DisplayName("Identificación")]
+        [DisplayName("NIT")]
         public string Identification { get; set; }
+        [DisplayName("RUT")]
+        public string Rut { get; set; }
         [DisplayName("Dirección")]
         public string Address { get; set; }
         [DisplayName("Teléfono")]
@@ -20,5 +22,10 @@ namespace IVSoftware.Data.Models
         public string Email { get; set; }
         [DisplayName("Contacto")]
         public string Contact { get; set; }
+        [DisplayName("Sitio web")]
+        public string WebPage { get; set; }
+        
+        public Guid? RutDocuentId { get; set; }
+        public virtual Document RutDocument { get; set; }
     }
 }

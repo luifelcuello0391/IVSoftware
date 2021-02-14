@@ -60,5 +60,8 @@ namespace IVSoftware.Data.Models
         public Guid? PersonId { get; set; }
         [DisplayName("Responsable")]
         public virtual Person Responsable { get; set; }
+
+        public Guid? MaintenanceCertificateDocumentId { get; set; }
+        public virtual Document MaintenanceCertificateDocument { get; set; }
     }
 }

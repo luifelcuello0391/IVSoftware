@@ -61,8 +61,7 @@ namespace IVSoftware.Data.Models
         public DateTime NextMaintenanceDate { get; set; }
         [DisplayName("Observaciones")]
         public string Observations { get; set; }
-        [DisplayName("Ubicación")]
-        public string Location { get; set; }
+
         [DisplayName("Descripción")]
         public string Description { get; set; }
         [DisplayName("Número de inventario")]
@@ -70,5 +69,7 @@ namespace IVSoftware.Data.Models
         public Guid? PersonId { get; set; }
         [DisplayName("Responsable")]
         public virtual Person Responsable { get; set; }
+        public Guid? MaintenanceCertificateDocumentId { get; set; }
+        public virtual Document MaintenanceCertificateDocument { get; set; }
     }
 }
