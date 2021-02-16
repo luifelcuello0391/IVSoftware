@@ -319,10 +319,6 @@ namespace IVSoftware.Web.Controllers
             return _context.Provider.Any(e => e.Id == id);
         }
 
-        public IActionResult DocumentUpload()
-        {
-            return View();
-        }
 
         public ActionResult DownloadFile(string fileName)
         {

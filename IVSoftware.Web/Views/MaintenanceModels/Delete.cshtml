@@ -107,6 +107,21 @@
         </dd>
     </dl>
 
+    <h5 style="color:yellowgreen">Certificado de mantenimiento y/o calibración</h5>
+    <hr />
+    <dl class="row">
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.MaintenanceCertificateDocument != null && Model.MaintenanceCertificateDocument.Url != null && !string.IsNullOrEmpty(Model.MaintenanceCertificateDocument.Url.Replace(" ", string.Empty)))
+            {
+                <a asp-action="DownloadFile" asp-route-fileName="@Model.MaintenanceCertificateDocument.Url">Descargar: @Model.MaintenanceCertificateDocument.Name</a>
+            }
+            else
+            {
+                @Html.Raw("No se han adjuntado ningún documento")
+            }
+        </dd>
+    </dl>
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
