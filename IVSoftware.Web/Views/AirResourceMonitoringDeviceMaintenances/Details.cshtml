@@ -250,20 +250,35 @@
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.RegisterStatus)
         </dt>
-         <dd class="col-sm-10" style="margin-left:5px">
+        <dd class="col-sm-10" style="margin-left:5px">
             @Html.DisplayFor(model => model.RegisterStatusName)
         </dd>
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.CreationDatetime)
         </dt>
-         <dd class="col-sm-10" style="margin-left:5px">
+        <dd class="col-sm-10" style="margin-left:5px">
             @Html.DisplayFor(model => model.CreationDatetime)
         </dd>
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.ModificationDatetime)
         </dt>
-         <dd class="col-sm-10" style="margin-left:5px">
+        <dd class="col-sm-10" style="margin-left:5px">
             @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Certificado de mantenimiento y/o calibración</h5>
+    <hr />
+    <dl class="row">
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.MaintenanceCertificateDocument != null && Model.MaintenanceCertificateDocument.Url != null && !string.IsNullOrEmpty(Model.MaintenanceCertificateDocument.Url.Replace(" ", string.Empty)))
+            {
+                <a asp-action="DownloadFile" asp-route-fileName="@Model.MaintenanceCertificateDocument.Url">Descargar: @Model.MaintenanceCertificateDocument.Name</a>
+            }
+            else
+            {
+                @Html.Raw("No se han adjuntado ningún documento")
+            }
         </dd>
     </dl>
 </div>

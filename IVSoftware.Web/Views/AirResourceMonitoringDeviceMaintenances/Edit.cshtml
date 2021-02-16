@@ -10,7 +10,7 @@
 <hr />
 <div>
     <div>
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input hidden asp-for="EquipId" id="txt_equip_id" />
@@ -166,6 +166,35 @@
                 <span asp-validation-for="NextMaintenanceDate" class="text-danger"></span>
             </div>
 
+            <h5>Certificado de mantenimiento y/o calibración</h5>
+            <hr />
+            <div style="width:100%">
+                <table>
+                    <tr>
+
+                        <td>
+                            <label class="btn btn-primary" style="background-color:yellowgreen; color:white;">
+                                Adjuntar PDF <input id="postedFiles" name="postedFiles" type="file" style="display: none;" required onchange="selectFile()">
+                            </label>
+                        </td>
+
+                        <td>
+                            @if (Model.MaintenanceCertificateDocument != null && Model.MaintenanceCertificateDocument.Name != null && !string.IsNullOrEmpty(Model.MaintenanceCertificateDocument.Name.Replace(" ", string.Empty)))
+                            {
+                                <label id="lbl_selected" style="margin-left:10px">Archivo seleccionado: @Model.MaintenanceCertificateDocument.Name</label>
+                            }
+                            else
+                            {
+                                <label id="lbl_selected" style="margin-left:10px">No se ha seleccionado ningún archivo</label>
+                            }
+                        </td>
+
+                    </tr>
+                </table>
+                <input asp-for="MaintenanceCertificateDocumentId" hidden />
+                <span style="color:red" class="text-danger">@ViewBag.Message</span>
+            </div>
+
             <div class="form-group" hidden>
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" value="Mantenimiento" />
@@ -237,6 +266,11 @@
         selectResponsableOnLoad();
         selectedEquipmentOnLoad();
     });
+
+    function selectFile() {
+        var name = document.getElementById("postedFiles");
+        document.getElementById("lbl_selected").innerText = 'Archivo seleccionado: ' + name.files.item(0).name;
+    }
 
     function selectResponsableOnLoad() {
         selectPersonOnLoad($("#txt_responsable_id").val());
