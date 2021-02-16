@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\AppDocuments\**" />
+    <Content Remove="wwwroot\AppDocuments\**" />
+    <EmbeddedResource Remove="wwwroot\AppDocuments\**" />
+    <None Remove="wwwroot\AppDocuments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Models\EducacionBasica.cs~RF4addf2f8.TMP" />
     <None Remove="Models\LoginViewModel" />
   </ItemGroup>
