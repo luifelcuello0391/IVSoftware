@@ -242,6 +242,10 @@ namespace IVSoftware.Web.Models
             // NotificationSetting
             new NotificationSettingConfiguration("NotificationSetting", "Id").Map(modelBuilder);
 
+            // Supervisions
+            new SupervisionConfiguration("Supervision", "Id").Map(modelBuilder);
+            new SupervisionDetailConfiguration("SupervisionDetail", "Id").Map(modelBuilder);
+
             base.OnModelCreating(modelBuilder);
         }
 

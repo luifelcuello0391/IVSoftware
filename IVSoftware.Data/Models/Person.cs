@@ -195,5 +195,8 @@ namespace IVSoftware.Data.Models
 
         public virtual ICollection<PersonEvaluation> PersonEvaluations { get; set; }
 
+        public virtual ICollection<Supervision> Supervisions { get; set; }
+
+        public virtual ICollection<Supervision> SupervisionsByMe { get; set; }
     }
 }
