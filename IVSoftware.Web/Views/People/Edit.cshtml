@@ -13,26 +13,27 @@
     </div>
     <hr />
 
-    @if (ViewBag.HasUser != null && !ViewBag.HasUser)
-    {
-        <div class="row">
-            <div class="col">
-                <button id="btnNew" type="button" class="float-right btn btn-primary mb-3" data-toggle="modal" href="#create-modal" data-id="@Model.Id">
+    <div class="row">
+        <div class="col">
+            <a asp-action="DownloadExcelDocument" asp-route-id="@Model.Id" class="float-right btn btn-primary mb-3">
+                Descargar
+            </a>
+            @if (ViewBag.HasUser != null && !ViewBag.HasUser)
+            {
+                <button id="btnNew" type="button" class="btn btn-primary mb-3" data-toggle="modal" href="#create-modal" data-id="@Model.Id">
                     Crear Acceso Web
                 </button>
-            </div>
-        </div>
-    }
-    else if (ViewBag.HasUser != null && ViewBag.HasUser && User.IsInRole("Administrador"))
-    {
-        <div class="row">
-            <div class="col">
-                <button id="btnReset" type="button" class="float-right btn btn-primary mb-3" data-toggle="modal" href="#create-modal" data-id="@Model.Id">
+            }
+            else if (ViewBag.HasUser != null && ViewBag.HasUser && User.IsInRole("Administrador"))
+            {
+                <button id="btnReset" type="button" class="btn btn-primary mb-3" data-toggle="modal" href="#create-modal" data-id="@Model.Id">
                     Restablecer Contraseña
                 </button>
-            </div>
+            }
         </div>
-    }
+    </div>
+
+
 
     <div class="row">
         <div class="col">

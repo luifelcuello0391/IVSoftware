@@ -1,4 +1,5 @@
-﻿using IVSoftware.Data.Models;
+﻿using ClosedXML.Excel;
+using IVSoftware.Data.Models;
 using IVSoftware.Web.BusinessLogic;
 using IVSoftware.Web.Data;
 using IVSoftware.Web.Models;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -451,6 +453,154 @@ namespace IVSoftware.Web.Controllers
             return PartialView("_ModalResetPassword", model);
         }
 
+        public async Task<IActionResult> DownloadExcelDocument(Guid id)
+        {
+            Person person = await _personService.GetByIdAsync(id);
+            if(person == null) { return NotFound(); }
+
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = $"Hoja de Vida - { person.FullName }.xlsx";
+            try
+            {
+                string cvPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Formats\HV.xlsx");
+                using (var workbook = new XLWorkbook(cvPath))
+                {
+                    IXLWorksheet worksheet = workbook.Worksheets.FirstOrDefault();
+
+                    #region Datos Personales
+                    worksheet.Cell(9, 4).Value = person.FullName;
+                    worksheet.Cell(10, 4).Value = person.IdentificationNumber;
+                    worksheet.Cell(11, 4).Value = person.Email;
+                    worksheet.Cell(12, 4).Value = person.PhoneNumber;
+                    worksheet.Cell(10, 7).Value = person.Arl?.Name;
+                    worksheet.Cell(11, 7).Value = person.Eps?.Name;
+                    worksheet.Cell(12, 7).Value = person.BloodType?.Name;
+                    #endregion
+
+                    #region Roles
+                    int jobRoleRow = 14;
+                    foreach(PersonJobRole personJobRole in person.PeopleJobRole)
+                    {
+                        worksheet.Cell(jobRoleRow, 4).Value = personJobRole.JobRole.Name;
+                        jobRoleRow++;
+                    }
+                    #endregion
+
+                    #region Educación
+                    BasicEducation firstBasicEducation = person.BasicEducations.FirstOrDefault();
+                    worksheet.Cell(22, 2).Value = firstBasicEducation?.InstitutionName;
+                    worksheet.Cell(22, 6).Value = firstBasicEducation?.SpecialtyName;
+                    worksheet.Cell(22, 8).Value = firstBasicEducation?.DegreeDate;
+
+                    int higherEducationRow = 23;
+                    foreach (HigherEducation higherEducation in person.HigherEducations)
+                    {
+                        worksheet.Cell(higherEducationRow, 2).Value = higherEducation.InstitutionName;
+                        worksheet.Cell(higherEducationRow, 4).Value = higherEducation.AcademicLevel?.Name;
+                        worksheet.Cell(higherEducationRow, 6).Value = higherEducation.StudiesName;
+                        worksheet.Cell(higherEducationRow, 8).Value = higherEducation.DegreeDate;
+                        higherEducationRow++;
+                    }
+                    #endregion
+
+                    #region Formación
+                    int trainingRow = 30;
+                    foreach (Training training in person.Trainings)
+                    {
+                        worksheet.Cell(trainingRow, 1).Value = training.Name;
+                        worksheet.Cell(trainingRow, 3).Value = training.Subject;
+                        worksheet.Cell(trainingRow, 4).Value = training.CertificationType?.Name;
+                        worksheet.Cell(trainingRow, 5).Value = training.Entity;
+                        worksheet.Cell(trainingRow, 7).Value = training.EndDate;
+                        worksheet.Cell(trainingRow, 8).Value = training.NumberOfHours;
+                        trainingRow++;
+                    }
+                    #endregion
+
+                    #region Experiencia
+                    int workExperienceRow = 45;
+                    foreach (WorkExperience workExperience in person.WorkExperiences)
+                    {
+                        worksheet.Cell(workExperienceRow, 1).Value = workExperience.CompanyName;
+                        worksheet.Cell(workExperienceRow, 2).Value = workExperience.JobTitle;
+                        worksheet.Cell(workExperienceRow, 3).Value = workExperience.Responsibilities;
+                        worksheet.Cell(workExperienceRow, 6).Value = workExperience.StartDate;
+                        worksheet.Cell(workExperienceRow, 7).Value = workExperience.EndDate;
+
+                        DateTime endDate = workExperience.EndDate.HasValue ?
+                            workExperience.EndDate.Value : DateTime.Today;
+                        int totalDays = (endDate - workExperience.StartDate).Days;
+                        if (totalDays > 0)
+                        {
+                            var mod = totalDays % 365;
+                            var years = (totalDays >= 365) ? (totalDays / 365) : 0;
+                            var months = (mod > 0) ? (mod / 30) : 0;
+
+                            worksheet.Cell(workExperienceRow, 8).Value = $"{years} Año(s) y {months} Mes(es)"; ;
+                        }
+                        workExperienceRow++;
+                    }
+                    #endregion
+
+                    #region Conocimiento Técnico
+                    int technicalKnowledgeRow = 57;
+                    int initiaTechnicalKnowledgeColumn = 1;
+                    foreach (TechnicalKnowledge technicalKnowledge in person.TechnicalKnowledges)
+                    {
+                        worksheet.Cell(technicalKnowledgeRow, initiaTechnicalKnowledgeColumn).Value = technicalKnowledge.Matrix?.Name;
+                        worksheet.Cell(technicalKnowledgeRow, initiaTechnicalKnowledgeColumn + 1).Value = technicalKnowledge.AnalyticTechnique;
+                        worksheet.Cell(technicalKnowledgeRow, initiaTechnicalKnowledgeColumn + 2).Value = technicalKnowledge.Matrix?.Name;
+                        worksheet.Cell(technicalKnowledgeRow, initiaTechnicalKnowledgeColumn + 3).Value = technicalKnowledge.Time;
+
+                        if(technicalKnowledgeRow == 61)
+                        {
+                            technicalKnowledgeRow = 57;
+                            initiaTechnicalKnowledgeColumn = 5;
+                        }
+                        else
+                        {
+                            technicalKnowledgeRow++;
+                        }
+                    }
+                    #endregion
+
+                    #region Otros Conocimietos
+                    int otherTechnicalRow = 63;
+                    int initiaotherTechnicalColumn = 2;
+                    foreach (var otherTechnical in person.OtherTechnicalKnowledges)
+                    {
+                        worksheet.Cell(otherTechnicalRow, initiaotherTechnicalColumn).Value = otherTechnical.Name;
+                        worksheet.Cell(otherTechnicalRow, initiaotherTechnicalColumn + 2).Value = otherTechnical.Time;
+
+                        if (otherTechnicalRow == 65)
+                        {
+                            otherTechnicalRow = 63;
+                            initiaotherTechnicalColumn = 6;
+                        }
+                        else
+                        {
+                            otherTechnicalRow++;
+                        }
+                    }
+                    #endregion
+
+                    #region Habilidades
+                    worksheet.Cell(68, 1).Value = person.Skills;
+                    #endregion
+
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return File(content, contentType, fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         private async Task<List<SelectListItem>> GetIdentificationTypeSelectList()
         {
             var identificationTypes = new List<SelectListItem>();

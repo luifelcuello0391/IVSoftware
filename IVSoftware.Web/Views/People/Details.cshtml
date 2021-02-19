@@ -11,6 +11,13 @@
 
 <div class="row">
     <div class="col">
+        <a asp-action="DownloadExcelDocument" asp-route-id="@Model.Id" class="float-right btn btn-primary mb-3">
+            Descargar
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
         <div class="form-group">
             <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                 <label asp-for="IdentificationTypeId" style="color:white"></label>
