@@ -4,14 +4,13 @@
     ViewData["Title"] = "Nuevo registro";
 }
 
-
 <h1>Mantenimiento y/o calibración de equipo de laboratorio</h1>
 
 <h4>Nuevo registro</h4>
 <hr />
 <div>
     <div>
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input hidden asp-for="Name" value="Mantenimiento" />
@@ -54,7 +53,7 @@
 
             <!--Service provider-->
             <div class="form-group">
-                <h5 class="control-label" style="color:yellowgreen">Información del contratista de mantenimiento</h5>
+                <h5 class="control-label" style="color:yellowgreen">Información del proveedor de mantenimiento</h5>
                 <hr />
 
                 <button id="btnShowModalProvider"
@@ -62,7 +61,7 @@
                         style="background-color:yellowgreen; color:white"
                         class="btn btn-primary"
                         onclick="ShowProviderModal()">
-                    Seleccionar contratista
+                    Seleccionar proveedor
                 </button>
 
                 <div id="div_provider_info"></div>
@@ -110,6 +109,27 @@
                 </button>
 
                 <div id="div_responsable"></div>
+            </div>
+
+            <h5 style="color:yellowgreen">Certificado de mantenimiento y/o calibración</h5>
+            <hr />
+            <div style="width:100%">
+                <table>
+                    <tr>
+                        <td>
+                            <label class="btn btn-primary" style="background-color:yellowgreen; color:white">
+                                Adjuntar PDF <input id="postedFiles" name="postedFiles" type="file" style="display: none;" required onchange="selectFile()">
+                            </label>
+                        </td>
+
+                        <td>
+                            <label id="lbl_selected" style="margin-left:10px">No se ha seleccionado ningún archivo</label>
+                        </td>
+
+                    </tr>
+                </table>
+
+                <span style="color:red" class="text-danger">@ViewBag.Message</span>
             </div>
 
             <div class="form-group" hidden>
@@ -173,6 +193,11 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 <script>
+    function selectFile() {
+        var name = document.getElementById("postedFiles");
+        document.getElementById("lbl_selected").innerText = 'Archivo seleccionado: ' +  name.files.item(0).name;
+    }
+
     function onMaintenanceTypeSelectedChanged() {
 
         var type = $("#cbx_maintenance_type").val();

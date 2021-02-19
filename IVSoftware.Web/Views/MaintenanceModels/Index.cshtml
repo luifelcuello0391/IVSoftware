@@ -74,8 +74,12 @@
                 @Html.Raw("Serie del equipo")
             </th>
 
+            <th>
+                @Html.DisplayNameFor(model => model.Equip.Laboratory)
+            </th>
+
             <th style="white-space:nowrap">
-                @Html.Raw("Contratista de mantenimiento")
+                @Html.Raw("Proveedor de mantenimiento")
             </th>
 
             <th style="white-space:nowrap">
@@ -133,6 +137,19 @@
             {
                 <td style="white-space:nowrap">
                     @Html.Raw("No especificada")
+                </td>
+            }
+
+            @if (item.Equip != null && item.Equip.Laboratory != null && item.Equip.Laboratory.Name != null && !string.IsNullOrEmpty(item.Equip.Laboratory.Name.Replace(" ", string.Empty)))
+            {
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.Equip.Laboratory.Name)
+                </td>
+            }
+            else
+            {
+                <td style="white-space:nowrap">
+                    @Html.Raw("No asignado")
                 </td>
             }
 

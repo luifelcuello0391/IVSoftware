@@ -67,7 +67,7 @@
     </div>
 
     <!--Provider information-->
-    <h5 style="color:yellowgreen">Información del contratista de mantenimiento</h5>
+    <h5 style="color:yellowgreen">Información del proveedor de mantenimiento</h5>
     <hr />
     <input hidden asp-for="ProviderId" id="txt_provider_id" />
     <div style="margin-left:5px" id="div_provider_info">
@@ -105,7 +105,24 @@
             @Html.DisplayFor(model => model.ModificationDatetime)
         </dd>
     </dl>
+
+    <h5 style="color:yellowgreen">Certificado de mantenimiento y/o calibración</h5>
+    <hr />
+    <dl class="row">
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.MaintenanceCertificateDocument != null && Model.MaintenanceCertificateDocument.Url != null && !string.IsNullOrEmpty(Model.MaintenanceCertificateDocument.Url.Replace(" ", string.Empty)))
+            {
+                <a asp-action="DownloadFile" asp-route-fileName="@Model.MaintenanceCertificateDocument.Url">Descargar: @Model.MaintenanceCertificateDocument.Name</a>
+            }
+            else
+            {
+                @Html.Raw("No se han adjuntado ningún documento")
+            }
+        </dd>
+    </dl>
+
 </div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
     <a asp-action="Index">Regresar</a>

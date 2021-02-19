@@ -6,41 +6,76 @@
 
 <h1>Crear</h1>
 
-<h4>Proveedor/Contratista</h4>
+<h4>Proveedor</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<div>
+    <div>
+        <form asp-action="Create" enctype="multipart/form-data" method="post" >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Identification" class="control-label"></label>
                 <input asp-for="Identification" class="form-control" />
                 <span asp-validation-for="Identification" class="text-danger"></span>
             </div>
+
+            <div style="width:100%">
+                <label asp-for="Rut" class="control-label"></label>
+                <table>
+                    <tr>
+                        <td>
+                            <input asp-for="Rut" class="form-control" />
+                        </td>
+
+                        <td>
+                            <label class="btn btn-primary" style="background-color:yellowgreen; color:white; margin-left:10px">
+                                Adjuntar PDF <input id="postedFiles" name="postedFiles" type="file" style="display: none;" required onchange="selectFile()">
+                            </label>
+                        </td>
+
+                        <td>
+                            <label id="lbl_selected" style="margin-left:10px">No se ha seleccionado ningún archivo</label>
+                        </td>
+
+                    </tr>
+                </table>
+                
+                <span style="color:red" class="text-danger">@ViewBag.Message</span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Contact" class="control-label"></label>
                 <input asp-for="Contact" class="form-control" />
                 <span asp-validation-for="Contact" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="WebPage" class="control-label"></label>
+                <input asp-for="WebPage" class="form-control" />
+                <span asp-validation-for="WebPage" class="text-danger"></span>
             </div>
 
             <div class="form-group" style="display:none">
@@ -48,16 +83,19 @@
                 <input asp-for="RegisterStatus" class="form-control" value="1" />
                 <span asp-validation-for="RegisterStatus" class="text-danger"></span>
             </div>
+
             <div class="form-group" style="display:none">
                 <label asp-for="CreationDatetime" class="control-label"></label>
                 <input asp-for="CreationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
                 <span asp-validation-for="CreationDatetime" class="text-danger"></span>
             </div>
+
             <div class="form-group" style="display:none">
                 <label asp-for="ModificationDatetime" class="control-label"></label>
                 <input asp-for="ModificationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
                 <span asp-validation-for="ModificationDatetime" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
             </div>
@@ -68,6 +106,15 @@
 <div>
     <a asp-action="Index">Regresar</a>
 </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+<script>
+    function selectFile() {
+        var name = document.getElementById("postedFiles");
+        document.getElementById("lbl_selected").innerText = 'Archivo seleccionado: ' +  name.files.item(0).name;
+    }
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -9,6 +9,10 @@
         <table>
             <tr>
                 <td style="padding: 0 15px 0 0">
+                    <div><b>@Html.DisplayNameFor(model => model.Laboratory)</b></div>
+                </td>
+
+                <td style="padding: 0 15px 0 0">
                     <div><b>@Html.DisplayNameFor(model => model.Code)</b></div>
                 </td>
 
@@ -30,6 +34,19 @@
             </tr>
 
             <tr>
+                @if (Model.Laboratory != null && Model.Laboratory.Name != null && !string.IsNullOrEmpty(Model.Laboratory.Name.Replace(" ", string.Empty)))
+                {
+                    <td style="padding: 0 15px 0 0">
+                        <div> @Html.DisplayFor(model => model.Laboratory.Name)</div>
+                    </td>
+                }
+                else
+                {
+                    <td style="padding: 0 15px 0 0">
+                        <div> @Html.Raw("No asignado")</div>
+                    </td>
+                }
+
                 <td style="padding: 0 15px 0 0">
                     <div> @Html.DisplayFor(model => model.Code)</div>
                 </td>

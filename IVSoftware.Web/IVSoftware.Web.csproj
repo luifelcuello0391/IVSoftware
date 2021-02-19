@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\AppDocuments\**" />
+    <Content Remove="wwwroot\AppDocuments\**" />
+    <EmbeddedResource Remove="wwwroot\AppDocuments\**" />
+    <None Remove="wwwroot\AppDocuments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Models\EducacionBasica.cs~RF4addf2f8.TMP" />
     <None Remove="Models\LoginViewModel" />
   </ItemGroup>
@@ -54,6 +61,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="InitialScripts\QuestionAndCheckListScript.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="InitialScripts\script_insert_laboratories.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="InitialScripts\ServicesAdditionalInfo.sql">

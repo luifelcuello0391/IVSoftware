@@ -1,8 +1,10 @@
 ﻿using IVSoftware.Models;
+using IVSoftware.Web.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,7 +32,7 @@ namespace IVSoftware.Data.Models
         [DisplayName("Fecha de compra")]
         public DateTime? PurchaseDate { get; set; }
         [DisplayName("Magnitud")]
-        public string Magnitude { get; set; }
+        public string Magnitude { get; set; }  
         [DisplayName("Rango")]
         public string Range { get; set; }
         [DisplayName("Lectura mínima (resolución)")]
@@ -55,5 +57,10 @@ namespace IVSoftware.Data.Models
         public virtual List<AirResourceMonitoringDeviceMaintenance> MaintenancesForAirResourceMonitoringDevice { get; set; }
         [DisplayName("Valor de compra")]
         public double PurchaseValue { get; set; } = 0;
+
+        [DisplayName("Laboratorio")]
+        public virtual LaboratoryModel Laboratory { get; set; }
+        [NotMapped]
+        public int? SelectedLaboratoryId { get; set; }
     }
 }

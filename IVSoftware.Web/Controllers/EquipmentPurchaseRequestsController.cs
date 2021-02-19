@@ -26,10 +26,28 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: EquipmentPurchaseRequests
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter = "All")
         {
-            var iVSoftwareContext = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson);
-            return View(await iVSoftwareContext.ToListAsync());
+            ViewBag.filter = filter;
+
+            switch(filter)
+            {
+                case "1": // News
+                    var iVSoftwareContextNew = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson).Where(x => x.RequestStatus == 1);
+                    return View(await iVSoftwareContextNew.ToListAsync());
+
+                case "2": // Approved
+                    var iVSoftwareContextApproved = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson).Where(x => x.RequestStatus == 2);
+                    return View(await iVSoftwareContextApproved.ToListAsync());
+
+                case "3": // Rejected
+                    var iVSoftwareContextRejected = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson).Where(x => x.RequestStatus == 3);
+                    return View(await iVSoftwareContextRejected.ToListAsync());
+
+                default: // All
+                    var iVSoftwareContext = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson);
+                    return View(await iVSoftwareContext.ToListAsync());
+            }
         }
 
         // GET: EquipmentPurchaseRequests/Details/5

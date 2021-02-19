@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using IVSoftware.Data.Models;
 using IVSoftware.Web.Models;
 using IVSoftware.Web.Service;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace IVSoftware.Web.Controllers
 {
@@ -15,9 +18,13 @@ namespace IVSoftware.Web.Controllers
     {
         private readonly IVSoftwareContext _context;
         private readonly IEntityService<Person, Guid> _personService;
+        private readonly IEntityService<Document, Guid> _documentService;
+        private readonly IHostingEnvironment _env;
 
-        public MaintenanceModelsController(IVSoftwareContext context, IEntityService<Person, Guid> PersonService)
+        public MaintenanceModelsController(IVSoftwareContext context, IEntityService<Person, Guid> PersonService, IEntityService<Document, Guid> documentService, IHostingEnvironment env)
         {
+            _documentService = documentService;
+            _env = env;
             this._personService = PersonService;
             _context = context;
         }
@@ -78,10 +85,25 @@ namespace IVSoftware.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TypeOfMaintenanceId,EquipId,MaintenanceDate,Diagnostic,WorkExecuted,NextCalibrationDate,Observations,ProviderId,Name,RegisterStatus,CreationDatetime,ModificationDatetime, PersonId")] MaintenanceModel maintenanceModel)
+        public async Task<IActionResult> Create([Bind("TypeOfMaintenanceId,EquipId,MaintenanceDate,Diagnostic,WorkExecuted,NextCalibrationDate,Observations,ProviderId,Name,RegisterStatus,CreationDatetime,ModificationDatetime,PersonId")] MaintenanceModel maintenanceModel, List<IFormFile> postedFiles)
         {
             if (ModelState.IsValid)
             {
+                Document certificate = null;
+
+                if (postedFiles != null && postedFiles.Count > 0)
+                {
+                    certificate = new Document();
+                    certificate.Id = Guid.NewGuid();
+                    certificate.Name = postedFiles[0].FileName;
+                    certificate.CreationDatetime = DateTime.Now;
+                    certificate.ModiicationDatetime = DateTime.Now;
+                    certificate.Url = "/AppDocuments/Maintenances/" + postedFiles[0].FileName;
+                }
+
+                maintenanceModel.MaintenanceCertificateDocument = certificate;
+                maintenanceModel.MaintenanceCertificateDocumentId = certificate.Id;
+
                 Equipment equipment = null;
                 if(maintenanceModel.EquipId > 0)
                 {
@@ -107,12 +129,60 @@ namespace IVSoftware.Web.Controllers
                 }
                 maintenanceModel.Responsable = responsable;
 
-                _context.Add(maintenanceModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if(maintenanceModel.MaintenanceCertificateDocument != null)
+                {
+                    if (postedFiles[0].FileName.ToLower().EndsWith(".pdf"))
+                    {
+                        if (postedFiles[0].Length <= 2000000)
+                        {
+                            string path = Path.Combine(_env.WebRootPath, "AppDocuments", "Maintenances");
+
+                            if (!Directory.Exists(path))
+                            {
+                                Directory.CreateDirectory(path);
+                            }
+
+                            List<string> uploadedFiles = new List<string>();
+                            foreach (IFormFile postedFile in postedFiles)
+                            {
+                                string fileName = Path.GetFileName(postedFile.FileName);
+                                using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                                {
+                                    postedFile.CopyTo(stream);
+                                    uploadedFiles.Add(fileName);
+                                }
+                            }
+
+                            // Saves the maintenance certificate document information
+                            _context.Add(certificate);
+                            await _context.SaveChangesAsync();
+
+                            _context.Add(maintenanceModel);
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index));
+                        }
+                        else
+                        {
+                            ViewBag.Message = "El tamaño máximo del archivo debe ser 2 MB";
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.Message = "El archivo debe ser un PDF";
+                    }
+                }
+                else
+                {
+                    // Normal save
+                    _context.Add(maintenanceModel);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
+
             ViewData["EquipId"] = new SelectList(_context.Equipment, "Id", "Name", maintenanceModel.EquipId);
             ViewData["ProviderId"] = new SelectList(_context.Provider, "Id", "Name", maintenanceModel.ProviderId);
+
             return View(maintenanceModel);
         }
 
@@ -129,6 +199,12 @@ namespace IVSoftware.Web.Controllers
             {
                 return NotFound();
             }
+
+            if(maintenanceModel.MaintenanceCertificateDocument != null)
+            {
+                maintenanceModel.MaintenanceCertificateDocumentId = maintenanceModel.MaintenanceCertificateDocument.Id;
+            }
+
             ViewData["EquipId"] = new SelectList(_context.Equipment, "Id", "Name", maintenanceModel.EquipId);
             ViewData["ProviderId"] = new SelectList(_context.Provider, "Id", "Name", maintenanceModel.ProviderId);
             return View(maintenanceModel);
@@ -139,7 +215,7 @@ namespace IVSoftware.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TypeOfMaintenanceId,EquipId,MaintenanceDate,Diagnostic,WorkExecuted,NextCalibrationDate,Observations,ProviderId,Name,RegisterStatus,CreationDatetime,ModificationDatetime, PersonId")] MaintenanceModel maintenanceModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TypeOfMaintenanceId,EquipId,MaintenanceDate,Diagnostic,WorkExecuted,NextCalibrationDate,Observations,ProviderId,Name,RegisterStatus,CreationDatetime,ModificationDatetime,PersonId,MaintenanceCertificateDocumentId")] MaintenanceModel maintenanceModel, List<IFormFile> postedFiles)
         {
             if (id != maintenanceModel.Id)
             {
@@ -150,6 +226,93 @@ namespace IVSoftware.Web.Controllers
             {
                 try
                 {
+                    if (postedFiles != null && postedFiles.Count > 0)
+                    {
+                        if (postedFiles[0].FileName.ToLower().EndsWith(".pdf"))
+                        {
+                            if (postedFiles[0].Length <= 2000000)
+                            {
+                                if (maintenanceModel.MaintenanceCertificateDocumentId != null)
+                                {
+                                    IEnumerable<Document> documents = await _documentService.FindByConditionAsync(x => x.Id == maintenanceModel.MaintenanceCertificateDocumentId);
+                                    if (documents != null && documents.Count() > 0)
+                                    {
+                                        maintenanceModel.MaintenanceCertificateDocument = documents.FirstOrDefault();
+                                    }
+                                }
+
+                                if (maintenanceModel.MaintenanceCertificateDocument != null)
+                                {
+                                    string previousFileName = maintenanceModel.MaintenanceCertificateDocument.Name;
+
+                                    maintenanceModel.MaintenanceCertificateDocument.Name = postedFiles[0].FileName;
+                                    maintenanceModel.MaintenanceCertificateDocument.ModiicationDatetime = DateTime.Now;
+                                    maintenanceModel.MaintenanceCertificateDocument.Url = "/AppDocuments/Maintenances/" + postedFiles[0].FileName;
+
+                                    _context.Update(maintenanceModel.MaintenanceCertificateDocument);
+                                    await _context.SaveChangesAsync();
+
+                                    string deletePath = Path.Combine(_env.WebRootPath, "AppDocuments", "Maintenances", previousFileName);
+
+                                    // Delete file on physical path
+                                    if (System.IO.File.Exists(deletePath))
+                                    {
+                                        System.IO.File.Delete(deletePath);
+                                    }
+                                }
+                                else
+                                {
+                                    Document certificate = new Document();
+                                    certificate.Id = Guid.NewGuid();
+                                    certificate.Name = postedFiles[0].FileName;
+                                    certificate.CreationDatetime = DateTime.Now;
+                                    certificate.ModiicationDatetime = DateTime.Now;
+                                    certificate.Url = "/AppDocuments/Maintenances/" + postedFiles[0].FileName;
+                                    maintenanceModel.MaintenanceCertificateDocument = certificate;
+
+                                    _context.Add(certificate);
+                                    await _context.SaveChangesAsync();
+                                }
+
+                                // Add file to physical path
+                                string path = Path.Combine(_env.WebRootPath, "AppDocuments", "Maintenances");
+
+                                if (!Directory.Exists(path))
+                                {
+                                    Directory.CreateDirectory(path);
+                                }
+
+                                List<string> uploadedFiles = new List<string>();
+                                foreach (IFormFile postedFile in postedFiles)
+                                {
+                                    string fileName = Path.GetFileName(postedFile.FileName);
+                                    using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                                    {
+                                        postedFile.CopyTo(stream);
+                                        uploadedFiles.Add(fileName);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.Message = "El tamaño máximo del archivo debe ser 2 MB";
+
+                                ViewData["EquipId"] = new SelectList(_context.Equipment, "Id", "Name", maintenanceModel.EquipId);
+                                ViewData["ProviderId"] = new SelectList(_context.Provider, "Id", "Name", maintenanceModel.ProviderId);
+                                return View(maintenanceModel);
+                            }
+                        }
+                        else
+                        {
+                            ViewBag.Message = "El archivo debe ser un PDF";
+
+                            ViewData["EquipId"] = new SelectList(_context.Equipment, "Id", "Name", maintenanceModel.EquipId);
+                            ViewData["ProviderId"] = new SelectList(_context.Provider, "Id", "Name", maintenanceModel.ProviderId);
+                            return View(maintenanceModel);
+                        }
+                    }
+
+
                     Equipment equipment = null;
                     if (maintenanceModel.EquipId > 0)
                     {
@@ -347,6 +510,30 @@ namespace IVSoftware.Web.Controllers
             }
 
             return PartialView("EquipmentData", null);
+        }
+
+        public ActionResult DownloadFile(string fileName)
+        {
+            try
+            {
+                string[] paths = fileName.Split("/");
+
+                string path = Path.Combine(_env.WebRootPath, "AppDocuments", "Maintenances", paths[paths.Length - 1]);
+
+                if (System.IO.File.Exists(path))
+                {
+                    var fs = System.IO.File.OpenRead(path);
+                    return File(fs, "application/pdf", Path.GetFileName(paths[paths.Length - 1]));
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                return NotFound();
+            }
         }
     }
 }

@@ -63,6 +63,15 @@ namespace IVSoftware.Web.Controllers
         {
             try
             {
+                ViewBag.Laboratories = await _context.Laboratories.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on EquipmentsController.Laboratories >> " + ex.ToString());
+            }
+
+            try
+            {
                 ViewBag.Brands = await _context.Brand.ToListAsync();
             }
             catch(Exception ex)
@@ -87,7 +96,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Model,Serie,PurchaseDate,Magnitude,Range,MinimumRead,Accuracy,PowerSupply,Observation,OtherRecomendation,Name,RegisterStatus,CreationDatetime,ModificationDatetime,SelectedBrandId,RequestedProviderId,PurchaseValue")] Equipment equipment)
+        public async Task<IActionResult> Create([Bind("Id,Code,Model,Serie,PurchaseDate,Magnitude,Range,MinimumRead,Accuracy,PowerSupply,Observation,OtherRecomendation,Name,RegisterStatus,CreationDatetime,ModificationDatetime,SelectedBrandId,RequestedProviderId,PurchaseValue,SelectedLaboratoryId")] Equipment equipment)
         {
             if (ModelState.IsValid)
             {
@@ -106,6 +115,13 @@ namespace IVSoftware.Web.Controllers
                 }
 
                 equipment.EquipProvider = provider;
+
+                LaboratoryModel laboratory = null;
+                if(equipment.SelectedBrandId > 0)
+                {
+                    laboratory = await _context.Laboratories.FirstOrDefaultAsync<LaboratoryModel>(x => x.Id == equipment.SelectedLaboratoryId);
+                }
+                equipment.Laboratory = laboratory;
 
                 _context.Add(equipment);
                 await _context.SaveChangesAsync();
@@ -130,6 +146,15 @@ namespace IVSoftware.Web.Controllers
 
             try
             {
+                ViewBag.Laboratories = await _context.Laboratories.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on EquipmentsController.Laboratories >> " + ex.ToString());
+            }
+
+            try
+            {
                 ViewBag.Brands = await _context.Brand.ToListAsync();
             }
             catch (Exception ex)
@@ -144,6 +169,15 @@ namespace IVSoftware.Web.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine("Error on EquipmentsController.Providers >> " + ex.ToString());
+            }
+
+            if(equipment.Laboratory != null)
+            {
+                equipment.SelectedLaboratoryId = equipment.Laboratory.Id;
+            }
+            else
+            {
+                equipment.SelectedLaboratoryId = 0;
             }
 
             if(equipment.EquipBrand != null)
@@ -172,7 +206,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Model,Serie,PurchaseDate,Magnitude,Range,MinimumRead,Accuracy,PowerSupply,Observation,OtherRecomendation,Name,RegisterStatus,CreationDatetime,ModificationDatetime,SelectedBrandId,RequestedProviderId,PurchaseValue")] Equipment equipment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Model,Serie,PurchaseDate,Magnitude,Range,MinimumRead,Accuracy,PowerSupply,Observation,OtherRecomendation,Name,RegisterStatus,CreationDatetime,ModificationDatetime,SelectedBrandId,RequestedProviderId,PurchaseValue,SelectedLaboratoryId")] Equipment equipment)
         {
             if (id != equipment.Id)
             {
@@ -198,6 +232,13 @@ namespace IVSoftware.Web.Controllers
                     }
 
                     equipment.EquipProvider = provider;
+
+                    LaboratoryModel laboratory = null;
+                    if (equipment.SelectedBrandId > 0)
+                    {
+                        laboratory = await _context.Laboratories.FirstOrDefaultAsync<LaboratoryModel>(x => x.Id == equipment.SelectedLaboratoryId);
+                    }
+                    equipment.Laboratory = laboratory;
 
                     _context.Update(equipment);
                     await _context.SaveChangesAsync();

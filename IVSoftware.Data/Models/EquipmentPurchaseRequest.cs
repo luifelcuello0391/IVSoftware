@@ -99,5 +99,11 @@ namespace IVSoftware.Data.Models
         [DisplayName("Quien aprueba/rechaza la solicitud")]
         public virtual Person StatusChangePerson { get; set; }
 
+        [NotMapped]
+        public int? SelectedLaboratoryId { get; set; }
+
+        [DisplayName("Laboratorio")]
+        public virtual LaboratoryModel Laboratory { get; set; }
+
     }
 }

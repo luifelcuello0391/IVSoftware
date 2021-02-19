@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210213220337_laboratoryentity")]
+    partial class laboratoryentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,8 +56,8 @@ namespace IVSoftware.Web.Migrations
                     b.Property<int>("EquipId")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("MaintenanceCertificateDocumentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("MaintenanceDate")
                         .HasColumnType("datetime2");
@@ -106,8 +108,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EquipId");
-
-                    b.HasIndex("MaintenanceCertificateDocumentId");
 
                     b.HasIndex("PersonId");
 
@@ -713,29 +713,6 @@ namespace IVSoftware.Web.Migrations
                     b.ToTable("Department");
                 });
 
-            modelBuilder.Entity("IVSoftware.Data.Models.Document", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ModiicationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Document");
-                });
-
             modelBuilder.Entity("IVSoftware.Data.Models.Eps", b =>
                 {
                     b.Property<int>("Id")
@@ -941,9 +918,6 @@ namespace IVSoftware.Web.Migrations
                     b.Property<string>("Justification")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LaboratoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
@@ -996,8 +970,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AnalystPersonId");
-
-                    b.HasIndex("LaboratoryId");
 
                     b.HasIndex("ResponsePersonId");
 
@@ -1260,9 +1232,6 @@ namespace IVSoftware.Web.Migrations
                     b.Property<int>("EquipId")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("MaintenanceCertificateDocumentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("MaintenanceDate")
                         .HasColumnType("datetime2");
 
@@ -1297,8 +1266,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EquipId");
-
-                    b.HasIndex("MaintenanceCertificateDocumentId");
 
                     b.HasIndex("PersonId");
 
@@ -1709,21 +1676,7 @@ namespace IVSoftware.Web.Migrations
                     b.Property<int>("RegisterStatus")
                         .HasColumnType("int");
 
-                    b.Property<string>("Rut")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("RutDocuentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("RutDocumentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("WebPage")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RutDocumentId");
 
                     b.ToTable("Provider");
                 });
@@ -3476,19 +3429,12 @@ namespace IVSoftware.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IVSoftware.Data.Models.Document", "MaintenanceCertificateDocument")
-                        .WithMany()
-                        .HasForeignKey("MaintenanceCertificateDocumentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("IVSoftware.Data.Models.Person", "Responsable")
                         .WithMany()
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Equipment");
-
-                    b.Navigation("MaintenanceCertificateDocument");
 
                     b.Navigation("Responsable");
                 });
@@ -3714,17 +3660,10 @@ namespace IVSoftware.Web.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("IVSoftware.Data.Models.LaboratoryModel", "Laboratory")
-                        .WithMany()
-                        .HasForeignKey("LaboratoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("IVSoftware.Data.Models.Person", "StatusChangePerson")
                         .WithMany()
                         .HasForeignKey("ResponsePersonId")
                         .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Laboratory");
 
                     b.Navigation("ResponsibleAnalyst");
 
@@ -3779,11 +3718,6 @@ namespace IVSoftware.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IVSoftware.Data.Models.Document", "MaintenanceCertificateDocument")
-                        .WithMany()
-                        .HasForeignKey("MaintenanceCertificateDocumentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("IVSoftware.Data.Models.Person", "Responsable")
                         .WithMany()
                         .HasForeignKey("PersonId")
@@ -3795,8 +3729,6 @@ namespace IVSoftware.Web.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Equip");
-
-                    b.Navigation("MaintenanceCertificateDocument");
 
                     b.Navigation("Responsable");
 
@@ -3938,16 +3870,6 @@ namespace IVSoftware.Web.Migrations
                     b.Navigation("JobRole");
 
                     b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.Provider", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.Document", "RutDocument")
-                        .WithMany()
-                        .HasForeignKey("RutDocumentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("RutDocument");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.QuestionEvaluation", b =>
