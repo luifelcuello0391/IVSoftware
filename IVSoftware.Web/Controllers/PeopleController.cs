@@ -467,6 +467,13 @@ namespace IVSoftware.Web.Controllers
                 {
                     IXLWorksheet worksheet = workbook.Worksheets.FirstOrDefault();
 
+                    #region Logo
+                    var imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Formats\Logo.png");
+                    var image = worksheet.AddPicture(imagePath)
+                        .MoveTo(30, 25)
+                        .Scale(1); // optional: resize picture
+                    #endregion
+
                     #region Datos Personales
                     worksheet.Cell(9, 4).Value = person.FullName;
                     worksheet.Cell(10, 4).Value = person.IdentificationNumber;

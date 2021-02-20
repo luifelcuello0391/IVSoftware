@@ -58,6 +58,9 @@
     <div class="row">
         <div class="col">
             <div class="form-group">
+                <a asp-action="DownloadExcelDocument" asp-route-id="@Model.Id" class="btn btn-primary">
+                    Descargar
+                </a>
                 <input type="submit" value="Guardar" class="btn btn-primary" />
                 <a asp-controller="People" asp-action="Edit" asp-route-id="@Model.SupervisedById" class="btn btn-primary"> Cancelar </a>
             </div>
