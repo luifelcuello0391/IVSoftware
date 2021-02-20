@@ -13,7 +13,6 @@ namespace IVSoftware.Data.Models
         public Guid SupervisedPersonId { get; set; }
 
         [DisplayName("Persona supervisada")]
-        [Required(ErrorMessage = "El {0} es requerido.")]
         public virtual Person SupervisedPerson { get; set; }
 
         [DisplayName("Supervisado por")]
@@ -21,7 +20,6 @@ namespace IVSoftware.Data.Models
         public Guid SupervisedById { get; set; }
 
         [DisplayName("Supervisado por")]
-        [Required(ErrorMessage = "El {0} es requerido.")]
         public virtual Person SupervisedBy { get; set; }
 
         [DisplayName("Fecha de supervisión")]

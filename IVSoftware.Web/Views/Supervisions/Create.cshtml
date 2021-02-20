@@ -1,0 +1,76 @@
+﻿@model Supervision
+@{
+    ViewData["Title"] = "Supervisión - Agregar";
+}
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <h5 class="text-primary titulo">Supervisión - Agregar</h5>
+    <hr />
+
+    <div class="row" style="margin-top:20px">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SupervisedById" class="control-label" style="color:white"></label>
+                </div>
+                <select asp-for="SupervisedById" class="form-control"
+                        asp-items="(List<SelectListItem>) ViewBag.People">
+                </select>
+                <span asp-validation-for="SupervisedById" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SupervisedPersonId" class="control-label" style="color:white"></label>
+                </div>
+                <select asp-for="SupervisedPersonId" class="form-control"
+                        asp-items="(List<SelectListItem>) ViewBag.People">
+                </select>
+                <span asp-validation-for="SupervisedPersonId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Analyte" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Analyte" class="form-control" />
+                <span asp-validation-for="Analyte" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Date" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <a asp-controller="People" asp-action="Edit" asp-route-id="@Model.SupervisedById" class="btn btn-primary"> Cancelar </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="assignModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,206 @@
+﻿@model Supervision
+@{
+    ViewData["Title"] = "Supervisión - Editar";
+}
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <h5 class="text-primary titulo">Supervisión - Editar</h5>
+    <hr />
+
+    <div class="row" style="margin-top:20px">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SupervisedById" class="control-label" style="color:white"></label>
+                </div>
+                <select asp-for="SupervisedById" class="form-control"
+                        asp-items="(List<SelectListItem>) ViewBag.People">
+                </select>
+                <span asp-validation-for="SupervisedById" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SupervisedPersonId" class="control-label" style="color:white"></label>
+                </div>
+                <select asp-for="SupervisedPersonId" class="form-control"
+                        asp-items="(List<SelectListItem>) ViewBag.People">
+                </select>
+                <span asp-validation-for="SupervisedPersonId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Analyte" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Analyte" class="form-control" />
+                <span asp-validation-for="Analyte" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Date" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <a asp-controller="People" asp-action="Edit" asp-route-id="@Model.SupervisedById" class="btn btn-primary"> Cancelar </a>
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <div class="row">
+        <div class="col">
+            <button id="btnNew" type="button" class="float-right btn btn-primary mb-3" data-toggle="modal" href="#create-modal" data-id="@Model.Id">
+                Agregar registro
+            </button>
+        </div>
+    </div>
+
+    <table class="table" id="details">
+        <thead style="background-color:yellowgreen; color:white">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().PHVA)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Process)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().SupervisedActivity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Result)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Observations)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Details)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PHVA)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Process)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SupervisedActivity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Result)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observations)
+                    </td>
+                    <td align="right" style="white-space:nowrap">
+                        <a id="editDetail" data-toggle="modal" href="#edit-modal" data-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                        <a id="deleteDetail" data-toggle="modal" href="#delete-modal" data-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="assignModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/lib/datatables.net/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/datatables.net/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables.net/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            const newDetailUrl = '@Url.Action("CreateDetail", "Supervisions")';
+            $('#btnNew').on("click", function () {
+                let data_id = "0";
+                if (typeof $(this).data('id') !== 'undefined') {
+                    data_id = $(this).data('id');
+                }
+
+                $.ajax({
+                    url: newDetailUrl,
+                    data: { id: data_id },
+                    success: function (data) {
+                        $('.modal-content').html(data);
+                        $('#assignModal').modal('show');
+                    }
+                });
+            });
+
+            const deleteDetailUrl = '@Url.Action("DeleteDetail", "Supervisions")';
+            $('#deleteDetail').on("click", function () {
+                let data_id = "0";
+                if (typeof $(this).data('id') !== 'undefined') {
+                    data_id = $(this).data('id');
+                }
+
+                $.ajax({
+                    url: deleteDetailUrl,
+                    data: { id: data_id },
+                    success: function (data) {
+                        $('.modal-content').html(data);
+                        $('#assignModal').modal('show');
+                    }
+                });
+            });
+
+            const editDetailUrl = '@Url.Action("EditDetail", "Supervisions")';
+            $('#editDetail').on("click", function () {
+                let data_id = "0";
+                if (typeof $(this).data('id') !== 'undefined') {
+                    data_id = $(this).data('id');
+                }
+
+                $.ajax({
+                    url: editDetailUrl,
+                    data: { id: data_id },
+                    success: function (data) {
+                        $('.modal-content').html(data);
+                        $('#assignModal').modal('show');
+                    }
+                });
+            });
+
+            $('#details').DataTable({
+                language: {
+                    url: '/lib/datatables.net/Spanish.json'
+                },
+                columnDefs: [{
+                    orderable: false,
+                    targets: 5
+                },]
+            });
+        });
+    </script>
+}

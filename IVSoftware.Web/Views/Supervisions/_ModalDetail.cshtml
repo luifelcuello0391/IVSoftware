@@ -1,0 +1,139 @@
+﻿@model SupervisionDetail
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Detalle de la supervisión</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <input type="hidden" asp-for="Id" id="detailId" name="detailId" />
+    <input type="hidden" asp-for="SupervisionId" />
+    <div class="row">
+        <div class="col">
+            <span asp-validation-for="Id" class="text-danger small"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="PHVA" class="control-label" style="color:white"></label>
+                </div>
+                <select asp-for="PHVA" class="form-control">
+                    <option>Planear</option>
+                    <option>Hacer</option>
+                    <option>Verificar</option>
+                    <option>Actuar</option>
+                </select>
+                <span asp-validation-for="PHVA" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Process" class="control-label" style="color:white"></label>
+                </div>
+                <select asp-for="Process" class="form-control">
+                    <option>Coordinación Laboratorio y Gestión de Recursos</option>
+                    <option>Solicitudes Ofertas y Contratos</option>
+                    <option>Muestreo y trabajo de campo</option>
+                    <option>Manipulación de Ítems de Ensayo</option>
+                    <option>Realización de ensayos</option>
+                    <option>Seguimiento a la gestión</option>
+                    <option>Aseguramiento de la Validez de los resultados</option>
+                </select>
+                <span asp-validation-for="Process" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Result" class="control-label" style="color:white"></label>
+                </div>
+                <select asp-for="Result" class="form-control">
+                    <option>Se realiza de manera satisfactoria</option>
+                    <option>Se realiza de manera parcial</option>
+                    <option>No se realiza</option>
+                    <option>No aplica</option>
+                </select>
+                <span asp-validation-for="Result" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SupervisedActivity" style="color:white"></label>
+                </div>
+                <textarea asp-for="SupervisedActivity" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="SupervisedActivity" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Observations" style="color:white"></label>
+                </div>
+                <textarea asp-for="Observations" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Observations" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" id="cancel" data-dismiss="modal">Cancelar</button>
+    <button type="button" class="btn btn-primary" id="Add">Agregar</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#Add').on("click", function () {
+            $(this).prop('disabled', true);
+            $('#cancel').prop('disabled', true);
+            let Id = $('#detailId').val();
+            let SupervisionId = $('#SupervisionId').val();
+            let PHVA = $('#PHVA').val();
+            let Process = $('#Process').val();
+            let Result = $('#Result').val();
+            let SupervisedActivity = $('#SupervisedActivity').val();
+            let Observations = $('#Observations').val();
+
+            $.ajax({
+                url: '@Url.Action("CreateDetail", "Supervisions")',
+                method: 'POST',
+                data: {
+                    PHVA,
+                    Process,
+                    Result,
+                    SupervisedActivity,
+                    Observations,
+                    SupervisionId
+                },
+                success: function (data) {
+                    $('#assign-modal').modal('show');
+                    if (data.lastIndexOf("<div", 6) != -1) {
+                        $('.modal-content').html(data);
+                        $('#assign-modal').modal('show');
+                        $('#Add').prop('disabled', false);
+                        $('#cancel').prop('disabled', false);
+                    }
+                    else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log("error", data);
+                    alert("Ocurrió un error, intente más tarde por favor");
+                }
+            });
+        })
+    });
+
+</script>

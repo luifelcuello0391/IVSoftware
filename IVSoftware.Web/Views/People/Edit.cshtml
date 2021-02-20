@@ -301,6 +301,9 @@
             <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseConocimientoTecnico" role="button" aria-expanded="false" aria-controls="collapseExample">
                 Conocimiento técnico específico
             </a>
+            <a class="btn btn-outline-secondary" data-toggle="collapse" href="#collapseSupervisionesPorMi" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Supervisiones realizadas por mi
+            </a>
 
             <div class="collapse" id="collapseEducacionBasica" style="margin-top:20px">
                 <div class="card card-body">
@@ -642,6 +645,54 @@
                         <div class="col"></div>
                     </div>
                 </div>
+            </div>
+
+            <div class="collapse" id="collapseSupervisionesPorMi" style="margin-top:20px">
+                <div class="card card-body">
+                    <h6 class="text-success titulo">Supervisiones realizadas por mi</h6>
+                    <table class="table">
+                        <thead style="background-color:yellowgreen; color:white">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SupervisionsByMe.FirstOrDefault().SupervisedBy)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SupervisionsByMe.FirstOrDefault().SupervisedPerson)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SupervisionsByMe.FirstOrDefault().Date)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.SupervisionsByMe)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SupervisedBy.FullName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SupervisedPerson.FullName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td align="right">
+                                        <a asp-controller="Supervisions" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="Supervisions" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <a asp-action="Create" asp-controller="Supervisions" asp-route-personId="@Model.Id"
+                           class="btn btn-primary btn-sm"
+                           style="margin-top:10px">Agregar</a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

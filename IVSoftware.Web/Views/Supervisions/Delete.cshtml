@@ -1,0 +1,139 @@
+﻿@model Supervision
+@{
+    ViewData["Title"] = "Supervisión - Eliminar";
+}
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="SupervisedById" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div>
+        <h5 class="text-primary titulo"><strong>¿Está seguro de que quiere eliminar este registro?</strong></h5>
+    </div>
+    <hr />
+
+    <div class="row" style="margin-top:20px">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SupervisedById" class="control-label" style="color:white"></label>
+                </div>
+                <select asp-for="SupervisedById" class="form-control" disabled
+                        asp-items="(List<SelectListItem>) ViewBag.People">
+                </select>
+                <span asp-validation-for="SupervisedById" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="SupervisedPersonId" class="control-label" style="color:white"></label>
+                </div>
+                <select asp-for="SupervisedPersonId" class="form-control" disabled
+                        asp-items="(List<SelectListItem>) ViewBag.People">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Analyte" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Analyte" class="form-control" readonly="readonly" />
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="Date" class="control-label" style="color:white"></label>
+                </div>
+                <input asp-for="Date" class="form-control" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="submit" value="Eliminar" class="btn btn-danger" />
+                <a asp-controller="People" asp-action="Edit" asp-route-id="@Model.SupervisedById" class="btn btn-primary"> Cancelar </a>
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <table class="table" id="details">
+        <thead style="background-color:yellowgreen; color:white">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().PHVA)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Process)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().SupervisedActivity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Result)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Observations)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Details)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PHVA)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Process)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SupervisedActivity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Result)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observations)
+                    </td>
+                    <td align="right" style="white-space:nowrap">
+                        @*<a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+@section Styles {
+    <link href="~/lib/datatables.net/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/lib/datatables.net/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables.net/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#details').DataTable({
+                language: {
+                    url: '/lib/datatables.net/Spanish.json'
+                },
+                columnDefs: [{
+                    orderable: false,
+                    targets: 5
+                },]
+            });
+        });
+    </script>
+}
