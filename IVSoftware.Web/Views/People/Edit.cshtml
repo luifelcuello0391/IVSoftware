@@ -680,6 +680,7 @@
                                     </td>
                                     <td align="right">
                                         <a asp-controller="Supervisions" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                                        <a asp-controller="Supervisions" asp-action="DownloadExcelDocument" asp-route-id="@item.Id"><i class="fas fa-cloud-download-alt" style="font-size:larger"></i></a>&nbsp;
                                         <a asp-controller="Supervisions" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
                                     </td>
                                 </tr>
