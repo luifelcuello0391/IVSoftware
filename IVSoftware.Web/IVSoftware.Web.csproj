@@ -45,6 +45,9 @@
     <None Update="Formats\HV.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Formats\Logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="InitialScripts\AcademyLevelData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
