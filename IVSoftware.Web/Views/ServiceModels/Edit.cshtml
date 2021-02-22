@@ -4,6 +4,43 @@
     ViewData["Title"] = "Editar servicio";
 }
 
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    .button1 {
+        border-radius: 2px;
+    }
+
+    .button2 {
+        border-radius: 4px;
+    }
+
+    .button3 {
+        border-radius: 8px;
+    }
+
+    .button4 {
+        border-radius: 12px;
+    }
+
+    .button5 {
+        border-radius: 50%;
+    }
+</style>
+
 <head>
     <script>
         function serviceSelection(e) {
@@ -14,9 +51,12 @@
             document.getElementById("input_matrix_id").value = e.target.value
         }
 
-
         function referenceMethodSelection(e) {
             document.getElementById("input_reference_method_id").value = e.target.value
+        }
+
+        function measurementUnitShange(e) {
+            document.getElementById("txt_unit_id").value = e.target.value;
         }
 
     </script>
@@ -24,7 +64,7 @@
 
 <h1>Editar</h1>
 
-<h4>Servicio</h4>
+<h4 style="color:yellowgreen">Servicio</h4>
 <hr />
 <div>
     <div>
@@ -39,6 +79,16 @@
             {
                 <input type="hidden" id="txt_load_person_id" />
             }
+
+            @if (Model.BackupAnalyst != null)
+            {
+                <input type="hidden" id="txt_load_backup_person_id" value="@Model.BackupAnalyst.IdentificationNumber" />
+            }
+            else
+            {
+                <input type="hidden" id="txt_load_backup_person_id" />
+            }
+
             <input type="hidden" asp-for="TypeOfServiceId" id="input_service_type_id" />
             <input type="hidden" asp-for="SelectedMatrixGroupId" id="input_matrix_id" />
             <input type="hidden" asp-for="SelectedVariableId" id="input_variable_id" />
@@ -137,9 +187,9 @@
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label asp-for="WeeklyAssignmentQuantity" class="control-label"></label>
-                    <input asp-for="WeeklyAssignmentQuantity" class="form-control" type="number" value="1" min="1" />
-                    <span asp-validation-for="WeeklyAssignmentQuantity" class="text-danger"></span>
+                    <label asp-for="AnalizeBefore" class="control-label"></label>
+                    <input asp-for="AnalizeBefore" class="form-control" type="number" value="1" min="1" />
+                    <span asp-validation-for="AnalizeBefore" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-md-4">
@@ -149,6 +199,20 @@
                         <input asp-for="UnitValue" class="form-control" type="number" style="flex:1" />
                     </div>
                     <span asp-validation-for="UnitValue" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="WeeklyAssignmentQuantity" class="control-label"></label>
+                    <input asp-for="WeeklyAssignmentQuantity" class="form-control" type="number" value="1" min="1" />
+                    <span asp-validation-for="WeeklyAssignmentQuantity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="MaximumWeeklyAssignment" class="control-label"></label>
+                    <input asp-for="MaximumWeeklyAssignment" class="form-control" type="number" value="1" min="1" />
+                    <span asp-validation-for="MaximumWeeklyAssignment" class="text-danger"></span>
                 </div>
             </div>
 
@@ -179,6 +243,169 @@
                     <span asp-validation-for="MaximumValue" class="text-danger"></span>
                 </div>
             </div>
+
+            <!--Información del análisis-->
+            <h5 style="color:yellowgreen">Información del análisis</h5>
+            <hr />
+
+            <div class="row">
+                <input asp-for="SelectedAnalisysTechniqueId" id="txt_analisys_technique_id" hidden />
+
+                <div class="col-md-8">
+                    <label asp-for="AnalisysTechnique" class="control-label"></label>
+                    <input id="txt_analisys_technique" asp-for="AnalisysTechnique" class="form-control" readonly />
+                    <span asp-validation-for="AnalisysTechnique" class="text-danger"></span>
+                </div>
+
+                <input type="button" class="btn btn-primary" style="background-color:yellowgreen; color:white; height:40px; margin-top:30px" value="Seleccionar" onclick="showAnalisysTechnique()">
+            </div>
+
+            <div class="row">
+                <input asp-for="SelectedAnalisysTypeId" id="txt_analisys_type_id" hidden />
+
+                <div class="col-md-8">
+                    <label asp-for="AnalisysType" class="control-label"></label>
+                    <input id="txt_analisys_type" asp-for="AnalisysType" class="form-control" readonly />
+                    <span asp-validation-for="AnalisysType" class="text-danger"></span>
+                </div>
+
+                <input type="button" class="btn btn-primary" style="background-color:yellowgreen; color:white; height:40px; margin-top:30px" value="Seleccionar" onclick="showAnalisisType()">
+            </div>
+
+            <div class="row">
+                <input asp-for="SelectedTypeOfSamplingId" id="txt_sampling_type_id" hidden />
+
+                <div class="col-md-8">
+                    <label asp-for="TypeOfSampling" class="control-label"></label>
+                    <input id="txt_sampling_type" asp-for="TypeOfSampling" class="form-control" readonly />
+                    <span asp-validation-for="TypeOfSampling" class="text-danger"></span>
+                </div>
+
+                <input type="button" class="btn btn-primary" style="background-color:yellowgreen; color:white; height:40px; margin-top:30px" value="Seleccionar" onclick="showSamplingType()">
+            </div>
+
+            <div class="row">
+                <input asp-for="SelectedStorageContainerId" id="txt_storage_container_id" hidden />
+
+                <div class="col-md-8">
+                    <label asp-for="StorageContainer" class="control-label"></label>
+                    <input id="txt_storage_container" asp-for="StorageContainer" class="form-control" readonly />
+                    <span asp-validation-for="StorageContainer" class="text-danger"></span>
+                </div>
+
+                <input type="button" class="btn btn-primary" style="background-color:yellowgreen; color:white; height:40px; margin-top:30px" value="Seleccionar" onclick="showStorageContainer()">
+            </div>
+
+            <div>
+                <label asp-for="WashingCleaningConditionsForContainer" class="control-label"></label>
+                <input asp-for="WashingCleaningConditionsForContainer" class="form-control" />
+                <span asp-validation-for="WashingCleaningConditionsForContainer" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="SamplingCaptureDescription" class="control-label"></label>
+                <input asp-for="SamplingCaptureDescription" class="form-control" />
+                <span asp-validation-for="SamplingCaptureDescription" class="text-danger"></span>
+            </div>
+
+            <div>
+                <label asp-for="PreservativesTheirConcentrationQuantity" class="control-label"></label>
+                <input asp-for="PreservativesTheirConcentrationQuantity" class="form-control" />
+                <span asp-validation-for="PreservativesTheirConcentrationQuantity" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="RegulatoryStorageTime" class="control-label"></label>
+                    <input asp-for="RegulatoryStorageTime" class="form-control" type="number" />
+                    <span asp-validation-for="RegulatoryStorageTime" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="StorageTemperature" class="control-label"></label>
+                    <input asp-for="StorageTemperature" class="form-control" />
+                    <span asp-validation-for="StorageTemperature" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="TestItemRetentionTimeInDays" class="control-label"></label>
+                    <input asp-for="TestItemRetentionTimeInDays" class="form-control" type="number" />
+                    <span asp-validation-for="TestItemRetentionTimeInDays" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="VolumeEstablishedByLaboratory" class="control-label"></label>
+                    <input asp-for="VolumeEstablishedByLaboratory" class="form-control" type="number" />
+                    <span asp-validation-for="VolumeEstablishedByLaboratory" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <input asp-for="SelectedUnitId" hidden id="txt_unit_id" />
+
+                <div class="form-group col-md-6">
+                    <label asp-for="MeasurementUnit" class="control-label"></label>
+                    <select class="form-control" data-placeholder="Seleccione la unidad" onchange="measurementUnitShange(event)">
+                        <option disabled selected></option>
+                        @if (ViewBag != null && ViewBag.Units != null && ViewBag.Units.Count > 0)
+                        {
+                            foreach (var item in ViewBag.Units)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="MeasurementUnit" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="RelatedProtocol" class="control-label"></label>
+                    <input asp-for="RelatedProtocol" class="form-control" />
+                    <span asp-validation-for="RelatedProtocol" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label asp-for="ReceptionDays" class="control-label"></label>
+                </div>
+
+                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnMonday" type="checkbox" checked /> @Html.Raw("Lunes")</div>
+                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnTuesday" type="checkbox" checked /> @Html.Raw("Martes")</div>
+                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnWednesday" type="checkbox" checked /> @Html.Raw("Miércoles")</div>
+                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnThursday" type="checkbox" checked /> @Html.Raw("Jueves")</div>
+                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnFriday" type="checkbox" checked /> @Html.Raw("Viernes")</div>
+                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnSaturday" type="checkbox" checked /> @Html.Raw("Sábado")</div>
+                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnSunday" type="checkbox" checked /> @Html.Raw("Domingo")</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AnalisysObservations" class="control-label"></label>
+                @Html.TextAreaFor(model => model.AnalisysObservations, new { @class = "form-control", @rows = 4 })
+                <span asp-validation-for="AnalisysObservations" class="text-danger"></span>
+            </div>
+
+            <h5></h5>
+
+            <h5 style="color:yellowgreen">Información de facturación</h5>
+            <hr />
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="BillingCode" class="control-label"></label>
+                    <input asp-for="BillingCode" class="form-control" type="number" />
+                    <span asp-validation-for="BillingCode" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="BillingName" class="control-label"></label>
+                    <input asp-for="BillingName" class="form-control" />
+                    <span asp-validation-for="BillingName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <h5></h5>
 
             <h5 style="color:yellowgreen">Autorizaciones y vigencia</h5>
             <hr />
@@ -224,6 +451,14 @@
             <!--Datos del responsable del servicio-->
             <div id="div_person_data" />
 
+            <div class="form-group">
+                <input type="button" value="Asignar suplente" onclick="showBackupPersonModal()" class="btn btn-primary" style="background-color:yellowgreen;color:white" />
+                <div id="div_backup_responsable"></div>
+            </div>
+
+            <!--Datos del suplente del servicio-->
+            <div id="div_backup_person_data" />
+
             <div class="form-group" style="display:none">
                 <label asp-for="BillingCode" class="control-label"></label>
                 <input asp-for="BillingCode" class="form-control" value="1" />
@@ -253,6 +488,7 @@
             </div>
 
             <input asp-for="PersonId" id="txt_responsable_id" hidden />
+            <input asp-for="BackupAnalystId" id="txt_backup_responsable_id" hidden />
 
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
@@ -277,12 +513,117 @@
     </div>
 </div>
 
+<!--Modal para seleccionar el suplente-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalBackupPersons" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para seleccionar la técnica de análisis-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="analisysTechniqueModal" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para seleccionar el tipo de análisis-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="analisisTypeModal" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para seleccionar el tipo de muestra-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="samplingTypeModal" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para seleccionar el recipiente de almacenamiento-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="storageContainerModal" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 <script>
     $(window).on('load', function () {
         selectPersonOnLoad();
     });
+
+    function showAnalisysTechnique() {
+        var url = "@Url.Action("GetAnalisysTechniques")";
+
+        // Show modal for persons
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#analisysTechniqueModal").modal('show');
+        });
+    }
+
+    function showStorageContainer() {
+        var url = "@Url.Action("GetStorageContainers")";
+
+        // Show modal for persons
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#storageContainerModal").modal('show');
+        });
+    }
+
+    function showSamplingType() {
+        var url = "@Url.Action("GetSamplingTypes")";
+
+        // Show modal for persons
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#samplingTypeModal").modal('show');
+        });
+    }
+
+    function showAnalisisType() {
+        var url = "@Url.Action("GetAnalisysTypes")";
+
+        // Show modal for persons
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#analisisTypeModal").modal('show');
+        });
+    }
+
+    function showBackupPersonModal() {
+        var url = "@Url.Action("GetBackupPersons")";
+
+        // Show modal for persons
+        $.get(url, "", function (data) {
+            $('.modal-content').html(data);
+            $("#modalBackupPersons").modal('show');
+        });
+    }
 
     function showPersonModal() {
         var url = "@Url.Action("GetPersons")";
@@ -292,7 +633,24 @@
                 $('.modal-content').html(data);
                 $("#modalPersons").modal('show');
             });
-        }
+    }
+
+    function selectBackupPerson(id) {
+        hidePersonmodal();
+
+        var url = "@Url.Action("GetBackupPerson")";
+
+        // Obtains the person data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                $("#lbl_backup_responsable").html("");
+                $("#div_backup_responsable").html(data);
+
+                $("#txt_backup_responsable_id").val($("#txt_backup_person_id").val());
+            }
+        });
+    }
 
     function selectPerson(id) {
             hidePersonmodal();
@@ -331,7 +689,85 @@
     function hidePersonmodal() {
             $("#modalPersons").modal('hide');
             $('.modal-content').html("");
-        }
+    }
+
+    function hideModal() {
+        $("#storageContainerModal").modal('hide');
+        $('.modal-content').html("");
+
+        $("#samplingTypeModal").modal('hide');
+        $('.modal-content').html("");
+
+        $("#analisisTypeModal").modal('hide');
+        $('.modal-content').html("");
+
+        $("#analisysTechniqueModal").modal('hide');
+        $('.modal-content').html("");
+    }
+
+    function selectSamplingType(id) {
+        hideModal();
+
+        var url = "@Url.Action("GetSamplingType")";
+
+        // Obtains the data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                var splitted = data.split(";");
+                $("#txt_sampling_type_id").val(splitted[0]);
+                $("#txt_sampling_type").val(splitted[1]);
+            }
+        });
+    }
+
+    function selectAnalisysType(id) {
+        hideModal();
+
+        var url = "@Url.Action("GetAnalisysType")";
+
+        // Obtains the data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                var splitted = data.split(";");
+                $("#txt_analisys_type_id").val(splitted[0]);
+                $("#txt_analisys_type").val(splitted[1]);
+            }
+        });
+    }
+
+    function selectStorageContainer(id) {
+        hideModal();
+
+        var url = "@Url.Action("GetStorageContainer")";
+
+        // Obtains the data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                var splitted = data.split(";");
+                $("#txt_storage_container_id").val(splitted[0]);
+                $("#txt_storage_container").val(splitted[1]);
+            }
+        });
+    }
+
+    function selectAnalisysTechnique(id) {
+        hideModal();
+
+        var url = "@Url.Action("GetAnalisysTechnique")";
+
+        // Obtains the data with ID
+        $.get(url, { identification: id }, function (data) {
+            if (data != null)
+            {
+                var splitted = data.split(";");
+                $("#txt_analisys_technique_id").val(splitted[0]);
+                $("#txt_analisys_technique").val(splitted[1]);
+            }
+        });
+    }
 
 </script>
 

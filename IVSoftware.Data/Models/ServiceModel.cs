@@ -80,7 +80,7 @@ namespace IVSoftware.Data.Models
         public virtual Person Responsable { get; set; }
 
         // New data aded after february 5th reunion
-        public Guid? BackupPersonId { get; set; }
+        public Guid? BackupAnalystId { get; set; }
 
         [DisplayName("Analista suplente")]
         public virtual Person BackupAnalyst { get; set; } // OK
@@ -161,19 +161,49 @@ namespace IVSoftware.Data.Models
         [NotMapped]
         public bool ReceptionOnSunday { get; set; } = true;
 
-        public string ObtainsReceptionDays()
+        [NotMapped]
+        public string ObtainsReceptionDays
         {
-            StringBuilder builder = new StringBuilder();
+            get
+            {
+                StringBuilder builder = new StringBuilder();
 
-            if (ReceptionOnMonday) builder.Append("M;");
-            if (ReceptionOnTuesday) builder.Append("Tu;");
-            if (ReceptionOnWednesday) builder.Append("W;");
-            if (ReceptionOnThursday) builder.Append("Th;");
-            if (ReceptionOnFriday) builder.Append("F;");
-            if (ReceptionOnSaturday) builder.Append("S;");
-            if (ReceptionOnSunday) builder.Append("Su");
+                if (ReceptionOnMonday) builder.Append("M;");
+                if (ReceptionOnTuesday) builder.Append("Tu;");
+                if (ReceptionOnWednesday) builder.Append("W;");
+                if (ReceptionOnThursday) builder.Append("Th;");
+                if (ReceptionOnFriday) builder.Append("F;");
+                if (ReceptionOnSaturday) builder.Append("S;");
+                if (ReceptionOnSunday) builder.Append("Su;");
 
-            return builder.ToString();
+                return builder.ToString();
+            }
+        }
+
+        [NotMapped]
+        public string ObtainsReceptionDaysName
+        {
+            get
+            {
+                if(!string.IsNullOrEmpty(ReceptionDays))
+                {
+                    string data = ReceptionDays.Replace(";", ", ");
+                    data = data.Replace("M", "Lunes");
+                    data = data.Replace("Tu", "Martes");
+                    data = data.Replace("W", "Miércoles");
+                    data = data.Replace("Th", "Jueves");
+                    data = data.Replace("F", "Viernes");
+                    data = data.Replace("S", "Sábado");
+                    data = data.Replace("Su", "Domingo");
+                    data = data.Remove(data.Length - 2);
+
+                    return data;
+                }
+                else
+                {
+                    return "No hay días de recepción";
+                }
+            }
         }
 
         [DisplayName("Observaciones")]

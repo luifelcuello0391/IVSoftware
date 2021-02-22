@@ -103,7 +103,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId,AvailableForClients,WeeklyAssignmentQuantity,BackupPersonId,MaximumWeeklyAssignment,SelectedAnalisysTypeId,SelectedTypeOfSamplingId,VolumeEstablishedByLaboratory,SelectedStorageContainerId,WashingCleaningConditionsForContainer,SamplingCaptureDescription,PreservativesTheirConcentrationQuantity,StorageTemperature,AnalizeBefore,RegulatoryStorageTime,ReceptionDays,TestItemRetentionTimeInDays,RelatedProtocol,SelectedAnalisysTechniqueId,ReceptionOnMonday,ReceptionOnTuesday,ReceptionOnWednesday,ReceptionOnThursday,ReceptionOnFriday,ReceptionOnSaturday,ReceptionOnSunday,SelectedUnitId")] ServiceModel serviceModel)
+        public async Task<IActionResult> Create([Bind("Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId,AvailableForClients,WeeklyAssignmentQuantity,BackupAnalystId,MaximumWeeklyAssignment,SelectedAnalisysTypeId,SelectedTypeOfSamplingId,VolumeEstablishedByLaboratory,SelectedStorageContainerId,WashingCleaningConditionsForContainer,SamplingCaptureDescription,PreservativesTheirConcentrationQuantity,StorageTemperature,AnalizeBefore,RegulatoryStorageTime,ReceptionDays,TestItemRetentionTimeInDays,RelatedProtocol,SelectedAnalisysTechniqueId,ReceptionOnMonday,ReceptionOnTuesday,ReceptionOnWednesday,ReceptionOnThursday,ReceptionOnFriday,ReceptionOnSaturday,ReceptionOnSunday,SelectedUnitId")] ServiceModel serviceModel)
         {
             if (ModelState.IsValid)
             {
@@ -143,6 +143,17 @@ namespace IVSoftware.Web.Controllers
                 }
                 serviceModel.Responsable = responsable;
 
+                Person backupAnalyst = null;
+                if (serviceModel.BackupAnalystId != null)
+                {
+                    IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.Id.Equals(serviceModel.BackupAnalystId));
+                    if (persons != null && persons.Count() > 0)
+                    {
+                        backupAnalyst = persons.First();
+                    }
+                }
+                serviceModel.BackupAnalyst = backupAnalyst;
+
                 AnalisysType analisys = null;
                 if(serviceModel.SelectedAnalisysTypeId > 0)
                 {
@@ -178,7 +189,7 @@ namespace IVSoftware.Web.Controllers
                 }
                 serviceModel.MeasurementUnit = unit;
 
-                serviceModel.ReceptionDays = serviceModel.ObtainsReceptionDays();
+                serviceModel.ReceptionDays = serviceModel.ObtainsReceptionDays;
 
                 _context.Add(serviceModel);
                 await _context.SaveChangesAsync();
@@ -261,7 +272,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId,AvailableForClients,WeeklyAssignmentQuantity,BackupPersonId,MaximumWeeklyAssignment,SelectedAnalisysTypeId,SelectedTypeOfSamplingId,VolumeEstablishedByLaboratory,SelectedStorageContainerId,WashingCleaningConditionsForContainer,SamplingCaptureDescription,PreservativesTheirConcentrationQuantity,StorageTemperature,AnalizeBefore,RegulatoryStorageTime,ReceptionDays,TestItemRetentionTimeInDays,RelatedProtocol,SelectedAnalisysTechniqueId,ReceptionOnMonday,ReceptionOnTuesday,ReceptionOnWednesday,ReceptionOnThursday,ReceptionOnFriday,ReceptionOnSaturday,ReceptionOnSunday,SelectedUnitId")] ServiceModel serviceModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId,AvailableForClients,WeeklyAssignmentQuantity,BackupAnalystId,MaximumWeeklyAssignment,SelectedAnalisysTypeId,SelectedTypeOfSamplingId,VolumeEstablishedByLaboratory,SelectedStorageContainerId,WashingCleaningConditionsForContainer,SamplingCaptureDescription,PreservativesTheirConcentrationQuantity,StorageTemperature,AnalizeBefore,RegulatoryStorageTime,ReceptionDays,TestItemRetentionTimeInDays,RelatedProtocol,SelectedAnalisysTechniqueId,ReceptionOnMonday,ReceptionOnTuesday,ReceptionOnWednesday,ReceptionOnThursday,ReceptionOnFriday,ReceptionOnSaturday,ReceptionOnSunday,SelectedUnitId")] ServiceModel serviceModel)
         {
             if (id != serviceModel.Id)
             {

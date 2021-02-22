@@ -63,6 +63,10 @@
                 @Html.DisplayNameFor(model => model.Responsable)
             </th>
 
+            <th>
+                @Html.DisplayNameFor(model => model.BackupAnalyst)
+            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -111,10 +115,23 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
 
-            @if(item.Responsable != null && !string.IsNullOrEmpty(item.Responsable.FullName))
+            @if (item.Responsable != null && !string.IsNullOrEmpty(item.Responsable.FullName))
             {
                 <td style="white-space:nowrap">
                     @item.Responsable.FullName
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.Raw("No asignado")
+                </td>
+            }
+
+            @if (item.BackupAnalyst != null && !string.IsNullOrEmpty(item.BackupAnalyst.FullName))
+            {
+                <td style="white-space:nowrap">
+                    @item.BackupAnalyst.FullName
                 </td>
             }
             else

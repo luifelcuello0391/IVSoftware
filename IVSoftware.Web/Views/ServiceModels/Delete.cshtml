@@ -8,6 +8,7 @@
 
 <h3>¿Desea eliminar el servicio?</h3>
 <div>
+    <h4 style="color:yellowgreen">Servicio</h4>
 
     <hr />
     <dl class="row">
@@ -24,12 +25,17 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ReferenceMethod)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ReferenceMethodName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.MatrixGroup)
         </dt>
         <dd class="col-sm-10" style="margin-left:5px">
             @Html.DisplayFor(model => model.MatrixGroupName)
         </dd>
-
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.ServiceType)
         </dt>
@@ -43,22 +49,10 @@
             @Html.DisplayFor(model => model.ReportDeliveryTime)
         </dd>
         <dt class="col-sm-2" style="white-space:nowrap">
-            @Html.DisplayNameFor(model => model.WeeklyAssignmentQuantity)
+            @Html.DisplayNameFor(model => model.AnalizeBefore)
         </dt>
         <dd class="col-sm-10" style="margin-left:5px">
-            @Html.DisplayFor(model => model.WeeklyAssignmentQuantity)
-        </dd>
-        <dt class="col-sm-2" style="white-space:nowrap">
-            @Html.DisplayNameFor(model => model.ReferenceMethod)
-        </dt>
-        <dd class="col-sm-10" style="margin-left:5px">
-            @Html.DisplayFor(model => model.ReferenceMethodName)
-        </dd>
-        <dt class="col-sm-2" style="white-space:nowrap">
-            @Html.Raw("Rango de trabajo")
-        </dt>
-        <dd class="col-sm-10" style="margin-left:5px">
-            @Html.DisplayFor(model => model.WorkingRange)
+            @Html.DisplayFor(model => model.AnalizeBefore)
         </dd>
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.UnitValue)
@@ -67,11 +61,258 @@
             $ @Html.DisplayFor(model => model.UnitValue)
         </dd>
         <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.WeeklyAssignmentQuantity)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.WeeklyAssignmentQuantity)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.MaximumWeeklyAssignment)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.MaximumWeeklyAssignment)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd class="col-sm-10" style="margin-left:5px">
             @Html.DisplayFor(model => model.Description)
         </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Información del rango de trabajo</h5>
+    <hr />
+    <dl class="row">
+        <!--Work range-->
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.Raw("Rango de trabajo")
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.WorkingRange)
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Información del análisis</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.AnalisysTechnique)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.AnalisysTechnique != null)
+            {
+                @Html.DisplayFor(model => model.AnalisysTechnique.Name)
+            }
+            else
+            {
+                @Html.Raw("No asignada")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.AnalisysType)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.AnalisysType != null)
+            {
+                @Html.DisplayFor(model => model.AnalisysType.Name)
+            }
+            else
+            {
+                @Html.Raw("No asignado")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.TypeOfSampling)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.TypeOfSampling != null)
+            {
+                @Html.DisplayFor(model => model.TypeOfSampling.Name)
+            }
+            else
+            {
+                @Html.Raw("No asignado")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.StorageContainer)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.StorageContainer != null)
+            {
+                @Html.DisplayFor(model => model.StorageContainer.Name)
+            }
+            else
+            {
+                @Html.Raw("No asignado")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.WashingCleaningConditionsForContainer)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.WashingCleaningConditionsForContainer != null)
+            {
+                @Html.DisplayFor(model => model.WashingCleaningConditionsForContainer)
+            }
+            else
+            {
+                @Html.Raw("Sin datos")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.SamplingCaptureDescription)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.SamplingCaptureDescription != null)
+            {
+                @Html.DisplayFor(model => model.SamplingCaptureDescription)
+            }
+            else
+            {
+                @Html.Raw("Sin datos")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.PreservativesTheirConcentrationQuantity)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.PreservativesTheirConcentrationQuantity != null)
+            {
+                @Html.DisplayFor(model => model.PreservativesTheirConcentrationQuantity)
+            }
+            else
+            {
+                @Html.Raw("Sin datos")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegulatoryStorageTime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RegulatoryStorageTime)
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.StorageTemperature)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.StorageTemperature != null)
+            {
+                @Html.DisplayFor(model => model.StorageTemperature)
+            }
+            else
+            {
+                @Html.Raw("Sin datos")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.TestItemRetentionTimeInDays)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.TestItemRetentionTimeInDays)
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.VolumeEstablishedByLaboratory)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.VolumeEstablishedByLaboratory)
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.MeasurementUnit)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.MeasurementUnit != null)
+            {
+                @Html.DisplayFor(model => model.MeasurementUnit.Name)
+            }
+            else
+            {
+                @Html.Raw("Sin unidad")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RelatedProtocol)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.RelatedProtocol != null)
+            {
+                @Html.DisplayFor(model => model.RelatedProtocol)
+            }
+            else
+            {
+                @Html.Raw("No asignado")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ReceptionDays)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ObtainsReceptionDaysName)
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.AnalisysObservations)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.AnalisysObservations != null)
+            {
+                @Html.DisplayFor(model => model.AnalisysObservations)
+            }
+            else
+            {
+                @Html.Raw("Sin datos")
+            }
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Información de facturación</h5>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.BillingCode)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.BillingCode != null)
+            {
+                @Html.DisplayFor(model => model.BillingCode)
+            }
+            else
+            {
+                @Html.Raw("No asignado")
+            }
+        </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.BillingName)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @if (Model.BillingName != null)
+            {
+                @Html.DisplayFor(model => model.BillingName)
+            }
+            else
+            {
+                @Html.Raw("No asignado")
+            }
+        </dd>
+    </dl>
+
+    <h5 style="color:yellowgreen">Autorizaciones y vigencias</h5>
+    <hr />
+    <dl class="row">
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.AcredditedByIdeam)
         </dt>
@@ -92,22 +333,18 @@
         <dd class="col-sm-10" style="margin-left:5px">
             @Model.GetYesNo(Model.Valid)
         </dd>
+
         <dt class="col-sm-2" style="white-space:nowrap">
             ¿@Html.DisplayNameFor(model => model.AvailableForClients)?
         </dt>
         <dd class="col-sm-10" style="margin-left:5px">
             @Model.GetYesNo(Model.AvailableForClients)
         </dd>
-
-        <dt class="col-sm-2" style="white-space:nowrap">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10" style="margin-left:5px">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
     </dl>
 
-    <h5 style="color:yellowgreen">Información del responsable</h5>
+    <h1> </h1>
+
+    <h5 style="color:yellowgreen">Información del analista responsable</h5>
     <hr />
     <div class="row" style="margin-left:10px">
         @if (Model.Responsable != null)
@@ -145,10 +382,54 @@
         else
         {
             <div class="col-sm-10" style="margin-left:10px">
-                <label>No se ha asignado un responsable</label>
+                <label>No se ha asignado un analista responsable</label>
             </div>
         }
     </div>
+
+    <h5 style="color:yellowgreen">Información del analista suplente</h5>
+    <hr />
+    <div class="row" style="margin-left:10px">
+        @if (Model.BackupAnalyst != null)
+        {
+            <table>
+                <tr>
+                    <td style="padding: 0 15px 0 0">
+                        <div><b>Tipo de ID</b></div>
+                    </td>
+
+                    <td style="padding: 0 15px 0 0">
+                        <div><b>@Html.DisplayNameFor(model => model.BackupAnalyst.IdentificationNumber)</b></div>
+                    </td>
+
+                    <td style="padding: 0 15px 0 0">
+                        <div><b>@Html.DisplayNameFor(model => model.BackupAnalyst.FullName)</b></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding: 0 15px 0 0">
+                        <div>@Html.DisplayFor(model => model.BackupAnalyst.IdentificationType.Name)</div>
+                    </td>
+
+                    <td style="padding: 0 15px 0 0">
+                        <div>@Html.DisplayFor(model => model.BackupAnalyst.IdentificationNumber)</div>
+                    </td>
+
+                    <td style="padding: 0 15px 0 0">
+                        <div>@Html.DisplayFor(model => model.BackupAnalyst.FullName)</div>
+                    </td>
+                </tr>
+            </table>
+        }
+        else
+        {
+            <div class="col-sm-10" style="margin-left:10px">
+                <label>No se ha asignado un analista suplente</label>
+            </div>
+        }
+    </div>
+
     <h1> </h1>
 
     <h5 style="color:yellowgreen">Información adicional</h5>
