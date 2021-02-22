@@ -96,13 +96,13 @@
 
             <div class="row">
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <label asp-for="Code" class="control-label"></label>
                     <input asp-for="Code" class="form-control" />
                     <span asp-validation-for="Code" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-md-9">
+                <div class="form-group col-md-8">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
@@ -182,13 +182,13 @@
             <div class="row">
                 <div class="form-group col-md-4">
                     <label asp-for="ReportDeliveryTime" class="control-label"></label>
-                    <input asp-for="ReportDeliveryTime" class="form-control" type="number" value="1" min="1" />
+                    <input asp-for="ReportDeliveryTime" class="form-control" type="number" min="1" />
                     <span asp-validation-for="ReportDeliveryTime" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-md-4">
                     <label asp-for="AnalizeBefore" class="control-label"></label>
-                    <input asp-for="AnalizeBefore" class="form-control" type="number" value="1" min="1" />
+                    <input asp-for="AnalizeBefore" class="form-control" type="number" min="1" />
                     <span asp-validation-for="AnalizeBefore" class="text-danger"></span>
                 </div>
 
@@ -205,13 +205,13 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label asp-for="WeeklyAssignmentQuantity" class="control-label"></label>
-                    <input asp-for="WeeklyAssignmentQuantity" class="form-control" type="number" value="1" min="1" />
+                    <input asp-for="WeeklyAssignmentQuantity" class="form-control" type="number" min="1" />
                     <span asp-validation-for="WeeklyAssignmentQuantity" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-md-6">
                     <label asp-for="MaximumWeeklyAssignment" class="control-label"></label>
-                    <input asp-for="MaximumWeeklyAssignment" class="form-control" type="number" value="1" min="1" />
+                    <input asp-for="MaximumWeeklyAssignment" class="form-control" type="number" min="1" />
                     <span asp-validation-for="MaximumWeeklyAssignment" class="text-danger"></span>
                 </div>
             </div>
@@ -253,7 +253,14 @@
 
                 <div class="col-md-8">
                     <label asp-for="AnalisysTechnique" class="control-label"></label>
-                    <input id="txt_analisys_technique" asp-for="AnalisysTechnique" class="form-control" readonly />
+                    @if (Model.AnalisysTechnique != null)
+                    {
+                        <input id="txt_analisys_technique" asp-for="AnalisysTechnique" class="form-control" readonly value="@Model.AnalisysTechnique.Name" />
+                    }
+                    else
+                    {
+                        <input id="txt_analisys_technique" asp-for="AnalisysTechnique" class="form-control" readonly value="" />
+                    }
                     <span asp-validation-for="AnalisysTechnique" class="text-danger"></span>
                 </div>
 
@@ -265,7 +272,15 @@
 
                 <div class="col-md-8">
                     <label asp-for="AnalisysType" class="control-label"></label>
-                    <input id="txt_analisys_type" asp-for="AnalisysType" class="form-control" readonly />
+                    @if (Model.AnalisysType != null)
+                    {
+                        <input id="txt_analisys_type" asp-for="AnalisysType" class="form-control" readonly value="@Model.AnalisysType.Name" />
+                    }
+                    else
+                    {
+                        <input id="txt_analisys_type" asp-for="AnalisysType" class="form-control" readonly value="" />
+                    }
+
                     <span asp-validation-for="AnalisysType" class="text-danger"></span>
                 </div>
 
@@ -277,7 +292,15 @@
 
                 <div class="col-md-8">
                     <label asp-for="TypeOfSampling" class="control-label"></label>
-                    <input id="txt_sampling_type" asp-for="TypeOfSampling" class="form-control" readonly />
+                    @if (Model.TypeOfSampling != null)
+                    {
+                        <input id="txt_sampling_type" asp-for="TypeOfSampling" class="form-control" readonly value="@Model.TypeOfSampling.Name"/>
+                    }
+                    else
+                    {
+                        <input id="txt_sampling_type" asp-for="TypeOfSampling" class="form-control" readonly value="" />
+                    }
+
                     <span asp-validation-for="TypeOfSampling" class="text-danger"></span>
                 </div>
 
@@ -289,7 +312,15 @@
 
                 <div class="col-md-8">
                     <label asp-for="StorageContainer" class="control-label"></label>
-                    <input id="txt_storage_container" asp-for="StorageContainer" class="form-control" readonly />
+                    @if (Model.StorageContainer != null)
+                    {
+                        <input id="txt_storage_container" asp-for="StorageContainer" class="form-control" readonly value="@Model.StorageContainer.Name"/>
+                    }
+                    else
+                    {
+                        <input id="txt_storage_container" asp-for="StorageContainer" class="form-control" readonly value="" />
+                    }
+
                     <span asp-validation-for="StorageContainer" class="text-danger"></span>
                 </div>
 
@@ -353,7 +384,14 @@
                         {
                             foreach (var item in ViewBag.Units)
                             {
-                                <option value="@item.Id">@item.Name</option>
+                                @if (Model.MeasurementUnit != null && item.Id == Model.MeasurementUnit.Id)
+                                {
+                                    <option selected value="@item.Id">@item.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
                             }
                         }
                     </select>
@@ -372,13 +410,69 @@
                     <label asp-for="ReceptionDays" class="control-label"></label>
                 </div>
 
-                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnMonday" type="checkbox" checked /> @Html.Raw("Lunes")</div>
-                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnTuesday" type="checkbox" checked /> @Html.Raw("Martes")</div>
-                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnWednesday" type="checkbox" checked /> @Html.Raw("Miércoles")</div>
-                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnThursday" type="checkbox" checked /> @Html.Raw("Jueves")</div>
-                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnFriday" type="checkbox" checked /> @Html.Raw("Viernes")</div>
-                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnSaturday" type="checkbox" checked /> @Html.Raw("Sábado")</div>
-                <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnSunday" type="checkbox" checked /> @Html.Raw("Domingo")</div>
+                @if (Model.GetReceptionOnMonday)
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnMonday" type="checkbox" checked /> @Html.Raw("Lunes")</div>
+                }
+                else
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnMonday" type="checkbox" /> @Html.Raw("Lunes")</div>
+                }
+
+                @if (Model.GetReceptionOnTuesday)
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnTuesday" type="checkbox" checked /> @Html.Raw("Martes")</div>
+                }
+                else
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnTuesday" type="checkbox" /> @Html.Raw("Martes")</div>
+                }
+
+                @if (Model.GetReceptionOnWednesday)
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnWednesday" type="checkbox" checked /> @Html.Raw("Miércoles")</div>
+                }
+                else
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnWednesday" type="checkbox" /> @Html.Raw("Miércoles")</div>
+                }
+
+                @if (Model.GetReceptionOnThursday)
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnThursday" type="checkbox" checked /> @Html.Raw("Jueves")</div>
+                }
+                else
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnThursday" type="checkbox" /> @Html.Raw("Jueves")</div>
+                }
+
+                @if (Model.GetReceptionOnFriday)
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnFriday" type="checkbox" checked /> @Html.Raw("Viernes")</div>
+                }
+                else
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnFriday" type="checkbox" /> @Html.Raw("Viernes")</div>
+                }
+
+                @if (Model.GetReceptionOnSaturday)
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnSaturday" type="checkbox" checked /> @Html.Raw("Sábado")</div>
+                }
+                else
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnSaturday" type="checkbox" /> @Html.Raw("Sábado")</div>
+                }
+
+                @if (Model.GetReceptionOnSunday)
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnSunday" type="checkbox" checked /> @Html.Raw("Domingo")</div>
+                }
+                else
+                {
+                    <div style="margin-left:50px"><input class="form-check-input" asp-for="ReceptionOnSunday" type="checkbox" /> @Html.Raw("Domingo")</div>
+                }
+
             </div>
 
             <div class="form-group">
@@ -478,7 +572,7 @@
             </div>
             <div class="form-group" style="display:none">
                 <label asp-for="CreationDatetime" class="control-label"></label>
-                <input asp-for="CreationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <input asp-for="CreationDatetime" class="form-control" type="datetime" />
                 <span asp-validation-for="CreationDatetime" class="text-danger"></span>
             </div>
             <div class="form-group" style="display:none">
@@ -488,7 +582,7 @@
             </div>
 
             <input asp-for="PersonId" id="txt_responsable_id" hidden />
-            <input asp-for="BackupAnalystId" id="txt_backup_responsable_id" hidden />
+            <input asp-for="BackupAnalystId" id="txt_backup_responsable_id" hidden/>
 
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
@@ -573,6 +667,7 @@
 <script>
     $(window).on('load', function () {
         selectPersonOnLoad();
+        selectPersonBackupOnLoad();
     });
 
     function showAnalisysTechnique() {
@@ -684,11 +779,31 @@
                     $("#txt_responsable_id").val($("#txt_person_id").val());
                 }
             });
-        }
+    }
+
+    function selectPersonBackupOnLoad() {
+            var id = $("#txt_load_backup_person_id").val();
+
+            var url = "@Url.Action("GetBackupPerson")";
+
+            // Obtains the person data with ID
+            $.get(url, { identification: id }, function (data) {
+                if (data != null)
+                {
+                    $("#lbl_backup_responsable").html("");
+                    $("#div_backup_responsable").html(data);
+
+                    $("#txt_backup_responsable_id").val($("#txt_backup_person_id").val());
+                }
+            });
+    }
 
     function hidePersonmodal() {
-            $("#modalPersons").modal('hide');
-            $('.modal-content').html("");
+        $("#modalPersons").modal('hide');
+        $('.modal-content').html("");
+
+        $("#modalBackupPersons").modal('hide');
+        $('.modal-content').html("");
     }
 
     function hideModal() {

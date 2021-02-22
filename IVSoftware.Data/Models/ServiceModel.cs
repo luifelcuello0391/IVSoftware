@@ -141,25 +141,123 @@ namespace IVSoftware.Data.Models
         public double RegulatoryStorageTime { get; set; } // OK
 
         [NotMapped]
-        public bool ReceptionOnMonday { get; set; } = true;
+        public bool GetReceptionOnMonday
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ReceptionDays))
+                {
+                    return ReceptionDays.Contains("M;");
+                }
+
+                return true;
+            }
+        }
 
         [NotMapped]
-        public bool ReceptionOnTuesday { get; set; } = true;
+        public bool GetReceptionOnTuesday
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ReceptionDays))
+                {
+                    return ReceptionDays.Contains("Tu;");
+                }
+
+                return true;
+            }
+        }
 
         [NotMapped]
-        public bool ReceptionOnWednesday { get; set; } = true;
+        public bool GetReceptionOnWednesday
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ReceptionDays))
+                {
+                    return ReceptionDays.Contains("W;");
+                }
+
+                return true;
+            }
+        }
 
         [NotMapped]
-        public bool ReceptionOnThursday { get; set; } = true;
+        public bool GetReceptionOnThursday
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ReceptionDays))
+                {
+                    return ReceptionDays.Contains("Th;");
+                }
+
+                return true;
+            }
+        }
 
         [NotMapped]
-        public bool ReceptionOnFriday { get; set; } = true;
+        public bool GetReceptionOnFriday
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ReceptionDays))
+                {
+                    return ReceptionDays.Contains("F;");
+                }
+
+                return true;
+            }
+        }
 
         [NotMapped]
-        public bool ReceptionOnSaturday { get; set; } = true;
+        public bool GetReceptionOnSaturday
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ReceptionDays))
+                {
+                    return ReceptionDays.Contains("S;");
+                }
+
+                return true;
+            }
+        }
 
         [NotMapped]
-        public bool ReceptionOnSunday { get; set; } = true;
+        public bool GetReceptionOnSunday
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ReceptionDays))
+                {
+                    return ReceptionDays.Contains("Su;");
+                }
+
+                return true;
+            }
+        }
+
+        [NotMapped]
+        public bool ReceptionOnMonday { get; set; } 
+
+        [NotMapped]
+        public bool ReceptionOnTuesday { get; set; } 
+
+        [NotMapped]
+        public bool ReceptionOnWednesday { get; set; }
+
+        [NotMapped]
+        public bool ReceptionOnThursday { get; set; } 
+
+        [NotMapped]
+        public bool ReceptionOnFriday { get; set; } 
+
+        [NotMapped]
+        public bool ReceptionOnSaturday { get; set; } 
+
+        [NotMapped]
+        public bool ReceptionOnSunday { get; set; } 
 
         [NotMapped]
         public string ObtainsReceptionDays
@@ -193,7 +291,7 @@ namespace IVSoftware.Data.Models
                     data = data.Replace("W", "Miércoles");
                     data = data.Replace("Th", "Jueves");
                     data = data.Replace("F", "Viernes");
-                    data = data.Replace("S", "Sábado");
+                    data = data.Replace("S,", "Sábado,");
                     data = data.Replace("Su", "Domingo");
                     data = data.Remove(data.Length - 2);
 

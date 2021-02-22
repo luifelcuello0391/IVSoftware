@@ -103,7 +103,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId,AvailableForClients,WeeklyAssignmentQuantity,BackupAnalystId,MaximumWeeklyAssignment,SelectedAnalisysTypeId,SelectedTypeOfSamplingId,VolumeEstablishedByLaboratory,SelectedStorageContainerId,WashingCleaningConditionsForContainer,SamplingCaptureDescription,PreservativesTheirConcentrationQuantity,StorageTemperature,AnalizeBefore,RegulatoryStorageTime,ReceptionDays,TestItemRetentionTimeInDays,RelatedProtocol,SelectedAnalisysTechniqueId,ReceptionOnMonday,ReceptionOnTuesday,ReceptionOnWednesday,ReceptionOnThursday,ReceptionOnFriday,ReceptionOnSaturday,ReceptionOnSunday,SelectedUnitId")] ServiceModel serviceModel)
+        public async Task<IActionResult> Create([Bind("Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId,AvailableForClients,WeeklyAssignmentQuantity,BackupAnalystId,MaximumWeeklyAssignment,SelectedAnalisysTypeId,SelectedTypeOfSamplingId,VolumeEstablishedByLaboratory,SelectedStorageContainerId,WashingCleaningConditionsForContainer,SamplingCaptureDescription,PreservativesTheirConcentrationQuantity,StorageTemperature,AnalizeBefore,RegulatoryStorageTime,ReceptionDays,TestItemRetentionTimeInDays,RelatedProtocol,SelectedAnalisysTechniqueId,ReceptionOnMonday,ReceptionOnTuesday,ReceptionOnWednesday,ReceptionOnThursday,ReceptionOnFriday,ReceptionOnSaturday,ReceptionOnSunday,SelectedUnitId,AnalisysObservations")] ServiceModel serviceModel)
         {
             if (ModelState.IsValid)
             {
@@ -228,6 +228,36 @@ namespace IVSoftware.Web.Controllers
                 serviceModel.SelectedReferenceMethodId = serviceModel.ReferenceMethod.Id;
             }
 
+            if(serviceModel.AnalisysType != null)
+            {
+                serviceModel.SelectedAnalisysTypeId = serviceModel.AnalisysType.Id;
+            }
+
+            if (serviceModel.AnalisysTechnique != null)
+            {
+                serviceModel.SelectedAnalisysTechniqueId = serviceModel.AnalisysTechnique.Id;
+            }
+
+            if (serviceModel.TypeOfSampling != null)
+            {
+                serviceModel.SelectedTypeOfSamplingId = serviceModel.TypeOfSampling.Id;
+            }
+
+            if (serviceModel.StorageContainer != null)
+            {
+                serviceModel.SelectedStorageContainerId = serviceModel.StorageContainer.Id;
+            }
+
+            if(serviceModel.BackupAnalyst != null)
+            {
+                serviceModel.BackupAnalystId = serviceModel.BackupAnalyst.Id;
+            }
+
+            if(serviceModel.Responsable != null)
+            {
+                serviceModel.PersonId = serviceModel.Responsable.Id;
+            }
+
             try
             {
                 ViewBag.ServiceTypes = await _context.TypeOfService.ToListAsync();
@@ -264,6 +294,15 @@ namespace IVSoftware.Web.Controllers
                 Console.WriteLine("Error on Create.ReferenceMethods >> " + ex.ToString());
             }
 
+            try
+            {
+                ViewBag.Units = await _context.MeasurementUnitModel.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on Create.Units >> " + ex.ToString());
+            }
+
             return View(serviceModel);
         }
 
@@ -272,7 +311,7 @@ namespace IVSoftware.Web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId,AvailableForClients,WeeklyAssignmentQuantity,BackupAnalystId,MaximumWeeklyAssignment,SelectedAnalisysTypeId,SelectedTypeOfSamplingId,VolumeEstablishedByLaboratory,SelectedStorageContainerId,WashingCleaningConditionsForContainer,SamplingCaptureDescription,PreservativesTheirConcentrationQuantity,StorageTemperature,AnalizeBefore,RegulatoryStorageTime,ReceptionDays,TestItemRetentionTimeInDays,RelatedProtocol,SelectedAnalisysTechniqueId,ReceptionOnMonday,ReceptionOnTuesday,ReceptionOnWednesday,ReceptionOnThursday,ReceptionOnFriday,ReceptionOnSaturday,ReceptionOnSunday,SelectedUnitId")] ServiceModel serviceModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,UnitValue,Name,RegisterStatus,CreationDatetime,ModificationDatetime,TypeOfServiceId,SelectedMatrixGroupId,SelectedReferenceMethodId,AcredditedByIdeam,AuthorizedByINS,ReportDeliveryTime,Valid,BillingCode,BillingName,Precondition,MinimumValue,MaximumValue,PersonId,AvailableForClients,WeeklyAssignmentQuantity,BackupAnalystId,MaximumWeeklyAssignment,SelectedAnalisysTypeId,SelectedTypeOfSamplingId,VolumeEstablishedByLaboratory,SelectedStorageContainerId,WashingCleaningConditionsForContainer,SamplingCaptureDescription,PreservativesTheirConcentrationQuantity,StorageTemperature,AnalizeBefore,RegulatoryStorageTime,ReceptionDays,TestItemRetentionTimeInDays,RelatedProtocol,SelectedAnalisysTechniqueId,ReceptionOnMonday,ReceptionOnTuesday,ReceptionOnWednesday,ReceptionOnThursday,ReceptionOnFriday,ReceptionOnSaturday,ReceptionOnSunday,SelectedUnitId,AnalisysObservations")] ServiceModel serviceModel)
         {
             if (id != serviceModel.Id)
             {
@@ -313,13 +352,61 @@ namespace IVSoftware.Web.Controllers
                         if(serviceModel.Responsable == null || 
                             (serviceModel.Responsable != null && !serviceModel.Responsable.Id.Equals(serviceModel.PersonId)))
                         {
-                            IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.Id != null && x.Id.Equals(serviceModel.PersonId));
+                            IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.Id.Equals(serviceModel.PersonId));
                             if (persons != null && persons.Count() > 0)
                             {
                                 serviceModel.Responsable = persons.First();
                             }
                         }
                     }
+
+                    Person backupAnalyst = null;
+                    if (serviceModel.BackupAnalystId != null)
+                    {
+                        IEnumerable<Person> persons = await _personService.FindByConditionAsync(x => x.Id.Equals(serviceModel.BackupAnalystId));
+                        if (persons != null && persons.Count() > 0)
+                        {
+                            backupAnalyst = persons.First();
+                        }
+                    }
+                    serviceModel.BackupAnalyst = backupAnalyst;
+
+                    AnalisysType analisys = null;
+                    if (serviceModel.SelectedAnalisysTypeId > 0)
+                    {
+                        analisys = await _context.AnalisysType.FirstOrDefaultAsync(x => x.Id == serviceModel.SelectedAnalisysTypeId);
+                    }
+                    serviceModel.AnalisysType = analisys;
+
+                    AnalisysTechnique technique = null;
+                    if (serviceModel.SelectedAnalisysTechniqueId > 0)
+                    {
+                        technique = await _context.AnalisysTechnique.FirstOrDefaultAsync(x => x.Id == serviceModel.SelectedAnalisysTechniqueId);
+                    }
+                    serviceModel.AnalisysTechnique = technique;
+
+                    SamplingType samplingType = null;
+                    if (serviceModel.SelectedTypeOfSamplingId > 0)
+                    {
+                        samplingType = await _context.SamplingType.FirstOrDefaultAsync(x => x.Id == serviceModel.SelectedTypeOfSamplingId);
+                    }
+                    serviceModel.TypeOfSampling = samplingType;
+
+                    StorageContainer storage = null;
+                    if (serviceModel.SelectedStorageContainerId > 0)
+                    {
+                        storage = await _context.StorageContainer.FirstOrDefaultAsync(x => x.Id == serviceModel.SelectedStorageContainerId);
+                    }
+                    serviceModel.StorageContainer = storage;
+
+                    MeasurementUnitModel unit = null;
+                    if (serviceModel.SelectedUnitId > 0)
+                    {
+                        unit = await _context.MeasurementUnitModel.FirstOrDefaultAsync(x => x.Id == serviceModel.SelectedUnitId);
+                    }
+                    serviceModel.MeasurementUnit = unit;
+
+                    serviceModel.ReceptionDays = serviceModel.ObtainsReceptionDays;
 
                     _context.Update(serviceModel);
                     await _context.SaveChangesAsync();
