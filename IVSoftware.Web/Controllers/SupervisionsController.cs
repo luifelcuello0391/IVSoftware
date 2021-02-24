@@ -18,14 +18,17 @@ namespace IVSoftware.Web.Controllers
     {
         private readonly IEntityService<Supervision, Guid> _supervisionService;
         private readonly IEntityService<SupervisionDetail, Guid> _supervisionDetailService;
+        private readonly IEntityService<SupervisionFile, Guid> _supervisionFileService;
         private readonly IEntityService<Person, Guid> _personService;
 
         public SupervisionsController(IEntityService<Supervision, Guid> supervisionService,
             IEntityService<SupervisionDetail, Guid> supervisionDetailService,
+            IEntityService<SupervisionFile, Guid> supervisionFileService,
             IEntityService<Person, Guid> personService)
         {
             _supervisionService = supervisionService;
             _supervisionDetailService = supervisionDetailService;
+            _supervisionFileService = supervisionFileService;
             _personService = personService;
         }
 
@@ -303,27 +306,71 @@ namespace IVSoftware.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadSupervision(IFormFile supervisionFile, Guid id)
         {
-            if (supervisionFile != null && supervisionFile.Length > 0)
+            try
             {
-                string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Uploads\Supervisions\");
-                string filePath = Path.Combine(folderPath, $"F-MA-96_{id}.xlsx");
-                if (Directory.Exists(folderPath))
+                if (supervisionFile != null && supervisionFile.Length > 0)
                 {
-                    Directory.CreateDirectory(folderPath);
-                }
+                    string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Uploads\Supervisions\");
+                    string filePath = Path.Combine(folderPath, $"F-MA-96_{id}.xlsx");
+                    if (Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                    }
 
-                if (System.IO.File.Exists(filePath))
-                {
-                    filePath = Path.Combine(folderPath, $"F-MA-96_{id} (2).xlsx");
-                }
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        filePath = Path.Combine(folderPath, $"F-MA-96_{id} (2).xlsx");
+                    }
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await supervisionFile.CopyToAsync(stream);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await supervisionFile.CopyToAsync(stream);
+                    }
+
+                    SupervisionFile fileModel = new SupervisionFile()
+                    {
+                        Date = DateTime.Now,
+                        Path = filePath,
+                        SupervisionId = id,
+                        UploadedBy = User.Identity.Name
+                    };
+                    await _supervisionFileService.CreateAsync(fileModel);
+                    TempData["SupervisionSuccess"] = "Se ha subido el archivo exitosamente!";
                 }
             }
+            catch (Exception ex)
+            {
+                TempData["SupervisionError"] = ex.Message;
+            }
 
-            return Ok(new { count = 1 });
+            return RedirectToAction(nameof(Edit), new { id });
+        }
+
+        public async Task<IActionResult> DownloadFinalFile(Guid id)
+        {
+            SupervisionFile supervisionFile = await _supervisionFileService.GetByIdAsync(id);
+            if (supervisionFile == null) { return NotFound(); }
+
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = $"F-MA-96 Supervisión - { supervisionFile.Supervision.SupervisedPerson?.FullName }.xlsx";
+            try
+            {
+                string cvPath = supervisionFile.Path;
+                using (var workbook = new XLWorkbook(cvPath))
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return File(content, contentType, fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["SupervisionError"] = ex.Message;
+                return RedirectToAction(nameof(Edit), new { id = supervisionFile.SupervisionId });
+            }
         }
 
         private async Task<List<SelectListItem>> GetPeopleList()

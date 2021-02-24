@@ -30,5 +30,7 @@ namespace IVSoftware.Data.Models
         public string Analyte { get; set; }
 
         public virtual ICollection<SupervisionDetail> Details { get; set; }
+
+        public virtual ICollection<SupervisionFile> Files { get; set; }
     }
 }

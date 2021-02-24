@@ -245,6 +245,7 @@ namespace IVSoftware.Web.Models
             // Supervisions
             new SupervisionConfiguration("Supervision", "Id").Map(modelBuilder);
             new SupervisionDetailConfiguration("SupervisionDetail", "Id").Map(modelBuilder);
+            new SupervisionFileConfiguration("SupervisionFile", "Id").Map(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }

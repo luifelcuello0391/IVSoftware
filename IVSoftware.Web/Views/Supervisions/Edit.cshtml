@@ -1,6 +1,8 @@
 ﻿@model Supervision
 @{
     ViewData["Title"] = "Supervisión - Editar";
+    string successMessage = TempData["SupervisionSuccess"]?.ToString();
+    string errorMessage = TempData["SupervisionError"]?.ToString();
 }
 
 <form asp-action="Edit">
@@ -8,6 +10,26 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <h5 class="text-primary titulo">Supervisión - Editar</h5>
     <hr />
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @successMessage
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @errorMessage
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
 
     <div class="row" style="margin-top:20px">
         <div class="col">
@@ -69,24 +91,55 @@
 </form>
 <hr />
 
-<form asp-action="UploadSupervision" enctype="multipart/form-data"
-      method="post">
-    <input type="hidden" asp-for="Id" />
-    <div class="row">
-        <div class="col-6">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="supervisionFile"
-                       name="supervisionFile" lang="es" accept=".xlsx">
-                <label class="custom-file-label" id="file-name" for="supervisionFile" data-browse="Elegir">Seleccionar Archivo</label>
+@if (Model.Files?.Count < 2)
+{
+    <form asp-action="UploadSupervision" enctype="multipart/form-data"
+          method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="row">
+            <div class="col-6">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="supervisionFile"
+                           name="supervisionFile" lang="es" accept=".xlsx">
+                    <label class="custom-file-label" id="file-name" for="supervisionFile" data-browse="Elegir">Seleccionar Archivo</label>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <input class="btn btn-primary" type="submit" value="Cargar" />
+                </div>
             </div>
         </div>
-        <div class="col-3">
-            <div class="form-group">
-                <input class="btn btn-primary" type="submit" value="Cargar" />
-            </div>
-        </div>
+    </form>
+}
+
+<div class="row">
+    <div class="col">
+        <table class="table">
+            <thead style="background-color:yellowgreen; color:white">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Files.FirstOrDefault().Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Files.FirstOrDefault().UploadedBy)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var file in Model.Files)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => file.Date)</td>
+                        <td>@Html.DisplayFor(modelItem => file.UploadedBy)</td>
+                        <td><a asp-controller="Supervisions" asp-action="DownloadFinalFile" asp-route-id="@file.Id"><i class="fas fa-cloud-download-alt" style="font-size:larger"></i></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-</form>
+</div>
 <hr />
 
 <div class="row">
