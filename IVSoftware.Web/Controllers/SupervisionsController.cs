@@ -2,6 +2,7 @@
 using IVSoftware.Data.Models;
 using IVSoftware.Web.Service;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -297,6 +298,32 @@ namespace IVSoftware.Web.Controllers
             {
                 throw;
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadSupervision(IFormFile supervisionFile, Guid id)
+        {
+            if (supervisionFile != null && supervisionFile.Length > 0)
+            {
+                string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Uploads\Supervisions\");
+                string filePath = Path.Combine(folderPath, $"F-MA-96_{id}.xlsx");
+                if (Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    filePath = Path.Combine(folderPath, $"F-MA-96_{id} (2).xlsx");
+                }
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await supervisionFile.CopyToAsync(stream);
+                }
+            }
+
+            return Ok(new { count = 1 });
         }
 
         private async Task<List<SelectListItem>> GetPeopleList()

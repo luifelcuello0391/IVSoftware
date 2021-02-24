@@ -49,7 +49,7 @@
                 <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
                     <label asp-for="Date" class="control-label" style="color:white"></label>
                 </div>
-                <input asp-for="Date" class="form-control" readonly="readonly"/>
+                <input asp-for="Date" class="form-control" readonly="readonly" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
         </div>
@@ -66,65 +66,85 @@
             </div>
         </div>
     </div>
-    <hr />
+</form>
+<hr />
 
+<form asp-action="UploadSupervision" enctype="multipart/form-data"
+      method="post">
+    <input type="hidden" asp-for="Id" />
     <div class="row">
-        <div class="col">
-            <button id="btnNew" type="button" class="float-right btn btn-primary mb-3" data-toggle="modal" href="#create-modal" data-id="@Model.Id">
-                Agregar registro
-            </button>
+        <div class="col-6">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="supervisionFile"
+                       name="supervisionFile" lang="es" accept=".xlsx">
+                <label class="custom-file-label" id="file-name" for="supervisionFile" data-browse="Elegir">Seleccionar Archivo</label>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Cargar" />
+            </div>
         </div>
     </div>
-
-    <table class="table" id="details">
-        <thead style="background-color:yellowgreen; color:white">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().PHVA)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Process)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().SupervisedActivity)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Result)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Observations)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Details)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PHVA)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Process)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SupervisedActivity)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Result)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Observations)
-                    </td>
-                    <td align="right" style="white-space:nowrap">
-                        <a id="editDetail" data-toggle="modal" href="#edit-modal" data-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
-                        <a id="deleteDetail" data-toggle="modal" href="#delete-modal" data-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
 </form>
+<hr />
+
+<div class="row">
+    <div class="col">
+        <button id="btnNew" type="button" class="float-right btn btn-primary mb-3" data-toggle="modal" href="#create-modal" data-id="@Model.Id">
+            Agregar registro
+        </button>
+    </div>
+</div>
+
+<table class="table" id="details">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Details.FirstOrDefault().PHVA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Process)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details.FirstOrDefault().SupervisedActivity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Result)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Observations)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Details)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PHVA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Process)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupervisedActivity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Result)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observations)
+                </td>
+                <td align="right" style="white-space:nowrap">
+                    <a id="editDetail" data-toggle="modal" href="#edit-modal" data-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                    <a id="deleteDetail" data-toggle="modal" href="#delete-modal" data-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 <!-- Modal -->
 <div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="assignModalLabel" aria-hidden="true">
@@ -203,6 +223,29 @@
                     orderable: false,
                     targets: 5
                 },]
+            });
+
+            $("#supervisionFile").on("change", function (e) {
+                let files = e.currentTarget.files;
+                let filesize = ((files[0].size / 1024) / 1024).toFixed(4); // MB
+                console.log(filesize);
+                if (files[0].name != "item" && typeof files[0].name != "undefined" && filesize <= 1) {
+                    let fileName = files[0].name;
+                    let idxDot = fileName.lastIndexOf(".") + 1;
+                    let extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+                    if (extFile == "xlsx") {
+                        $("#file-name").text(fileName);
+                    } else {
+                        $(this).files = null;
+                        $("#file-name").text("Seleccionar Archivo");
+                        alert("Solo puede cargar archivo .xlsx");
+                    }
+                }
+                else {
+                    $(this).files = null;
+                    $("#file-name").text("Seleccionar Archivo");
+                    alert("El tamaño máximo del archivo debe ser de 1 MB");
+                }
             });
         });
     </script>
