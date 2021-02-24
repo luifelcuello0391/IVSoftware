@@ -608,6 +608,39 @@ namespace IVSoftware.Web.Controllers
                 throw;
             }
         }
+
+        public async Task<IActionResult> PersonRecordStatus(Guid id)
+        {
+            try
+            {
+                Person person = await _personService.GetByIdAsync(id);
+                if(person == null) { return NotFound(); }
+
+                if(person.RecordStatus.HasValue && person.RecordStatus.Value)
+                {
+                    User user = await _userManager.FindByIdAsync(person.UserId);
+                    if(user != null)
+                    {
+                        IdentityResult deleteResult = await _userManager.DeleteAsync(user);
+                        if(deleteResult != IdentityResult.Success)
+                        {
+                            TempData["PersonError"] = string.Join(", ", deleteResult.Errors);
+                            return RedirectToAction(nameof(Edit), new { id });
+                        }
+                    }
+                }
+
+                person.RecordStatus = !person.RecordStatus;
+                await _personService.UpdateAsync(person);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["PersonError"] = ex.Message;
+                return RedirectToAction(nameof(Edit), new { id });
+            }
+        }
+
         private async Task<List<SelectListItem>> GetIdentificationTypeSelectList()
         {
             var identificationTypes = new List<SelectListItem>();

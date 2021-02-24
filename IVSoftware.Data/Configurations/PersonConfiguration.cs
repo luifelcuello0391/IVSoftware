@@ -208,6 +208,11 @@ namespace IVSoftware.Data.Configurations
             builder
                 .HasOne(g => g.User)
                 .WithOne(p => p.Person);
+
+            builder
+                .Property(x => x.RecordStatus)
+                .IsRequired()
+                .HasDefaultValue(true);
         }
     }
 }

@@ -193,6 +193,10 @@ namespace IVSoftware.Data.Models
         [NotMapped]
         public string Role { get; set; }
 
+        [DisplayName("Estado")]
+        [Required(ErrorMessage = "El {0} es requerido.")]
+        public bool? RecordStatus { get; set; }
+
         public virtual ICollection<PersonEvaluation> PersonEvaluations { get; set; }
 
         public virtual ICollection<Supervision> Supervisions { get; set; }
