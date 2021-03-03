@@ -381,5 +381,7 @@ namespace IVSoftware.Data.Models
         }
         #endregion
 
+        [DisplayName("Límite de cuantificación")]
+        public string QuantificationLimit { get; set; }
     }
 }
