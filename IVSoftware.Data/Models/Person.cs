@@ -195,7 +195,7 @@ namespace IVSoftware.Data.Models
 
         [DisplayName("Estado")]
         [Required(ErrorMessage = "El {0} es requerido.")]
-        public bool? RecordStatus { get; set; }
+        public bool? RecordStatus { get; set; } = true;
 
         public virtual ICollection<PersonEvaluation> PersonEvaluations { get; set; } = new List<PersonEvaluation>();
 
