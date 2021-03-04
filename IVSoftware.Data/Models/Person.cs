@@ -197,10 +197,10 @@ namespace IVSoftware.Data.Models
         [Required(ErrorMessage = "El {0} es requerido.")]
         public bool? RecordStatus { get; set; }
 
-        public virtual ICollection<PersonEvaluation> PersonEvaluations { get; set; }
+        public virtual ICollection<PersonEvaluation> PersonEvaluations { get; set; } = new List<PersonEvaluation>();
 
-        public virtual ICollection<Supervision> Supervisions { get; set; }
+        public virtual ICollection<Supervision> Supervisions { get; set; } = new List<Supervision>();
 
-        public virtual ICollection<Supervision> SupervisionsByMe { get; set; }
+        public virtual ICollection<Supervision> SupervisionsByMe { get; set; } = new List<Supervision>();
     }
 }
