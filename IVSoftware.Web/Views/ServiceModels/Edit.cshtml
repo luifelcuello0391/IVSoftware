@@ -216,6 +216,14 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="QuantificationLimit" class="control-label"></label>
+                    <input asp-for="QuantificationLimit" class="form-control" type="number" />
+                    <span asp-validation-for="QuantificationLimit" class="text-danger"></span>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 4 })
@@ -294,7 +302,7 @@
                     <label asp-for="TypeOfSampling" class="control-label"></label>
                     @if (Model.TypeOfSampling != null)
                     {
-                        <input id="txt_sampling_type" asp-for="TypeOfSampling" class="form-control" readonly value="@Model.TypeOfSampling.Name"/>
+                        <input id="txt_sampling_type" asp-for="TypeOfSampling" class="form-control" readonly value="@Model.TypeOfSampling.Name" />
                     }
                     else
                     {
@@ -314,7 +322,7 @@
                     <label asp-for="StorageContainer" class="control-label"></label>
                     @if (Model.StorageContainer != null)
                     {
-                        <input id="txt_storage_container" asp-for="StorageContainer" class="form-control" readonly value="@Model.StorageContainer.Name"/>
+                        <input id="txt_storage_container" asp-for="StorageContainer" class="form-control" readonly value="@Model.StorageContainer.Name" />
                     }
                     else
                     {
@@ -582,7 +590,7 @@
             </div>
 
             <input asp-for="PersonId" id="txt_responsable_id" hidden />
-            <input asp-for="BackupAnalystId" id="txt_backup_responsable_id" hidden/>
+            <input asp-for="BackupAnalystId" id="txt_backup_responsable_id" hidden />
 
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
