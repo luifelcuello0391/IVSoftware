@@ -118,6 +118,16 @@ namespace IVSoftware.Web.Controllers
             return View(supervision);
         }
 
+        //GET: SupervisionsController/Details/5
+        public async Task<ActionResult> Details(Guid id)
+        {
+            var supervision = await _supervisionService.GetByIdAsync(id);
+            if (supervision == null) { return NotFound(); }
+
+            ViewBag.People = await GetPeopleList();
+            return View(supervision);
+        }
+
         //POST: SupervisionsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]

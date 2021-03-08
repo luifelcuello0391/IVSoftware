@@ -191,8 +191,8 @@
                     @Html.DisplayFor(modelItem => item.Observations)
                 </td>
                 <td align="right" style="white-space:nowrap">
-                    <a id="editDetail" data-toggle="modal" href="#edit-modal" data-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
-                    <a id="deleteDetail" data-toggle="modal" href="#delete-modal" data-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                    <a class="editDetail" data-toggle="modal" href="#edit-modal" data-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                    <a class="deleteDetail" data-toggle="modal" href="#delete-modal" data-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
                 </td>
             </tr>
         }
@@ -235,7 +235,7 @@
             });
 
             const deleteDetailUrl = '@Url.Action("DeleteDetail", "Supervisions")';
-            $('#deleteDetail').on("click", function () {
+            $('.deleteDetail').on("click", function () {
                 let data_id = "0";
                 if (typeof $(this).data('id') !== 'undefined') {
                     data_id = $(this).data('id');
@@ -252,7 +252,7 @@
             });
 
             const editDetailUrl = '@Url.Action("EditDetail", "Supervisions")';
-            $('#editDetail').on("click", function () {
+            $('.editDetail').on("click", function () {
                 let data_id = "0";
                 if (typeof $(this).data('id') !== 'undefined') {
                     data_id = $(this).data('id');

@@ -1,0 +1,167 @@
+﻿@model Supervision
+@{
+    ViewData["Title"] = "Supervisión - Detalle";
+    string successMessage = TempData["SupervisionSuccess"]?.ToString();
+    string errorMessage = TempData["SupervisionError"]?.ToString();
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<h5 class="text-primary titulo">Supervisión - Detalle</h5>
+<hr />
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @errorMessage
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="row" style="margin-top:20px">
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="SupervisedById" class="control-label" style="color:white"></label>
+            </div>
+            <select asp-for="SupervisedById" class="form-control" disabled
+                    asp-items="(List<SelectListItem>) ViewBag.People">
+            </select>
+            <span asp-validation-for="SupervisedById" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="SupervisedPersonId" class="control-label" style="color:white"></label>
+            </div>
+            <select asp-for="SupervisedPersonId" class="form-control" disabled
+                    asp-items="(List<SelectListItem>) ViewBag.People">
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="Analyte" class="control-label" style="color:white"></label>
+            </div>
+            <input asp-for="Analyte" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                <label asp-for="Date" class="control-label" style="color:white"></label>
+            </div>
+            <input asp-for="Date" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <a asp-action="DownloadExcelDocument" asp-route-id="@Model.Id" class="btn btn-primary">
+                Descargar
+            </a>
+            <a asp-controller="People" asp-action="Edit" asp-route-id="@Model.SupervisedById" class="btn btn-primary"> Cancelar </a>
+        </div>
+    </div>
+</div>
+<hr />
+
+<div class="row">
+    <div class="col">
+        <table class="table">
+            <thead style="background-color:yellowgreen; color:white">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Files.FirstOrDefault().Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Files.FirstOrDefault().UploadedBy)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var file in Model.Files)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => file.Date)</td>
+                        <td>@Html.DisplayFor(modelItem => file.UploadedBy)</td>
+                        <td><a asp-controller="Supervisions" asp-action="DownloadFinalFile" asp-route-id="@file.Id"><i class="fas fa-cloud-download-alt" style="font-size:larger"></i></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<hr />
+
+<table class="table" id="details">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Details.FirstOrDefault().PHVA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Process)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details.FirstOrDefault().SupervisedActivity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Result)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details.FirstOrDefault().Observations)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Details)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PHVA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Process)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupervisedActivity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Result)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observations)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Styles {
+    <link href="~/lib/datatables.net/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/lib/datatables.net/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables.net/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#details').DataTable({
+                language: {
+                    url: '/lib/datatables.net/Spanish.json'
+                }
+            });
+        });
+    </script>
+}
