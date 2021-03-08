@@ -1,7 +1,7 @@
 ﻿@model IVSoftware.Data.Models.QuotationRequest
 
 @{
-    ViewData["Title"] = "Nuevo solicitud de cotización";
+    ViewData["Title"] = "Nueva solicitud de cotización";
 }
 
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -466,6 +466,22 @@
         function hideClientmodal() {
             $("#modalClients").modal('hide');
             $("#div_client_list").html("");
+        }
+
+        function deleteIncentive(id) {
+            var result = confirm("¿Realmente desea eliminar el incentivo?");
+            if (result == true)
+            {
+                document.getElementById("tbody_incentives").removeChild(document.getElementById("incentive_row_" + id));
+            }
+        }
+
+        function deleteService(id) {
+            var result = confirm("¿Realmente desea eliminar el servicio?");
+            if (result == true)
+            {
+                document.getElementById("tbody_services").removeChild(document.getElementById("service_row_" + id));
+            }
         }
 
         // Events assignment

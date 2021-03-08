@@ -3,9 +3,9 @@
 {
     foreach(var item in Model)
     {
-        <tr>
+        <tr id="service_row_@item.Id">
             <td style="display:none" id="service_@item.Id" class="serviceRegister">@Html.DisplayFor(modelItem => item.Id)</td>
-            <td><a><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a></td>
+            <td><a><i class="fas fa-minus-circle" style="font-size:larger; color:red" onclick="deleteService(@item.Id)"></i></a></td>
             <td><input id="service_quantity_@item.Id" class="serviceQuantity" type="number" min="1" value="1" style="width:70px" /></td>
             @*<td>@Html.DisplayFor(modelItem => item.Code)</td>*@
             <td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.Name)</td>
