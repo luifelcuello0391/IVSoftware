@@ -63,7 +63,7 @@ namespace IVSoftware.Web.Data
                             IdentificationNumber = "8055",
                             IdentificationTypeId = 1,
                             ContractTypeId = 1,
-                            UserId = userCreated.Id
+                            UserId = userCreated != null ? userCreated.Id : Guid.NewGuid().ToString()
                         };
 
                         var personCreated = await _personService.CreateAsync(person);

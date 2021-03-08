@@ -7,7 +7,7 @@
 <h1>Detalle</h1>
 
 <div>
-    <h4 style="color:yellowgreen">Solicitud de cotización # @Html.DisplayFor(model => model.Id)</h4>
+    <h4 style="color:yellowgreen">Solicitud de cotización @Model.Name.Replace("<consecutive>", Model.Id.ToString())</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2" style="white-space:nowrap">
@@ -42,53 +42,172 @@
         }
     </dl>
 
+    <hr />
     <h5 style="color:yellowgreen">Información del cliente</h5>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2" style="white-space:nowrap">
-            @Html.DisplayNameFor(model => model.ClientIdentification)
-        </dt>
-        <dd class="col-sm-10" style="margin-left:5px">
-            @Html.DisplayFor(model => model.ClientIdentification)
-        </dd>
-
-        <dt class="col-sm-2" style="white-space:nowrap">
-            @Html.DisplayNameFor(model => model.ClientName)
-        </dt>
-        <dd class="col-sm-10" style="margin-left:5px">
-            @Html.DisplayFor(model => model.ClientName)
-        </dd>
-    </dl>
-
-    <h5 style="color:yellowgreen">Servicios</h5>
-    <hr />
-    <!--Listado de servicios asignados-->
-    @if (Model.Services != null && Model.Services.Count > 0)
+    <!--Información del cliente-->
+    @if (Model.Client != null)
     {
-        <table class="table table-striped table-sm" style="display:block; overflow:auto">
+        <div class="row form-group" style="margin-left:5px">
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.PersonType)</b></div>
+                <div>
+                    @if (@Model.Client.PersonType == 1)
+                    {
+                        @Html.Raw("Persona natural")
+                    }
+                    else
+                    {
+                        @Html.Raw("Persona jurídica")
+                    }
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.ClientType)</b></div>
+                <div>@Html.DisplayFor(model => model.Client.ClientTypeName)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.IsRegular)</b></div>
+                <div>@Html.DisplayFor(model => model.Client.IsRegularText)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.DocumentType)</b></div>
+                <div>@Html.DisplayFor(model => model.Client.DocumentTypeName)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.Identification)</b></div>
+                <div>@Html.DisplayFor(model => model.Client.Identification)</div>
+            </div>
+        </div>
+
+
+        <div class="row" style="margin-left:5px">
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.Name)</b></div>
+                <div>@Html.DisplayFor(model => model.Client.Name)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.Department)</b></div>
+                @if (Model.Client.Department != null && Model.Client.Department.Name != null)
+                {
+                    <div>@Html.DisplayFor(model => model.Client.Department.Name)</div>
+                }
+                else
+                {
+                    <div>@Html.Raw("No asignado")</div>
+                }
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.City)</b></div>
+                @if (Model.Client.Department != null && Model.Client.City.Name != null)
+                {
+                    <div>@Html.DisplayFor(model => model.Client.City.Name)</div>
+                }
+                else
+                {
+                    <div>@Html.Raw("No asignada")</div>
+                }
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.Address)</b></div>
+                <div>@Html.DisplayFor(model => model.Client.Address)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.PhoneNumber)</b></div>
+                @if (Model.Client.Extension != null && !string.IsNullOrEmpty(Model.Client.Extension.Replace(" ", string.Empty)))
+                {
+                    <div>@Html.Raw(string.Format("{0} Ext. {1}", Model.Client.PhoneNumber, Model.Client.Extension))</div>
+                }
+                else
+                {
+                    <div>@Html.DisplayFor(model => model.Client.PhoneNumber)</div>
+                }
+            </div>
+        </div>
+
+        <div class="row" style="margin-left:5px">
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Client.CellPhone)</b></div>
+                @if (Model.Client.CellPhone != null && string.IsNullOrEmpty(Model.Client.CellPhone.Replace(" ", string.Empty)))
+                {
+                    <div>@Html.DisplayFor(model => model.Client.CellPhone)</div>
+                }
+                else
+                {
+                    <div>@Html.Raw("No hay datos")</div>
+                }
+            </div>
+
+            <div class="form-group col-md-8">
+                <div><b>@Html.DisplayNameFor(model => model.Client.EmailAddress)</b></div>
+                <div>@Html.DisplayFor(model => model.Client.EmailAddress)</div>
+            </div>
+        </div>
+    }
+
+    @if(Model.Contact != null)
+    {
+        <hr />
+        <h5 style="color:yellowgreen">Información de contacto</h5>
+        <hr />
+        <div class="row form-group" style="margin-left:5px">
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Contact.DocumentType)</b></div>
+                <div>@Html.DisplayFor(model => model.Client.DocumentTypeName)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Contact.Identification)</b></div>
+                <div>@Html.DisplayFor(model => model.Contact.Identification)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Contact.Name)</b></div>
+                <div>@Html.DisplayFor(model => model.Contact.Name)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Contact.ReportDeliveryEmail)</b></div>
+                <div>@Html.DisplayFor(model => model.Contact.ReportDeliveryEmail)</div>
+            </div>
+        </div>
+    }
+
+    <!--Listado de servicios-->
+    <hr />
+    <h5 style="color:yellowgreen;margin-left:5px">Servicios solicitados</h5>
+    <hr />
+    <div style="margin-left:5px; margin-right:5px">
+        <table class="table table-striped table-sm" style="display:inline-block; overflow:auto">
             <thead style="background-color:yellowgreen; color:white">
                 <tr>
                     <th>
                         @Html.Raw("Código")
                     </th>
-                    <th>
-                        @Html.Raw("Nombre")
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Parámetro (técnica de análisis)")
+                    </th>
+
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Método de referencia (Acreditado)")
                     </th>
 
                     <th>
-                        @Html.Raw("Tipo de servicio")
+                        @Html.Raw("Límite de cuantificación")
                     </th>
 
                     <th>
-                        @Html.Raw("Matriz")
-                    </th>
-
-                    <th>
-                        @Html.Raw("Método de referencia")
-                    </th>
-
-                    <th>
-                        @Html.Raw("Rango de trabajo")
+                        @Html.Raw("Unidades")
                     </th>
 
                     <th>
@@ -98,86 +217,173 @@
                     <th style="white-space:nowrap">
                         @Html.Raw("Tiempo de entrega de informe (días)")
                     </th>
-
-                    <th>
-                        @Html.Raw("Acreditado por el IDEAM")
-                    </th>
-
-                    <th>
-                        @Html.Raw("Autorizado INS - Min. Salud")
-                    </th>
-
-                    <th>
-                        @Html.Raw("Vigente")
-                    </th>
-
-                    <th style="white-space:nowrap">
-                        @Html.Raw("Observaciones particulares de la prestación del servicio")
-                    </th>
                 </tr>
             </thead>
+
             <tbody>
-                @foreach (var service in @Model.Services)
+                @if (Model.Services != null && Model.Services.Count > 0)
                 {
-                    if (service.Service != null)
+                    foreach (var item in Model.Services)
                     {
-                        var item = service.Service;
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Code)
-                            </td>
-                            <td style="white-space:nowrap">
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td style="white-space:nowrap">
-                                @Html.DisplayFor(model => item.ServiceTypeName)
-                            </td>
-                            <td style="white-space:nowrap">
-                                @Html.DisplayFor(model => item.MatrixGroupName)
-                            </td>
+                        if (item.Service != null)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Service.Code)
+                                </td>
 
-                            <td style="white-space:nowrap">
-                                @Html.DisplayFor(modelItem => item.ReferenceMethodName)
-                            </td>
-                            <td style="white-space:nowrap">
-                                @Html.DisplayFor(modelItem => item.WorkingRange)
-                            </td>
+                                <td style="white-space:nowrap">
+                                    @Html.DisplayFor(modelItem => item.Service.Name)
+                                </td>
 
-                            <td style="white-space:nowrap">
-                                $ @Html.DisplayFor(modelItem => item.UnitValue)
-                            </td>
+                                <td style="white-space:nowrap">
+                                    @Html.DisplayFor(modelItem => item.Service.ReferenceMethodName)
+                                </td>
 
-                            <td style="white-space:nowrap">
-                                @Html.DisplayFor(modelItem => item.ReportDeliveryTime)
-                            </td>
+                                <td style="white-space:nowrap">
+                                    @Html.DisplayFor(modelItem => item.Service.QuantificationLimit)
+                                </td>
 
-                            <td>
-                                @item.GetYesNo(item.AcredditedByIdeam)
-                            </td>
-                            <td>
-                                @item.GetYesNo(item.AuthorizedByINS)
-                            </td>
-                            <td>
-                                @item.GetYesNo(item.Valid)
-                            </td>
+                                @if (item.Service != null && item.Service.MeasurementUnit != null)
+                                {
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Service.MeasurementUnit.Name)
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.Raw("No definida")
+                                    </td>
+                                }
 
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Description)
-                            </td>
+                                <td>
+                                    $ @Html.DisplayFor(modelItem => item.Service.UnitValue)
+                                </td>
 
-                        </tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Service.ReportDeliveryTime)
+                                </td>
+                            </tr>
+                        }
                     }
                 }
             </tbody>
         </table>
-    }
-    else
+    </div>
+
+    @if (Model.Services != null && Model.Services.Count > 0)
     {
-        <h6>No hay servicios asignados</h6>
-        <br />
+        <!--Resumen de los servicios-->
+        <h6 style="margin-left:5px"><b>Tiempo para entrega de resultados: </b>@Html.DisplayFor(modelItem => Model.ServicesReportTime) día(s)</h6>
     }
 
+    <hr />
+    <h5 style="color:yellowgreen;margin-left:5px">Totales</h5>
+    <hr />
+    <table style="margin-left:5px;margin-right:5px">
+        <thead style="background-color:yellowgreen; color:white">
+            <tr>
+                <th style="white-space:nowrap">
+                    @Html.Raw("Descripción")
+                </th>
 
+                <th style="white-space:nowrap">
+                    @Html.Raw("Total")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="white-space:nowrap">
+                    @Html.Raw("Valor total por servicios (Subtotal)")
+                </td>
+
+                <td style="white-space:nowrap">
+                    $ @Html.DisplayFor(modelItem => Model.ServicesTotal)
+                </td>
+            </tr>
+
+            @if (Model.Incentives != null && Model.Incentives.Count > 0)
+            {
+                foreach (var incentive in Model.Incentives)
+                {
+                    if (incentive != null && incentive.Incentive != null)
+                    {
+                        <tr>
+                            <td style="white-space:nowrap">
+                                @Html.Raw("Incentivo - ") @Html.DisplayFor(modelItem => incentive.Incentive.Name)
+
+                                @if (incentive.IsPercentage)
+                                {
+                                    @Html.Raw(String.Format(" ({0}%)", incentive.IncentiveCurrentValue))
+                                }
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @if (incentive.IsPercentage)
+                                {
+                                    @Html.Raw("- $ ") @Html.DisplayFor(modelItem => incentive.IncentiveValueFromTotal)
+                                }
+                                else
+                                {
+                                    @Html.Raw("- $ ") @Html.DisplayFor(modelItem => incentive.IncentiveCurrentValue)
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+
+                <tr>
+                    <td style="white-space:nowrap">
+                        <b>@Html.Raw("TOTAL, CON INCENTIVOS")</b>
+                    </td>
+                    <td>
+                        <b>$ @Html.DisplayFor(modelItem => modelItem.QuotationTotalValue)</b>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td style="white-space:nowrap">
+                        <b>@Html.Raw("TOTAL, SIN INCENTIVOS")</b>
+                    </td>
+                    <td>
+                        <b>$ @Html.DisplayFor(modelItem => modelItem.QuotationTotalValue)</b>
+                    </td>
+                </tr>
+            }
+
+            <!--Include quotation taxes-->
+            @if (Model.Taxes != null && Model.Taxes.Count > 0)
+            {
+                foreach (var tax in Model.Taxes)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => tax.Tax.Name) (@Html.DisplayFor(modelItem => tax.CurrentTaxValue))%
+                        </td>
+                        <td>
+                            $ @Html.DisplayFor(modelItem => tax.ValueFromQuotationTotal)
+                        </td>
+                    </tr>
+                }
+            }
+
+            <tr>
+                <td style="white-space:nowrap">
+                    <b>@Html.Raw("TOTAL COTIZACIÓN")</b>
+                </td>
+
+                <td>
+                    <b>$ @Html.DisplayFor(modelItem => modelItem.QuotationTotalValueAfterTaxes)</b>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
     <h5 style="color:yellowgreen">Información adicional</h5>
     <hr />
     <dl class="row">

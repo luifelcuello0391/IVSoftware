@@ -75,6 +75,9 @@
     <None Update="InitialScripts\ServicesAdditionalInfo.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="InitialScripts\TaxTableInitialization.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Uploads\Supervisions\F-MA-96.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

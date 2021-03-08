@@ -1,0 +1,17 @@
+﻿@model IEnumerable<IncentiveModel>
+
+@if(Model != null && Model.Count() > 0)
+{
+    foreach(var item in Model)
+    {
+        <tr>
+            <td style="display:none" id="incentive_@item.Id" class="incentiveRegister">@Html.DisplayFor(modelItem => item.Id)</td>
+            <td><a><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a></td>
+            <td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.Name)</td>
+            <td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.Value)</td>
+            <td>@item.GetYesNo(item.IsPercentage)</td>
+        </tr>
+    }
+}
+
+

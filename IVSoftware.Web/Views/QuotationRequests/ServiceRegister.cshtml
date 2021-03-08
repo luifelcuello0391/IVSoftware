@@ -1,0 +1,32 @@
+﻿@model IEnumerable<ServiceModel>
+@if(Model != null && Model.Count() > 0)
+{
+    foreach(var item in Model)
+    {
+        <tr>
+            <td style="display:none" id="service_@item.Id" class="serviceRegister">@Html.DisplayFor(modelItem => item.Id)</td>
+            <td><a><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a></td>
+            <td><input id="service_quantity_@item.Id" class="serviceQuantity" type="number" min="1" value="1" style="width:70px" /></td>
+            @*<td>@Html.DisplayFor(modelItem => item.Code)</td>*@
+            <td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.Name)</td>
+            @*<td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.ServiceTypeName)</td>
+                <td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.MatrixGroupName)</td>*@
+            <td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.ReferenceMethodName)</td>
+            <td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.QuantificationLimit)</td>
+            @if (item.MeasurementUnit != null)
+            {
+                <td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.MeasurementUnit.Name)</td>
+            }
+            else
+            {
+                <td style="white-space:nowrap">@Html.Raw("No definido")</td>
+            }
+
+            <td style="white-space:nowrap">$ @Html.DisplayFor(modelItem => item.UnitValue)</td>
+            <td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.ReportDeliveryTime)</td>
+            @*<td>@item.GetYesNo(item.AcredditedByIdeam)</td>
+            <td>@item.GetYesNo(item.AuthorizedByINS)</td>
+            <td>@item.GetYesNo(item.Valid)</td>*@
+        </tr>
+    }
+}

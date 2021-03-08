@@ -7,6 +7,8 @@
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
+    .serviceRegister {}
+
     .button {
         background-color: #4CAF50; /* Green */
         border: none;
@@ -43,9 +45,9 @@
 
 <h1>Crear</h1>
 
-<h4>Solicitud de cotización</h4>
+<h4 style="color:yellowgreen">Solicitud de cotización</h4>
 <hr />
-<div class="row">
+<div>
     <div>
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -64,13 +66,13 @@
 
             <div class="form-group col-md-3">
                 <label asp-for="RequestDateTime" class="control-label"></label>
-                <input asp-for="RequestDateTime" class="form-control" value="@DateTime.Now" type="date" />
+                <input asp-for="RequestDateTime" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" id="txt_quotation_date"/>
                 <span asp-validation-for="RequestDateTime" class="text-danger"></span>
             </div>
 
-            <div class="form-group col">
+            <div style="margin-left:10px">
 
-                <table class="col-md-4">
+                <table class="col-md-8">
                     <tr>
                         <td>
                             <label class="control-label">Ingrese la identificación del cliente</label>
@@ -93,176 +95,73 @@
             </div>
 
             <!--To show client information-->
-            <div id="div_client_info" class="form-group"></div>
+            <div id="div_client_info" class="form-group" style="margin-left:10px"></div>
 
-            <div class="form-group  col-md-10">
+            <div class="form-group  col-md-12">
                 <label asp-for="ClientRequestDescription" class="control-label"></label>
-                @Html.TextAreaFor(model => model.ClientRequestDescription, new { @class = "form-control", @rows = 4 })
+                @Html.TextAreaFor(model => model.ClientRequestDescription, new { @class = "form-control", @rows = 4, @id = "txt_client_request" })
                 <span asp-validation-for="ClientRequestDescription" class="text-danger"></span>
             </div>
 
+            <hr />
+            <h5 style="color:yellowgreen">Servicios solicitados</h5>
+            <hr />
+
             <!--Modal para agregar servicios uno por uno-->
-            <div class="form-group  col-md-4">
-                <button id="btnShowModal"
-                        type="button"
-                        style="background-color:yellowgreen; color:white"
-                        class="btn btn-primary">
-                    Agregar servicio
-                </button>
+            <div class="row" style="margin-left:20px">
+                <table>
+                    <tr>
+                        <td>
+                            <button id="btnShowModal"
+                                    type="button"
+                                    style="background-color:yellowgreen; color:white"
+                                    class="btn btn-primary"
+                                    onclick="showServicesModal()">
+                                Agregar servicio
+                            </button>
+                        </td>
+                    </tr>
 
-                <div class="modal fade" tabindex="-1" id="loginModal" data-keyboard="false" data-backdrop="static">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-
-                            <div class="modal-header">
-                                <h5 class="modal-title" style="float:left">Banco de preguntas</h5>
-                                <button type="button" class="close" data-dismiss="modal" style="color:red">
-                                    X
-                                </button>
-                            </div>
-
-                            <!--Listado de servicios para agregar-->
-                            <table class="table table-striped table-sm" style="display:block; overflow:auto">
-                                <thead style="background-color:yellowgreen; color:white">
-                                    <tr>
-                                        <th></th>
-                                        <th>
-                                            @Html.Raw("Código")
-                                        </th>
-                                        <th>
-                                            @Html.Raw("Nombre")
-                                        </th>
-
-                                        <th>
-                                            @Html.Raw("Tipo de servicio")
-                                        </th>
-
-                                        <th>
-                                            @Html.Raw("Matriz")
-                                        </th>
-
-                                        <th>
-                                            @Html.Raw("Método de referencia")
-                                        </th>
-
-                                        <th>
-                                            @Html.Raw("Rango de trabajo")
-                                        </th>
-
-                                        <th>
-                                            @Html.Raw("Valor unitario")
-                                        </th>
-
-                                        <th style="white-space:nowrap">
-                                            @Html.Raw("Tiempo de entrega de informe (días)")
-                                        </th>
-
-                                        <th>
-                                            @Html.Raw("Acreditado por el IDEAM")
-                                        </th>
-
-                                        <th>
-                                            @Html.Raw("Autorizado INS - Min. Salud")
-                                        </th>
-
-                                        <th>
-                                            @Html.Raw("Vigente")
-                                        </th>
-
-                                        <th style="white-space:nowrap">
-                                            @Html.Raw("Observaciones particulares de la prestación del servicio")
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (ViewBag.Services != null && ViewBag.Services.Count > 0)
-                                    {
-                                        @foreach (var item in ViewBag.Services)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" class="uncheck_default" value=" @item.Id" />
-                                                </td>
-
-                                                @*<td>
-                                                        @Html.DisplayFor(modelItem => @item.Code)
-                                                    </td>
-                                                    <td style="white-space:nowrap">
-                                                        @Html.DisplayFor(modelItem => @item.Name)
-                                                    </td>
-                                                    <td style="white-space:nowrap">
-                                                        @Html.DisplayFor(model => @item.ServiceTypeName)
-                                                    </td>
-                                                    <td style="white-space:nowrap">
-                                                        @Html.DisplayFor(model => @item.MatrixGroupName)
-                                                    </td>
-
-                                                    <td style="white-space:nowrap">
-                                                        @Html.DisplayFor(modelItem => @item.ReferenceMethodName)
-                                                    </td>
-                                                    <td style="white-space:nowrap">
-                                                        @Html.DisplayFor(modelItem => @item.WorkingRangeName)
-                                                    </td>
-
-                                                    <td style="white-space:nowrap">
-                                                        $ @Html.DisplayFor(modelItem => @item.UnitValue)
-                                                    </td>
-
-                                                    <td style="white-space:nowrap">
-                                                        @Html.DisplayFor(modelItem => @item.ReportDeliveryTime)
-                                                    </td>
-
-                                                    <td>
-                                                        @item.GetYesNo(@item.AcredditedByIdeam)
-                                                    </td>
-                                                    <td>
-                                                        @item.GetYesNo(@item.AuthorizedByINS)
-                                                    </td>
-                                                    <td>
-                                                        @item.GetYesNo(@item.Valid)
-                                                    </td>
-
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => @item.Description)
-                                                    </td>*@
-
-                                            </tr>
-                                        }
-                                    }
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                    <tr>
+                        <td>
+                            <button id="btnShowModal"
+                                    type="button"
+                                    style="background-color:yellowgreen; color:white;"
+                                    class="btn btn-primary"
+                                    onclick="showServiceGroupModal()">
+                                Agregar grupo de servicio
+                            </button>
+                        </td>
+                    </tr>
+                </table>
             </div>
 
+            <h5></h5>
+
             <!--Listado de servicios asignados-->
-            <table class="table table-striped table-sm  col-md-10" style="display:block; overflow:auto">
+            <table class="table table-striped table-sm col-md-12" style="display:block; overflow:auto">
                 <thead style="background-color:yellowgreen; color:white">
                     <tr>
                         <th></th>
+
                         <th>
-                            @Html.Raw("Código")
+                            @Html.Raw("Cantidad")
                         </th>
-                        <th>
-                            @Html.Raw("Nombre")
+
+                        <th style="white-space:nowrap">
+                            @Html.Raw("Parámetro (técnica de análisis)")
+                        </th>
+
+                        <th style="white-space:nowrap">
+                            @Html.Raw("Método de referencia (Acreditado)")
                         </th>
 
                         <th>
-                            @Html.Raw("Tipo de servicio")
+                            @Html.Raw("Límite de cuantificación")
                         </th>
 
                         <th>
-                            @Html.Raw("Matriz")
-                        </th>
-
-                        <th>
-                            @Html.Raw("Método de referencia")
-                        </th>
-
-                        <th>
-                            @Html.Raw("Rango de trabajo")
+                            @Html.Raw("Unidades")
                         </th>
 
                         <th>
@@ -273,83 +172,46 @@
                             @Html.Raw("Tiempo de entrega de informe (días)")
                         </th>
 
+                    </tr>
+                </thead>
+                <tbody id="tbody_services">
+                </tbody>
+            </table>
+
+            <hr />
+            <h5 style="color:yellowgreen">Incentivos</h5>
+            <hr />
+
+            <div class="row" style="margin-left:20px">
+                <button id="btnShowModal"
+                        type="button"
+                        style="background-color:yellowgreen; color:white;"
+                        class="btn btn-primary"
+                        onclick="showIncentiveModal()">
+                    Agregar incentivo
+                </button>
+            </div>
+
+            <h5></h5>
+
+            <!--Listado de incentivos asignados-->
+            <table class="table table-striped table-sm col-md-12" style="display:block; overflow:auto">
+                <thead style="background-color:yellowgreen; color:white">
+                    <tr>
+                        <th></th>
                         <th>
-                            @Html.Raw("Acreditado por el IDEAM")
+                            @Html.Raw("Nombre")
+                        </th>
+                        <th>
+                            @Html.Raw("Valor")
                         </th>
 
                         <th>
-                            @Html.Raw("Autorizado INS - Min. Salud")
-                        </th>
-
-                        <th>
-                            @Html.Raw("Vigente")
-                        </th>
-
-                        <th style="white-space:nowrap">
-                            @Html.Raw("Observaciones particulares de la prestación del servicio")
+                            @Html.Raw("¿Es un porcentaje?")
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    @* @if (Model.Services != null && Model.Services.Count > 0)
-                        {
-                            @foreach (var service in @Model.Services)
-                            {
-                                if (service.Service != null)
-                                {
-                                    var item = service.Service;
-                                    <tr>
-                                        <td>
-                                            <a asp-action="RemoveService" asp-route-serviceId="@item.Id" asp-route-quotationId="@Model.Id" asp-route-isForManagement="@Model.ManageQuotation"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
-                                        </td>
-
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Code)
-                                        </td>
-                                        <td style="white-space:nowrap">
-                                            @Html.DisplayFor(modelItem => item.Name)
-                                        </td>
-                                        <td style="white-space:nowrap">
-                                            @Html.DisplayFor(model => item.ServiceTypeName)
-                                        </td>
-                                        <td style="white-space:nowrap">
-                                            @Html.DisplayFor(model => item.MatrixGroupName)
-                                        </td>
-
-                                        <td style="white-space:nowrap">
-                                            @Html.DisplayFor(modelItem => item.ReferenceMethodName)
-                                        </td>
-                                        <td style="white-space:nowrap">
-                                            @Html.DisplayFor(modelItem => item.WorkingRangeName)
-                                        </td>
-
-                                        <td style="white-space:nowrap">
-                                            $ @Html.DisplayFor(modelItem => item.UnitValue)
-                                        </td>
-
-                                        <td style="white-space:nowrap">
-                                            @Html.DisplayFor(modelItem => item.ReportDeliveryTime)
-                                        </td>
-
-                                        <td>
-                                            @item.GetYesNo(item.AcredditedByIdeam)
-                                        </td>
-                                        <td>
-                                            @item.GetYesNo(item.AuthorizedByINS)
-                                        </td>
-                                        <td>
-                                            @item.GetYesNo(item.Valid)
-                                        </td>
-
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Description)
-                                        </td>
-
-                                    </tr>
-                                }
-                            }
-                        }*@
-
+                <tbody id="tbody_incentives">
                 </tbody>
             </table>
 
@@ -373,7 +235,7 @@
             </div>
 
             <div class="form-group  col-md-4">
-                <input type="submit" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" />
+                <input type="button" value="Guardar" class="btn btn-primary" style="background-color:yellowgreen; color:white" onclick="confirmQuotation()" />
             </div>
         </form>
     </div>
@@ -418,10 +280,164 @@
     </div>
 </div>
 
+<!--Modal para seleccionar el servicio-->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalServices" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section FooterAssets {
     <script>
-        // Functions definition
+
+        function saveQuotation() {
+            var requestDate = $("#txt_quotation_date").val();
+            var clientRequest = $("#txt_client_request").val();
+            var clientId = $("#txt_client_id").val();
+            var contactId = $("#cbx_contact").val();
+            var services = obtainServices();
+            var incentives = obtainIncentives();
+
+            var url = "@Url.Action("SaveQuotation")";
+
+            $.get(url, { date: requestDate, client_request : clientRequest, client_id : clientId, contact_id : contactId, _services : services, _incentives : incentives}, function (data) {
+                if (data != null && data.includes("Error:")) {
+                    alert(data);
+                }
+                else
+                {
+                    location.href = '@Url.Action("Index", "QuotationRequests")';
+                }
+            });
+        }
+
+        function confirmQuotation() {
+            var requestDate = $("#txt_quotation_date").val();
+            var clientRequest = $("#txt_client_request").val();
+            var clientId = $("#txt_client_id").val();
+            var contactId = $("#cbx_contact").val();
+            var services = obtainServices();
+            var incentives = obtainIncentives();
+
+            var url = "@Url.Action("ConfirmQuotation")";
+
+            $.get(url, { date: requestDate, client_request : clientRequest, client_id : clientId, contact_id : contactId, _services : services, _incentives : incentives}, function (data) {
+                if (data != null) {
+                    $('.modal-content').html(data);
+                    $("#modalServices").modal('show');
+                }
+            });
+        }
+
+        function obtainIncentives() {
+            var assignedIncentives = "";
+
+            var incentiveRegisters = document.getElementsByClassName("incentiveRegister");
+
+            if (incentiveRegisters != null) {
+                for (var i = 0; i < incentiveRegisters.length; i++) {
+                    assignedIncentives += incentiveRegisters[i].innerHTML + ";";
+                }
+            }
+
+            return assignedIncentives;
+        }
+
+        function obtainServices() {
+            var assignedServices = "";
+
+            var serviceRegisters = document.getElementsByClassName("serviceRegister");
+
+            if (serviceRegisters != null) {
+                for (var i = 0; i < serviceRegisters.length; i++)
+                {
+                    var quantity = document.getElementById("service_quantity_" + serviceRegisters[i].innerHTML);
+                    assignedServices += serviceRegisters[i].innerHTML + ";quantity:" + quantity.value + "||";
+                }
+            }
+
+            return assignedServices;
+        }
+
+        function selectIncentive(id) {
+            var url = "@Url.Action("SelectIncentive")";
+
+            $.get(url, { id: id }, function (data) {
+                if ($("#tbody_incentives").html().includes("incentive_" + id)) {
+                    alert("El incentivo seleccionado ya se encuentra en la lista.");
+                }
+                else // The incentive has not been selected
+                {
+                    hideServiceModal();
+                    $("#tbody_incentives").html($("#tbody_incentives").html() + data);
+                }
+            });
+        }
+
+        function showIncentiveModal() {
+            var url = "@Url.Action("GetIncentives")";
+
+            // Show modal for services groups
+            $.get(url, null, function (data) {
+                $('.modal-content').html(data);
+                $("#modalServices").modal('show');
+            });
+        }
+
+        function selectServiceGroup(id) {
+            var url = "@Url.Action("GetServicesFromGroup")";
+            var assignedServices = obtainServices();
+
+            $.get(url, { id: id, currentAssignedServices : assignedServices }, function (data) {
+                hideServiceModal();
+                $("#tbody_services").html($("#tbody_services").html() + data);
+            });
+        }
+
+        function showServiceGroupModal() {
+            var url = "@Url.Action("GetServiceGroups")";
+
+            // Show modal for services groups
+            $.get(url, null, function (data) {
+                $('.modal-content').html(data);
+                $("#modalServices").modal('show');
+            });
+        }
+
+        function hideServiceModal() {
+            $("#modalServices").modal('hide');
+        }
+
+        function selectService(id) {
+            var url = "@Url.Action("GetServiceInformation")";
+
+            $.get(url, { id: id }, function (data) {
+                if ($("#tbody_services").html().includes("service_" + id)) {
+                    alert("El servicio seleccionado ya se encuentra en la lista.");
+                }
+                else // The service has not been selected
+                {
+                    hideServiceModal();
+                    $("#tbody_services").html($("#tbody_services").html() + data);
+                }
+            });
+        }
+
+        function showServicesModal() {
+            var url = "@Url.Action("GetAllServices")";
+
+            // Show modal for services
+            $.get(url, null, function (data) {
+                $('.modal-content').html(data);
+                $("#modalServices").modal('show');
+            });
+        }
+
         function getClient() {
             var url = "@Url.Action("GetClientInformation")";
             var id = $("#txtId").val();

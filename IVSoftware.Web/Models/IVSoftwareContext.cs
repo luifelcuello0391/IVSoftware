@@ -221,6 +221,13 @@ namespace IVSoftware.Web.Models
                 .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
 
+            // Quotation - Contact relationship ***************************************************************************************
+            modelBuilder.Entity<QuotationRequest>()
+                .HasOne(q => q.Contact)
+                .WithMany()
+                .HasForeignKey(q => q.ContactId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             // Gender
             new GenderConfiguration("Gender", "Id").Map(modelBuilder);
 
@@ -300,6 +307,9 @@ namespace IVSoftware.Web.Models
 
         public DbSet<IVSoftware.Data.Models.ServiceGroupServicesRelation> ServiceGroupServicesRelation { get; set; }
 
+        public DbSet<IncentivesIntoServiceQuotationRequest> IncentivesIntoServiceQuotationRequest { get; set; }
+        public DbSet<TaxesIntoServiceQuotationRequest> TaxesIntoServiceQuotationRequest { get; set; }
+
         public DbSet<PersonJobRole> PersonJobRoles { get; set; }
 
         public DbSet<PersonEvaluation> PersonEvaluations { get; set; }
@@ -322,5 +332,6 @@ namespace IVSoftware.Web.Models
 
         public DbSet<LaboratoryModel> Laboratories { get; set; }
 
+        public DbSet<TaxModel> Taxes { get; set; }
     }
 }

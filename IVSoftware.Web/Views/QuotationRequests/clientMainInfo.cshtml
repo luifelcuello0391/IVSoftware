@@ -4,91 +4,97 @@
 
     @if (Model != null)
     {
-    <div class="row form-group">
-        <div class="form-group col-md-2">
-            <div><b>@Html.DisplayNameFor(model => model.PersonType)</b></div>
-            <div>
-                @if (@Model.PersonType == 1)
-                {
-                    @Html.Raw("Persona natural")
-                }
-                else
-                {
-                    @Html.Raw("Persona jurídica")
-                }
+        <hr />
+        <h5 style="color:yellowgreen">Informaión del cliente</h5>
+        <hr />
+
+        <input id="txt_client_id" hidden value="@Html.DisplayFor(model => model.Id)"/>
+
+        <div class="row form-group">
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.PersonType)</b></div>
+                <div>
+                    @if (@Model.PersonType == 1)
+                    {
+                        @Html.Raw("Persona natural")
+                    }
+                    else
+                    {
+                        @Html.Raw("Persona jurídica")
+                    }
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.ClientType)</b></div>
+                <div>@Html.DisplayFor(model => model.ClientTypeName)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.IsRegular)</b></div>
+                <div>@Html.DisplayFor(model => model.IsRegularText)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.DocumentType)</b></div>
+                <div>@Html.DisplayFor(model => model.DocumentTypeName)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Identification)</b></div>
+                <div>@Html.DisplayFor(model => model.Identification)</div>
             </div>
         </div>
 
-        <div class="form-group col-md-2">
-            <div><b>@Html.DisplayNameFor(model => model.ClientType)</b></div>
-            <div>@Html.DisplayFor(model => model.ClientTypeName)</div>
+
+        <div class="row">
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Name)</b></div>
+                <div>@Html.DisplayFor(model => model.Name)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Department)</b></div>
+                @if (Model.Department != null && Model.Department.Name != null)
+                {
+                    <div>@Html.DisplayFor(model => model.Department.Name)</div>
+                }
+                else
+                {
+                    <div>@Html.Raw("No asignado")</div>
+                }
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.City)</b></div>
+                @if (Model.Department != null && Model.City.Name != null)
+                {
+                    <div>@Html.DisplayFor(model => model.City.Name)</div>
+                }
+                else
+                {
+                    <div>@Html.Raw("No asignada")</div>
+                }
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Address)</b></div>
+                <div>@Html.DisplayFor(model => model.Address)</div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.PhoneNumber)</b></div>
+                @if (Model.Extension != null && !string.IsNullOrEmpty(Model.Extension.Replace(" ", string.Empty)))
+                {
+                    <div>@Html.Raw(string.Format("{0} Ext. {1}", Model.PhoneNumber, Model.Extension))</div>
+                }
+                else
+                {
+                    <div>@Html.DisplayFor(model => model.PhoneNumber)</div>
+                }
+            </div>
         </div>
-
-        <div class="form-group col-md-2">
-            <div><b>@Html.DisplayNameFor(model => model.IsRegular)</b></div>
-            <div>@Html.DisplayFor(model => model.IsRegularText)</div>
-        </div>
-
-        <div class="form-group col-md-2">
-            <div><b>@Html.DisplayNameFor(model => model.DocumentType)</b></div>
-            <div>@Html.DisplayFor(model => model.DocumentTypeName)</div>
-        </div>
-
-        <div class="form-group col-md-2">
-            <div><b>@Html.DisplayNameFor(model => model.Identification)</b></div>
-            <div>@Html.DisplayFor(model => model.Identification)</div>
-        </div>
-    </div>
-
-
-    <div class="row">
-
-        <div class="form-group col-md-2">
-            <div><b>@Html.DisplayNameFor(model => model.Name)</b></div>
-            <div>@Html.DisplayFor(model => model.Name)</div>
-        </div>
-
-        <div class="form-group col-md-2">
-            <div><b>@Html.DisplayNameFor(model => model.Department)</b></div>
-            @if (Model.Department != null && Model.Department.Name != null)
-            {
-                <div>@Html.DisplayFor(model => model.Department.Name)</div>
-            }
-            else
-            {
-                <div>@Html.Raw("No asignado")</div>
-            }
-        </div>
-
-        <div class="form-group col-md-2">
-            <div><b>@Html.DisplayNameFor(model => model.City)</b></div>
-            @if (Model.Department != null && Model.City.Name != null)
-            {
-                <div>@Html.DisplayFor(model => model.City.Name)</div>
-            }
-            else
-            {
-                <div>@Html.Raw("No asignada")</div>
-            }
-        </div>
-
-        <div class="form-group col-md-2">
-            <div><b>@Html.DisplayNameFor(model => model.Address)</b></div>
-            <div>@Html.DisplayFor(model => model.Address)</div>
-        </div>
-
-        <div class="form-group col-md-2">
-            <div><b>@Html.DisplayNameFor(model => model.PhoneNumber)</b></div>
-            @if (Model.Extension != null && !string.IsNullOrEmpty(Model.Extension.Replace(" ", string.Empty)))
-            {
-                <div>@Html.Raw(string.Format("{0} Ext. {1}", Model.PhoneNumber, Model.Extension))</div>
-            }
-            else
-            {
-                <div>@Html.DisplayFor(model => model.PhoneNumber)</div>
-            }
-        </div>
-    </div>
 
         <div class="row">
 
@@ -104,11 +110,31 @@
                 }
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-8">
                 <div><b>@Html.DisplayNameFor(model => model.EmailAddress)</b></div>
                 <div>@Html.DisplayFor(model => model.EmailAddress)</div>
             </div>
         </div>
+
+        @if (Model.Contacts != null && Model.Contacts.Count > 0)
+        {
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <div><b>@Html.Raw("Seleccione el contacto")</b></div>
+                    <div>
+                        <select id="cbx_contact" class="form-control">
+                            @foreach (var contact in Model.Contacts)
+                            {
+                                if (contact != null)
+                                {
+                                    <option value="@contact.Id">@contact.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        }
     }
     else
     {

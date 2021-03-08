@@ -4,14 +4,16 @@ using IVSoftware.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IVSoftware.Web.Migrations
 {
     [DbContext(typeof(IVSoftwareContext))]
-    partial class IVSoftwareContextModelSnapshot : ModelSnapshot
+    [Migration("20210307171511_additionalDataForServicesIntoQuotation")]
+    partial class additionalDataForServicesIntoQuotation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1860,9 +1862,6 @@ namespace IVSoftware.Web.Migrations
                     b.Property<string>("ClientRequestDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ContactId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreationDatetime")
                         .HasColumnType("datetime2");
 
@@ -1885,9 +1884,6 @@ namespace IVSoftware.Web.Migrations
                     b.Property<float>("QuotationTotalValue")
                         .HasColumnType("real");
 
-                    b.Property<float>("QuotationTotalValueAfterTaxes")
-                        .HasColumnType("real");
-
                     b.Property<int>("RegisterStatus")
                         .HasColumnType("int");
 
@@ -1906,8 +1902,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
-
-                    b.HasIndex("ContactId");
 
                     b.HasIndex("GenerationUsedId");
 
@@ -2409,59 +2403,6 @@ namespace IVSoftware.Web.Migrations
                     b.HasIndex("SupervisionId");
 
                     b.ToTable("SupervisionFile");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.TaxModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("Currentvalue")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime?>("ModificationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Taxes");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.TaxesIntoServiceQuotationRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<float>("CurrentTaxValue")
-                        .HasColumnType("real");
-
-                    b.Property<int?>("QuotationRequestId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TaxId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuotationRequestId");
-
-                    b.HasIndex("TaxId");
-
-                    b.ToTable("TaxesIntoServiceQuotationRequest");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.TechnicalKnowledge", b =>
@@ -3997,7 +3938,7 @@ namespace IVSoftware.Web.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("IVSoftware.Data.Models.QuotationRequest", "QuotationRequest")
-                        .WithMany("Incentives")
+                        .WithMany()
                         .HasForeignKey("QuotationRequestId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -4211,11 +4152,6 @@ namespace IVSoftware.Web.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("IVSoftware.Data.Models.ClientContact", "Contact")
-                        .WithMany()
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("IVSoftware.Data.Models.Person", "GenerationUsed")
                         .WithMany()
                         .HasForeignKey("GenerationUsedId")
@@ -4227,8 +4163,6 @@ namespace IVSoftware.Web.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Client");
-
-                    b.Navigation("Contact");
 
                     b.Navigation("GenerationUsed");
 
@@ -4381,23 +4315,6 @@ namespace IVSoftware.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("Supervision");
-                });
-
-            modelBuilder.Entity("IVSoftware.Data.Models.TaxesIntoServiceQuotationRequest", b =>
-                {
-                    b.HasOne("IVSoftware.Data.Models.QuotationRequest", "QuotationRequest")
-                        .WithMany("Taxes")
-                        .HasForeignKey("QuotationRequestId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("IVSoftware.Data.Models.TaxModel", "Tax")
-                        .WithMany()
-                        .HasForeignKey("TaxId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("QuotationRequest");
-
-                    b.Navigation("Tax");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.TechnicalKnowledge", b =>
@@ -4996,11 +4913,7 @@ namespace IVSoftware.Web.Migrations
 
             modelBuilder.Entity("IVSoftware.Data.Models.QuotationRequest", b =>
                 {
-                    b.Navigation("Incentives");
-
                     b.Navigation("Services");
-
-                    b.Navigation("Taxes");
                 });
 
             modelBuilder.Entity("IVSoftware.Data.Models.ServiceGroupModel", b =>

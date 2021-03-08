@@ -1,0 +1,160 @@
+﻿@model IEnumerable<ServiceModel>
+
+@*<head>
+    <style>
+        td:last-child {
+            width: 100%;
+        }
+    </style>
+</head>*@
+
+<div class="modal-header">
+    <h5 class="modal-title" style="float:left; color:yellowgreen">Seleccione un servicio</h5>
+    <button id="btn_hide_client_modal" type="button" data-dismiss="modal" class="close" style="color:red; margin-right:5px">
+        X
+    </button>
+</div>
+
+
+
+@if (Model != null && Model.Count() > 0)
+{
+    <table class="table table-striped table-sm" style="display:block; overflow:auto">
+        <thead style="background-color:yellowgreen; color:white">
+            <tr>
+                <th></th>
+                <th style="white-space:nowrap">
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.ServiceType)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.MatrixGroup)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.ReferenceMethod)
+                </th>
+
+                <th style="white-space:nowrap">
+                    @Html.Raw("Rango de trabajo")
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.UnitValue)
+                </th>
+
+                <th style="white-space:nowrap">
+                    @Html.DisplayNameFor(model => model.ReportDeliveryTime)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.AcredditedByIdeam)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.AuthorizedByINS)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Valid)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Responsable)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.BackupAnalyst)
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td style="white-space:nowrap">
+                    <button class="btn btn-primary" onclick="selectService(@item.Id)">Seleccionar</button>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(model => item.ServiceTypeName)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(model => item.MatrixGroupName)
+                </td>
+
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.ReferenceMethodName)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.WorkingRangeWithoutPrecondition)
+                </td>
+
+                <td style="white-space:nowrap">
+                    $ @Html.DisplayFor(modelItem => item.UnitValue)
+                </td>
+
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.ReportDeliveryTime)
+                </td>
+
+                <td>
+                    @item.GetYesNo(item.AcredditedByIdeam)
+                </td>
+                <td>
+                    @item.GetYesNo(item.AuthorizedByINS)
+                </td>
+                <td>
+                    @item.GetYesNo(item.Valid)
+                </td>
+
+                @if (item.Responsable != null && !string.IsNullOrEmpty(item.Responsable.FullName))
+                {
+                    <td style="white-space:nowrap">
+                        @item.Responsable.FullName
+                    </td>
+                }
+                else
+                {
+                    <td style="white-space:nowrap">
+                        @Html.Raw("No asignado")
+                    </td>
+                }
+
+                @if (item.BackupAnalyst != null && !string.IsNullOrEmpty(item.BackupAnalyst.FullName))
+                {
+                    <td style="white-space:nowrap">
+                        @item.BackupAnalyst.FullName
+                    </td>
+                }
+                else
+                {
+                    <td style="white-space:nowrap">
+                        @Html.Raw("No asignado")
+                    </td>
+                }
+
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+else
+{
+    // No items
+    <div><label>No hay servicios registrados</label></div>
+}
+

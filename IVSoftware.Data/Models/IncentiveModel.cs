@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,8 +16,9 @@ namespace IVSoftware.Data.Models
         [DisplayName("¿Es un porcentaje?")]
         public bool IsPercentage { get; set; }
         public virtual ICollection<ClientTypeIncentiveRelation> ClientTypes { get; set; }
-        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        [NotMapped]
         public string IsPercentageValue { get { return IsPercentage ? "Sí" : "No"; } }
         public string ValueText { get { return IsPercentage ? string.Format("{0} %", Value) : string.Format("$ {0}", Value); } }
+        
     }
 }

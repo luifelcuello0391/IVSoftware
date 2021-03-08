@@ -13,5 +13,7 @@ namespace IVSoftware.Data.Models
         public virtual ServiceModel Service { get; set; }
         public int? QuotationRequestId { get; set; }
         public virtual QuotationRequest QuotationRequest { get; set; }
+        public int Quantity { get; set; }
+        public float CurrentValue { get; set; }
     }
 }

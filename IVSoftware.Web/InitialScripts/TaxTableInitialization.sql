@@ -1,0 +1,1 @@
+INSERT INTO Taxes ([Name], CurrentValue, RegisterStatus, CreationDatetime, ModificationDatetime) VALUES ('IVA', 19, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

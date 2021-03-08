@@ -22,9 +22,34 @@ namespace IVSoftware.Web.Controllers
         }
 
         // GET: QuotationRequests
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter)
         {
-            return View(await _context.QuotationRequest.ToListAsync());
+            if(string.IsNullOrEmpty(filter))
+            {
+                ViewBag.filter = "0";
+            }
+            else
+            {
+                ViewBag.filter = filter;
+            }
+
+            switch(filter)
+            {
+                case "1": // Registered
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 1).ToListAsync());
+
+                case "2": // Generated
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 2).ToListAsync());
+
+                case "3": // Sent
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 3).ToListAsync());
+
+                case "4": // Cancelled
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 4).ToListAsync());
+
+                default:
+                    return View(await _context.QuotationRequest.ToListAsync());
+            }
         }
 
         // GET: QuotationRequests/Details/5
@@ -48,6 +73,8 @@ namespace IVSoftware.Web.Controllers
         // GET: QuotationRequests/Create
         public IActionResult Create()
         {
+            TempData["serviceList"] = new List<int>();
+
             try
             {
                 ViewBag.ActiveClients = _context.ClientModel.ToList();
@@ -489,6 +516,291 @@ namespace IVSoftware.Web.Controllers
         private bool QuotationRequestExists(int id)
         {
             return _context.QuotationRequest.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> GetAllServices()
+        {
+            List<ServiceModel> services = await _context.ServiceModel.Where(x => x.Valid).ToListAsync();
+
+            return PartialView("ServiceSelectionList", services);
+        }
+
+        public async Task<IActionResult> GetServiceInformation(int id)
+        {
+            try
+            {
+                IEnumerable<ServiceModel> services = await _context.ServiceModel.Where(x => x.Id == id).ToListAsync();
+
+                return PartialView("ServiceRegister", services);
+            }
+            catch(Exception)
+            {
+                return PartialView("ServiceRegister", null);
+            }
+            
+        }
+
+        public async Task<IActionResult> GetServiceGroups()
+        {
+            List<ServiceGroupModel> groups = await _context.ServiceGroupModel.ToListAsync();
+
+            return PartialView("ServiceGroupSelectionList", groups);
+        }
+
+        public async Task<IActionResult> GetServicesFromGroup (int id, string currentAssignedServices)
+        {
+            try
+            {
+                List<ServiceGroupServicesRelation> servicesOnGroup = await _context.ServiceGroupServicesRelation.Where(x => x.ServiceGroupId == id).ToListAsync();
+
+                if(servicesOnGroup != null && servicesOnGroup.Count > 0)
+                {
+                    List<ServiceModel> services = new List<ServiceModel>();
+                    foreach(ServiceGroupServicesRelation service in servicesOnGroup)
+                    {
+                        if(service != null)
+                        {
+                            if(currentAssignedServices != null && !string.IsNullOrEmpty(currentAssignedServices.Replace(" ", string.Empty)))
+                            {
+                                if(!currentAssignedServices.Contains(service.ServiceId + ";"))
+                                {
+                                    // Only adds the services that has not been added yet
+                                    services.Add(service.Service);
+                                }
+                            }
+                            else // There is no assigned services
+                            {
+                                services.Add(service.Service);
+                            }
+                            
+                        }
+                    }
+
+                    return PartialView("ServiceRegister", services);
+                }
+
+                return PartialView("ServiceRegister", null);
+            }
+            catch(Exception ex)
+            {
+                return PartialView("ServiceRegister", null);
+            }
+            
+        }
+
+        public async Task<IActionResult> GetIncentives()
+        {
+            return PartialView("IncentivesSelectionList", await _context.IncentiveModel.ToListAsync());
+        }
+
+        public async Task<IActionResult> SelectIncentive (int id)
+        {
+            try
+            {
+                IEnumerable<IncentiveModel> incentives = await _context.IncentiveModel.Where(x => x.Id == id).ToListAsync();
+
+                return PartialView("IncentiveRegister", incentives);
+            }
+            catch (Exception)
+            {
+                return PartialView("IncentiveRegister", null);
+            }
+        }
+
+        public async Task<QuotationRequest> PrepareQuotation(DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives)
+        {
+            QuotationRequest request = new QuotationRequest();
+
+            // General information
+            request.RequestDateTime = date;
+            request.CreationDatetime = DateTime.Now;
+            request.ModificationDatetime = DateTime.Now;
+            request.RegisterStatus = 1;
+            request.Name = string.Format("C<consecutive>-{0}", DateTime.Now.Year);
+            request.ClientRequestDescription = client_request;
+            request.HasBeenGenerated = false;
+            request.Status = await _context.QuotationStatus.FirstOrDefaultAsync(x => x.Id == 1);
+
+            // Client information
+            request.ClientId = client_id;
+            request.Client = await _context.ClientModel.FirstOrDefaultAsync(x => x.Id == client_id);
+
+            if (request.Client != null)
+            {
+                request.RequestedClientId = request.Client.Identification;
+                request.RequestedClientName = request.Client.Name;
+            }
+
+            // Contact information
+            request.ContactId = contact_id;
+            request.Contact = await _context.ClientContact.FirstOrDefaultAsync(x => x.Id == contact_id);
+
+            // Services
+            string[] servicesId = _services.Split(new string[] { "||" }, StringSplitOptions.RemoveEmptyEntries);
+            if (servicesId != null && servicesId.Length > 0)
+            {
+                request.Services = new List<ServicesIntoQuotation>();
+
+                foreach (string id in servicesId)
+                {
+                    try
+                    {
+                        string[] id_quantity = id.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (id_quantity != null && id_quantity.Length >= 2)
+                        {
+                            ServicesIntoQuotation service = new ServicesIntoQuotation();
+                            service.ServiceId = int.Parse(id_quantity[0]);
+                            service.Service = await _context.ServiceModel.FirstOrDefaultAsync(x => x.Id == service.ServiceId);
+
+                            if (service.Service != null)
+                            {
+                                service.CurrentValue = service.Service.UnitValue;
+                            }
+                            service.QuotationRequest = request;
+                            service.Quantity = int.Parse(id_quantity[1].Replace("quantity:", string.Empty));
+
+                            request.Services.Add(service);
+                        }
+                    }
+                    catch { }
+                }
+            }
+
+            // Service total value and report time
+            request.ServicesTotal = 0f;
+            request.ServicesReportTime = 0;
+
+            if (request.Services != null && request.Services.Count > 0)
+            {
+                foreach (ServicesIntoQuotation service in request.Services)
+                {
+                    if (service != null)
+                    {
+                        request.ServicesTotal += service.CurrentValue;
+
+                        if (service.Service != null && service.Service.ReportDeliveryTime > request.ServicesReportTime)
+                        {
+                            request.ServicesReportTime = service.Service.ReportDeliveryTime;
+                        }
+                    }
+                }
+            }
+
+            // Incentives
+            if (_incentives != null && !string.IsNullOrEmpty(_incentives.Replace(" ", string.Empty)))
+            {
+                string[] incentivesId = _incentives.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                if (incentivesId != null && incentivesId.Length > 0)
+                {
+                    request.Incentives = new List<IncentivesIntoServiceQuotationRequest>();
+                    int _id = 0;
+
+                    foreach (string id in incentivesId)
+                    {
+                        try
+                        {
+                            _id = int.Parse(id);
+                            IncentivesIntoServiceQuotationRequest incentives = new IncentivesIntoServiceQuotationRequest();
+                            incentives.IncentiveId = _id;
+                            incentives.Incentive = await _context.IncentiveModel.FirstOrDefaultAsync(x => x.Id == _id);
+
+                            if (incentives.Incentive != null)
+                            {
+                                incentives.IncentiveCurrentValue = incentives.Incentive.Value;
+                                incentives.IsPercentage = incentives.Incentive.IsPercentage;
+                                incentives.ServiceTotalValue = request.ServicesTotal;
+                            }
+
+                            incentives.QuotationRequest = request;
+
+                            request.Incentives.Add(incentives);
+                        }
+                        catch { }
+                    }
+                }
+            }
+
+            // Obtains the total from services
+            request.QuotationTotalValue = request.ServicesTotal;
+
+            // Quotation total
+            if (request.Incentives != null && request.Incentives.Count > 0)
+            {
+                foreach (IncentivesIntoServiceQuotationRequest incentive in request.Incentives)
+                {
+                    if (incentive != null && incentive.Incentive != null)
+                    {
+                        request.QuotationTotalValue -= incentive.IsPercentage ? incentive.IncentiveValueFromTotal : incentive.IncentiveCurrentValue;
+                    }
+                }
+            }
+
+            // Obtains the taxes
+            List<TaxModel> taxes = await _context.Taxes.ToListAsync();
+            if (taxes != null && taxes.Count > 0)
+            {
+                request.Taxes = new List<TaxesIntoServiceQuotationRequest>();
+
+                foreach (TaxModel tax in taxes)
+                {
+                    if (tax != null)
+                    {
+                        TaxesIntoServiceQuotationRequest _tax = new TaxesIntoServiceQuotationRequest();
+                        _tax.TaxId = tax.Id;
+                        _tax.Tax = tax;
+                        _tax.CurrentTaxValue = tax.Currentvalue;
+                        _tax.QuotationRequest = request;
+                        _tax.QuotationTotal = request.QuotationTotalValue;
+
+                        request.Taxes.Add(_tax);
+                    }
+                }
+            }
+
+            request.QuotationTotalValueAfterTaxes = request.QuotationTotalValue;
+
+            // Taxes
+            if (request.Taxes != null && request.Taxes.Count > 0)
+            {
+                foreach (TaxesIntoServiceQuotationRequest tax in request.Taxes)
+                {
+                    if (tax != null)
+                    {
+                        request.QuotationTotalValueAfterTaxes += tax.ValueFromQuotationTotal;
+                    }
+                }
+            }
+
+            return request;
+        }
+
+        public async Task<IActionResult> ConfirmQuotation (DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives)
+        {
+            return PartialView("QuotationRequestResume", await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives));
+        }
+
+        public async Task<string> SaveQuotation (DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives)
+        {
+            QuotationRequest request = await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives);
+
+            if(request != null)
+            {
+                try
+                {
+                    _context.Add(request);
+                    await _context.SaveChangesAsync();
+
+                    return "OK";
+                }
+                catch(Exception ex)
+                {
+                    return string.Format("Error: {0}", ex.ToString());
+                }
+            }
+            else
+            {
+                return "Error: No hay información de la cotización";
+            }
         }
     }
 }

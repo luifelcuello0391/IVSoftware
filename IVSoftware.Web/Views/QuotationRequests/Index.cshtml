@@ -6,14 +6,80 @@
 
 <h1>Solicitudes de cotización</h1>
 
-<p>
-    <a asp-action="Create">Registrar solicitud</a>
-</p>
+<div>
+    <p style="float:left">
+        <a asp-action="Create">Registrar solicitud</a>
+    </p>
+
+    <div style="float:right">
+        <table>
+            <tr>
+                <td>
+                    <select class="form-control" id="cbx_filter">
+                        @if (ViewBag.filter == "0")
+                        {
+                            <option value="0" selected>Mostrar Todos</option>
+                        }
+                        else
+                        {
+                            <option value="0">Mostrar Todos</option>
+                        }
+
+                        @if (ViewBag.filter == "1")
+                        {
+                            <option value="1" selected>Estado registrada</option>
+                        }
+                        else
+                        {
+                            <option value="1">Estado registrada</option>
+                        }
+
+                        @if (ViewBag.filter == "2")
+                        {
+                            <option value="2" selected>Estado generada</option>
+                        }
+                        else
+                        {
+                            <option value="2">Estado generada</option>
+                        }
+
+                        @if (ViewBag.filter == "3")
+                        {
+                            <option value="3" selected>Estado enviada</option>
+                        }
+                        else
+                        {
+                            <option value="3">Estado enviada</option>
+                        }
+
+                        @if (ViewBag.filter == "4")
+                        {
+                            <option value="4" selected>Estado cancelada</option>
+                        }
+                        else
+                        {
+                            <option value="4">Estado cancelada</option>
+                        }
+                    </select>
+                </td>
+
+                <td>
+                    <input type="button" class="btn btn-primary" style="background-color:yellowgreen;color:white;margin-left:10px" value="Filtrar listado" onclick="onFilter()" />
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
 <table class="table">
     <thead style="background-color:yellowgreen; color:white">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.RequestDateTime)
+            </th>
+            <th>
+                @Html.Raw("Código")
             </th>
             <th>
                 Identificación del cliente
@@ -32,42 +98,55 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RequestDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientIdentification)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientRequestDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StatusName)
-            </td>
-
-            @if (!item.HasBeenCanceled)
-            {
-                <td style="white-space:nowrap">
-                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>
-                    &nbsp;
-                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
-                    &nbsp;
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
-                </td>
-            }
-            else
-            {
+        @foreach (var item in Model)
+        {
+            <tr>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
-                    &nbsp;
+                    @Html.DisplayFor(modelItem => item.RequestDateTime)
                 </td>
-            }
-        </tr>
-}
+                <td>
+                    @item.Name.Replace("<consecutive>", item.Id.ToString())
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientIdentification)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientRequestDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusName)
+                </td>
+
+                @if (!item.HasBeenCanceled)
+                {
+                    <td style="white-space:nowrap">
+                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>
+                        &nbsp;
+                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
+                        &nbsp;
+                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
+                        &nbsp;
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+<script>
+    function onFilter() {
+        var filter_data = document.getElementById("cbx_filter").value;
+        location.href = '@Url.Action("Index", "QuotationRequests")?filter=' + filter_data;
+    }
+</script>

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<IncentiveModel>
+
+@*<head>
+    <style>
+        td:last-child {
+            width: 100%;
+        }
+    </style>
+</head>*@
+
+<div class="modal-header">
+    <h5 class="modal-title" style="float:left; color:yellowgreen">Seleccione un incentivo</h5>
+    <button id="btn_hide_client_modal" type="button" data-dismiss="modal" class="close" style="color:red; margin-right:5px">
+        X
+    </button>
+</div>
+
+@if (Model != null && Model.Count() > 0)
+{
+    <table class="table">
+        <thead style="background-color:yellowgreen; color:white">
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Value)
+                </th>
+                <th style="white-space:nowrap">
+                    @Html.DisplayNameFor(model => model.IsPercentage)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td style="white-space:nowrap">
+                    <button class="btn btn-primary" onclick="selectIncentive(@item.Id)">Seleccionar</button>
+                </td>
+
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td style="white-space:nowrap">
+                    @Html.DisplayFor(modelItem => item.ValueText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsPercentageValue)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    // No items
+    <div><label>No hay incentivos registrados</label></div>
+}
