@@ -58,6 +58,10 @@ namespace IVSoftware.Data.Models
         [Required(ErrorMessage = "El {0} es requerido.")]
         public string Email { get; set; }
 
+        [DisplayName("Otros Correos electrónicos")]
+        [MaxLength(2000, ErrorMessage = "Máximo 2000 caracteres")]
+        public string OthersEmail { get; set; }
+
         [DisplayName("Fecha de diligenciamiento")]
         public DateTime? CompletionDateTime { get; set; }
 

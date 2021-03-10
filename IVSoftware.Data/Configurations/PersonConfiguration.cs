@@ -102,6 +102,12 @@ namespace IVSoftware.Data.Configurations
                 .HasMaxLength(250);
 
             builder
+                .Property(x => x.OthersEmail)
+                .IsRequired(false)
+                .IsUnicode()
+                .HasMaxLength(2000);
+
+            builder
                 .Property(x => x.Photo)
                 .IsRequired(false)
                 .IsUnicode()
