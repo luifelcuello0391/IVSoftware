@@ -221,7 +221,7 @@ namespace IVSoftware.Web.Models
                 .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Quotation - Contact relationship ***************************************************************************************
+            // Quotation - Contact relationship***************************************************************************************
             modelBuilder.Entity<QuotationRequest>()
                 .HasOne(q => q.Contact)
                 .WithMany()

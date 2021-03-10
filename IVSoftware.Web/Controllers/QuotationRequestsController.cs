@@ -607,7 +607,7 @@ namespace IVSoftware.Web.Controllers
             }
         }
 
-        public async Task<QuotationRequest> PrepareQuotation(DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives)
+        public async Task<QuotationRequest> PrepareQuotation(DateTime date, string client_request, int client_id, int? contact_id, string _services, string _incentives)
         {
             QuotationRequest request = new QuotationRequest();
 
@@ -632,8 +632,11 @@ namespace IVSoftware.Web.Controllers
             }
 
             // Contact information
-            request.ContactId = contact_id;
-            request.Contact = await _context.ClientContact.FirstOrDefaultAsync(x => x.Id == contact_id);
+            if(contact_id != null)
+            {
+                request.ContactId = contact_id.Value;
+                request.Contact = await _context.ClientContact.FirstOrDefaultAsync(x => x.Id == contact_id.Value);
+            }
 
             // Services
             string[] servicesId = _services.Split(new string[] { "||" }, StringSplitOptions.RemoveEmptyEntries);
