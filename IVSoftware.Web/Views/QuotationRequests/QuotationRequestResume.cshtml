@@ -13,7 +13,15 @@
 </head>
 
 <div class="modal-header">
-    <h5 class="modal-title" style="float:left; color:yellowgreen">Resumen de la solicitud</h5>
+    @if (Model.Id > 0)
+    {
+        <h5 class="modal-title" style="float:left; color:yellowgreen">Resumen de la solicitud de cotización @Model.Name.Replace("<consecutive>", Model.Id.ToString())</h5>
+    }
+    else
+    {
+        <h5 class="modal-title" style="float:left; color:yellowgreen">Resumen de la solicitud de cotización</h5>
+    }
+
     <button id="btn_hide_client_modal" type="button" data-dismiss="modal" class="close" style="color:red; margin-right:5px">
         X
     </button>
@@ -165,7 +173,7 @@
                         @Html.Raw("Método de referencia (Acreditado)")
                     </th>
 
-                    <th>
+                    <th style="white-space:nowrap">
                         @Html.Raw("Límite de cuantificación")
                     </th>
 
@@ -173,12 +181,20 @@
                         @Html.Raw("Unidades")
                     </th>
 
-                    <th>
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Tiempo de entrega de informe (días)")
+                    </th>
+
+                    <th style="white-space:nowrap">
                         @Html.Raw("Valor unitario")
                     </th>
 
                     <th style="white-space:nowrap">
-                        @Html.Raw("Tiempo de entrega de informe (días)")
+                        @Html.Raw("Cantidad")
+                    </th>
+
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Valor total antes de IVA")
                     </th>
                 </tr>
             </thead>
@@ -205,7 +221,7 @@
 
                                 @if (item.Service != null && item.Service.MeasurementUnit != null)
                                 {
-                                    <td>
+                                    <td style="white-space:nowrap">
                                         @Html.DisplayFor(modelItem => item.Service.MeasurementUnit.Name)
                                     </td>
                                 }
@@ -217,11 +233,19 @@
                                 }
 
                                 <td>
-                                    $ @Html.DisplayFor(modelItem => item.Service.UnitValue)
+                                    @Html.DisplayFor(modelItem => item.Service.ReportDeliveryTime)
+                                </td>
+
+                                <td style="white-space:nowrap">
+                                    $ @Html.DisplayFor(modelItem => item.CurrentValue)
                                 </td>
 
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Service.ReportDeliveryTime)
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+
+                                <td>
+                                    $ @Html.DisplayFor(modelItem => item.TotalValue)
                                 </td>
                             </tr>
                         }

@@ -37,15 +37,15 @@ namespace IVSoftware.Web.Controllers
             switch(filter)
             {
                 case "M":
-                    var iVSoftwareContextM = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable).Where(m => "M".Equals(m.TypeOfMaintenanceId));
+                    var iVSoftwareContextM = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable).Where(m => "M".Equals(m.TypeOfMaintenanceId) && m.RegisterStatus > 0).OrderByDescending(x => x.MaintenanceDate);
                     return View(await iVSoftwareContextM.ToListAsync());
 
                 case "C":
-                    var iVSoftwareContextC = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable).Where(m => "C".Equals(m.TypeOfMaintenanceId));
+                    var iVSoftwareContextC = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable).Where(m => "C".Equals(m.TypeOfMaintenanceId) && m.RegisterStatus > 0).OrderByDescending(x => x.MaintenanceDate);
                     return View(await iVSoftwareContextC.ToListAsync());
 
                 default:
-                    var iVSoftwareContext = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable);
+                    var iVSoftwareContext = _context.Maintenances.Include(m => m.Equip).Include(m => m.ServiceProvider).Include(m => m.Responsable).Where(x => x.RegisterStatus > 0).OrderByDescending(x => x.MaintenanceDate);
                     return View(await iVSoftwareContext.ToListAsync());
             }
         }

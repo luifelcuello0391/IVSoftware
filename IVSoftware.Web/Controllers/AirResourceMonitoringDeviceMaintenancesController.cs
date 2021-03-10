@@ -37,19 +37,19 @@ namespace IVSoftware.Web.Controllers
             switch(filter)
             {
                 case "R":
-                    var iVSoftwareContextR = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment).Where(m => "R".Equals(m.TypeOfMaintenanceId));
+                    var iVSoftwareContextR = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment).Where(m => "R".Equals(m.TypeOfMaintenanceId) && m.RegisterStatus > 0).OrderByDescending(x => x.MaintenanceDate);
                     return View(await iVSoftwareContextR.ToListAsync());
 
                 case "P":
-                    var iVSoftwareContextP = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment).Where(m => "P".Equals(m.TypeOfMaintenanceId));
+                    var iVSoftwareContextP = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment).Where(m => "P".Equals(m.TypeOfMaintenanceId) && m.RegisterStatus > 0).OrderByDescending(x => x.MaintenanceDate);
                     return View(await iVSoftwareContextP.ToListAsync());
 
                 case "C":
-                    var iVSoftwareContextC = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment).Where(m => "C".Equals(m.TypeOfMaintenanceId));
+                    var iVSoftwareContextC = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment).Where(m => "C".Equals(m.TypeOfMaintenanceId) && m.RegisterStatus > 0).OrderByDescending(x => x.MaintenanceDate);
                     return View(await iVSoftwareContextC.ToListAsync());
 
                 default:
-                    var iVSoftwareContext = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment);
+                    var iVSoftwareContext = _context.AirResourceMonitoringDevideMaintenances.Include(a => a.Equipment).Where(m => m.RegisterStatus > 0).OrderByDescending(x => x.MaintenanceDate);
                     return View(await iVSoftwareContext.ToListAsync());
             }
         }

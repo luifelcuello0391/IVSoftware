@@ -202,7 +202,7 @@
                         @Html.Raw("Método de referencia (Acreditado)")
                     </th>
 
-                    <th>
+                    <th style="white-space:nowrap">
                         @Html.Raw("Límite de cuantificación")
                     </th>
 
@@ -210,13 +210,22 @@
                         @Html.Raw("Unidades")
                     </th>
 
-                    <th>
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Tiempo de entrega de informe (días)")
+                    </th>
+
+                    <th style="white-space:nowrap">
                         @Html.Raw("Valor unitario")
                     </th>
 
                     <th style="white-space:nowrap">
-                        @Html.Raw("Tiempo de entrega de informe (días)")
+                        @Html.Raw("Cantidad")
                     </th>
+
+                    <th style="white-space:nowrap">
+                        @Html.Raw("Valor total antes de IVA")
+                    </th>
+
                 </tr>
             </thead>
 
@@ -246,7 +255,7 @@
 
                                 @if (item.Service != null && item.Service.MeasurementUnit != null)
                                 {
-                                    <td>
+                                    <td style="white-space:nowrap">
                                         @Html.DisplayFor(modelItem => item.Service.MeasurementUnit.Name)
                                     </td>
                                 }
@@ -258,11 +267,19 @@
                                 }
 
                                 <td>
-                                    $ @Html.DisplayFor(modelItem => item.Service.UnitValue)
+                                    @Html.DisplayFor(modelItem => item.Service.ReportDeliveryTime)
+                                </td>
+
+                                <td style="white-space:nowrap">
+                                    $ @Html.DisplayFor(modelItem => item.CurrentValue)
                                 </td>
 
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Service.ReportDeliveryTime)
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+
+                                <td>
+                                    $ @Html.DisplayFor(modelItem => item.TotalValue)
                                 </td>
                             </tr>
                         }

@@ -5,7 +5,7 @@
     @if (Model != null)
     {
         <hr />
-        <h5 style="color:yellowgreen">Informaión del cliente</h5>
+        <h5 style="color:yellowgreen">Información del cliente</h5>
         <hr />
 
         <input id="txt_client_id" hidden value="@Html.DisplayFor(model => model.Id)"/>
@@ -127,7 +127,14 @@
                             {
                                 if (contact != null)
                                 {
-                                    <option value="@contact.Id">@contact.Name</option>
+                                    if (contact.Id == Model.SelectedContactId)
+                                    {
+                                        <option value="@contact.Id" selected>@contact.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@contact.Id">@contact.Name</option>
+                                    }
                                 }
                             }
                         </select>

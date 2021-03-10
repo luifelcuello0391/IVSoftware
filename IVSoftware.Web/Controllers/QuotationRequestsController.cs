@@ -36,19 +36,19 @@ namespace IVSoftware.Web.Controllers
             switch(filter)
             {
                 case "1": // Registered
-                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 1).ToListAsync());
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 1).OrderByDescending(x => x.RequestDateTime).ToListAsync());
 
                 case "2": // Generated
-                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 2).ToListAsync());
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 2).OrderByDescending(x => x.RequestDateTime).ToListAsync());
 
                 case "3": // Sent
-                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 3).ToListAsync());
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 3).OrderByDescending(x => x.RequestDateTime).ToListAsync());
 
                 case "4": // Cancelled
-                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 4).ToListAsync());
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 4).OrderByDescending(x => x.RequestDateTime).ToListAsync());
 
                 default:
-                    return View(await _context.QuotationRequest.ToListAsync());
+                    return View(await _context.QuotationRequest.OrderByDescending(x => x.RequestDateTime).ToListAsync());
             }
         }
 
@@ -65,6 +65,28 @@ namespace IVSoftware.Web.Controllers
             if (quotationRequest == null)
             {
                 return NotFound();
+            }
+
+            if (quotationRequest.Incentives != null && quotationRequest.Incentives.Count > 0)
+            {
+                foreach (IncentivesIntoServiceQuotationRequest incentive in quotationRequest.Incentives)
+                {
+                    if (incentive != null)
+                    {
+                        incentive.ServiceTotalValue = quotationRequest.ServicesTotal;
+                    }
+                }
+            }
+
+            if (quotationRequest.Taxes != null && quotationRequest.Taxes.Count > 0)
+            {
+                foreach(TaxesIntoServiceQuotationRequest tax in quotationRequest.Taxes)
+                {
+                    if(tax != null)
+                    {
+                        tax.QuotationTotal = quotationRequest.QuotationTotalValue;
+                    }
+                }
             }
 
             return View(quotationRequest);
@@ -87,7 +109,7 @@ namespace IVSoftware.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult> GetClientInformation(string id)
+        public async Task<ActionResult> GetClientInformation(string id, int? selectedContactId = null)
         {
             if(id != null && !string.IsNullOrEmpty(id.Replace(" ", string.Empty)))
             {
@@ -99,6 +121,11 @@ namespace IVSoftware.Web.Controllers
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error GetClientInformation >> " + ex.ToString());
+                }
+
+                if(client != null)
+                {
+                    client.SelectedContactId = selectedContactId;
                 }
 
                 return PartialView("clientMainInfo", client);
@@ -465,7 +492,6 @@ namespace IVSoftware.Web.Controllers
             }
 
             quotationRequest.RequestedClientId = quotationRequest.ClientIdentification;
-
             quotationRequest.ManageQuotation = toManage;
 
             return View(quotationRequest);
@@ -519,6 +545,28 @@ namespace IVSoftware.Web.Controllers
             if (quotationRequest == null)
             {
                 return NotFound();
+            }
+
+            if (quotationRequest.Incentives != null && quotationRequest.Incentives.Count > 0)
+            {
+                foreach (IncentivesIntoServiceQuotationRequest incentive in quotationRequest.Incentives)
+                {
+                    if (incentive != null)
+                    {
+                        incentive.ServiceTotalValue = quotationRequest.ServicesTotal;
+                    }
+                }
+            }
+
+            if (quotationRequest.Taxes != null && quotationRequest.Taxes.Count > 0)
+            {
+                foreach (TaxesIntoServiceQuotationRequest tax in quotationRequest.Taxes)
+                {
+                    if (tax != null)
+                    {
+                        tax.QuotationTotal = quotationRequest.QuotationTotalValue;
+                    }
+                }
             }
 
             return View(quotationRequest);
@@ -647,6 +695,75 @@ namespace IVSoftware.Web.Controllers
             }
         }
 
+        public async Task<QuotationRequest> ObtainsQuotationForEdition (QuotationRequest quotation, int? quotation_id)
+        {
+            // QuotationRequest quotation = await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives);
+
+            QuotationRequest currentQuotation = null;
+
+            if(quotation_id != null)
+            {
+                currentQuotation = await _context.QuotationRequest.FirstOrDefaultAsync(x => x.Id == quotation_id.Value);
+
+                if (quotation != null && currentQuotation != null)
+                {
+                    currentQuotation.RequestDateTime = quotation.RequestDateTime;
+                    currentQuotation.ClientRequestDescription = quotation.ClientRequestDescription;
+                    currentQuotation.QuotationTotalValue = quotation.QuotationTotalValue;
+                    currentQuotation.QuotationTotalValueAfterTaxes = quotation.QuotationTotalValueAfterTaxes;
+
+                    if (currentQuotation.Incentives != null) currentQuotation.Incentives.Clear();
+
+                    currentQuotation.Incentives = quotation.Incentives;
+                    if (currentQuotation.Incentives != null && currentQuotation.Incentives.Count > 0)
+                    {
+                        foreach (IncentivesIntoServiceQuotationRequest incentive in currentQuotation.Incentives)
+                        {
+                            if (incentive != null)
+                            {
+                                incentive.QuotationRequest = currentQuotation;
+                                incentive.QuotationRequestId = currentQuotation.Id;
+                            }
+                        }
+                    }
+
+                    if (currentQuotation.Services != null) currentQuotation.Services.Clear();
+
+                    currentQuotation.Services = quotation.Services;
+                    if (currentQuotation.Services != null)
+                    {
+                        foreach (ServicesIntoQuotation service in currentQuotation.Services)
+                        {
+                            if (service != null)
+                            {
+                                service.QuotationRequest = currentQuotation;
+                                service.QuotationRequestId = currentQuotation.Id;
+                            }
+                        }
+                    }
+
+                    currentQuotation.ServicesReportTime = quotation.ServicesReportTime;
+                    currentQuotation.ServicesTotal = quotation.ServicesTotal;
+
+                    if (currentQuotation.Taxes != null) currentQuotation.Taxes.Clear();
+                    currentQuotation.Taxes = quotation.Taxes;
+                    if (currentQuotation.Taxes != null && currentQuotation.Taxes.Count > 0)
+                    {
+                        foreach (TaxesIntoServiceQuotationRequest tax in currentQuotation.Taxes)
+                        {
+                            if (tax != null)
+                            {
+                                tax.QuotationRequest = currentQuotation;
+                                tax.QuotationRequestId = currentQuotation.Id;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return currentQuotation;
+        }
+
         public async Task<QuotationRequest> PrepareQuotation(DateTime date, string client_request, int client_id, int? contact_id, string _services, string _incentives)
         {
             QuotationRequest request = new QuotationRequest();
@@ -719,7 +836,7 @@ namespace IVSoftware.Web.Controllers
                 {
                     if (service != null)
                     {
-                        request.ServicesTotal += service.CurrentValue;
+                        request.ServicesTotal += service.TotalValue;
 
                         if (service.Service != null && service.Service.ReportDeliveryTime > request.ServicesReportTime)
                         {
@@ -817,20 +934,49 @@ namespace IVSoftware.Web.Controllers
             return request;
         }
 
-        public async Task<IActionResult> ConfirmQuotation (DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives)
+        public async Task<IActionResult> ConfirmQuotation (DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives, int? quotation_id)
         {
-            return PartialView("QuotationRequestResume", await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives));
+            if(quotation_id != null)
+            {
+                return PartialView("QuotationRequestResume", await ObtainsQuotationForEdition(await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives), quotation_id));
+            }
+            else
+            {
+                return PartialView("QuotationRequestResume", await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives));
+            }
         }
 
-        public async Task<string> SaveQuotation (DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives)
+        public async Task<string> SaveQuotation (DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives, int? quotation_id)
         {
-            QuotationRequest request = await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives);
+            QuotationRequest request = null;
+
+            if(quotation_id != null)
+            {
+                // Edition
+                request = await ObtainsQuotationForEdition(await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives), quotation_id);
+            }
+            else 
+            {
+                // Creation
+                request = await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives);
+            }
+            
 
             if(request != null)
             {
                 try
                 {
-                    _context.Add(request);
+                    if(quotation_id != null)
+                    {
+                        // Edition
+                        _context.Update(request);
+                    }
+                    else
+                    {
+                        // Creation
+                        _context.Add(request);
+                    }
+                    
                     await _context.SaveChangesAsync();
 
                     return "OK";
@@ -904,7 +1050,7 @@ namespace IVSoftware.Web.Controllers
                         }
                     }
 
-                    return PartialView("ServiceRegister", incentives);
+                    return PartialView("IncentiveRegister", incentives);
                 }
                 else
                 {

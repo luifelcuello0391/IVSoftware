@@ -78,18 +78,27 @@
             <th>
                 @Html.DisplayNameFor(model => model.RequestDateTime)
             </th>
+            
             <th>
                 @Html.Raw("Código")
             </th>
+            
             <th>
                 Identificación del cliente
             </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.Client)
             </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.ClientRequestDescription)
             </th>
+
+            <th>
+                @Html.Raw("Valor total")
+            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
@@ -113,9 +122,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ClientName)
                 </td>
+
                 <td>
                     @Html.DisplayFor(modelItem => item.ClientRequestDescription)
                 </td>
+
+                <td style="white-space:nowrap">
+                    $ @Html.DisplayFor(modelItem => item.QuotationTotalValueAfterTaxes)
+                </td>
+
                 <td>
                     @Html.DisplayFor(modelItem => item.StatusName)
                 </td>

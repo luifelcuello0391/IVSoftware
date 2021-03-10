@@ -156,7 +156,7 @@
                             @Html.Raw("Método de referencia (Acreditado)")
                         </th>
 
-                        <th>
+                        <th style="white-space:nowrap">
                             @Html.Raw("Límite de cuantificación")
                         </th>
 
@@ -164,7 +164,7 @@
                             @Html.Raw("Unidades")
                         </th>
 
-                        <th>
+                        <th style="white-space:nowrap">
                             @Html.Raw("Valor unitario")
                         </th>
 
@@ -199,10 +199,10 @@
                 <thead style="background-color:yellowgreen; color:white">
                     <tr>
                         <th></th>
-                        <th>
+                        <th style="white-space:nowrap">
                             @Html.Raw("Nombre")
                         </th>
-                        <th>
+                        <th style="white-space:nowrap">
                             @Html.Raw("Valor")
                         </th>
 
@@ -324,14 +324,35 @@
             var services = obtainServices();
             var incentives = obtainIncentives();
 
-            var url = "@Url.Action("ConfirmQuotation")";
+            if (requestDate != null) {
+                if (clientId != null) {
+                    if (services != null && services.includes(";quantity:"))
+                    {
+                        var url = "@Url.Action("ConfirmQuotation")";
 
-            $.get(url, { date: requestDate, client_request : clientRequest, client_id : clientId, contact_id : contactId, _services : services, _incentives : incentives}, function (data) {
-                if (data != null) {
-                    $('.modal-content').html(data);
-                    $("#modalServices").modal('show');
+                        $.get(url, { date: requestDate, client_request : clientRequest, client_id : clientId, contact_id : contactId, _services : services, _incentives : incentives}, function (data) {
+                            if (data != null) {
+                                $('.modal-content').html(data);
+                                $("#modalServices").modal('show');
+                            }
+                        });
+                    }
+                    else
+                    {
+                        alert("Debe seleccionar por lo menos un servicio");
+                    }
                 }
-            });
+                else
+                {
+                    alert("Debe seleccionar el cliente");
+                }
+            }
+            else
+            {
+                alert("Debe especificar la fecha de la solicitud");
+            }
+
+
         }
 
         function obtainIncentives() {

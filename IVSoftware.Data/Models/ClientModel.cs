@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -61,5 +62,7 @@ namespace IVSoftware.Data.Models
         [DisplayName("Teléfono celular")]
         public string CellPhone { get; set; }
         public virtual ICollection<ClientContact> Contacts { get; set; }
+        [NotMapped]
+        public int? SelectedContactId { get; set; }
     }
 }

@@ -33,19 +33,19 @@ namespace IVSoftware.Web.Controllers
             switch(filter)
             {
                 case "1": // News
-                    var iVSoftwareContextNew = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson).Where(x => x.RequestStatus == 1);
+                    var iVSoftwareContextNew = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson).Where(x => x.RequestStatus == 1).OrderByDescending(x => x.RequestDate);
                     return View(await iVSoftwareContextNew.ToListAsync());
 
                 case "2": // Approved
-                    var iVSoftwareContextApproved = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson).Where(x => x.RequestStatus == 2);
+                    var iVSoftwareContextApproved = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson).Where(x => x.RequestStatus == 2).OrderByDescending(x => x.RequestDate);
                     return View(await iVSoftwareContextApproved.ToListAsync());
 
                 case "3": // Rejected
-                    var iVSoftwareContextRejected = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson).Where(x => x.RequestStatus == 3);
+                    var iVSoftwareContextRejected = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson).Where(x => x.RequestStatus == 3).OrderByDescending(x => x.RequestDate);
                     return View(await iVSoftwareContextRejected.ToListAsync());
 
                 default: // All
-                    var iVSoftwareContext = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson);
+                    var iVSoftwareContext = _context.EquipmentPurchaseRequests.Include(e => e.ResponsibleAnalyst).Include(e => e.StatusChangePerson).OrderByDescending(x => x.RequestDate);
                     return View(await iVSoftwareContext.ToListAsync());
             }
         }
