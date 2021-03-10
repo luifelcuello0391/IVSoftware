@@ -3,6 +3,8 @@ using IVSoftware.Web.Data;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,6 +40,14 @@ namespace IVSoftware.Web.Service
                     email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
                     email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
                     email.Subject = mailRequest.Subject;
+                    if (!string.IsNullOrEmpty(mailRequest.CC))
+                    {
+                        List<MailboxAddress> CC = mailRequest.CC
+                            .Split(";", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(oe => MailboxAddress.Parse(oe))
+                            .ToList();
+                        email.Cc.AddRange(CC);
+                    }
                     var builder = new BodyBuilder();
                     builder.HtmlBody = mailRequest.Body;
                     email.Body = builder.ToMessageBody();

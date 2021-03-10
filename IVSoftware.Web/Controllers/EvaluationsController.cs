@@ -242,7 +242,8 @@ namespace IVSoftware.Web.Controllers
                                 {
                                     ToEmail = personEvaluation.Person.Email,
                                     Subject = "Evaluación Asignada",
-                                    Body = $"Se le ha asignado la evaluación: {evaluation?.Name}"
+                                    Body = $"Se le ha asignado la evaluación: {evaluation?.Name}",
+                                    CC = personEvaluation.Person.OthersEmail
                                 };
 
                                 await _mailService.SendEmailAsync(request);
@@ -468,7 +469,8 @@ namespace IVSoftware.Web.Controllers
                             {
                                 ToEmail = personEvaluation.Person.Email,
                                 Subject = "Evaluación Reprogramada",
-                                Body = $"Se le ha reprogramado la evaluación: {personEvaluation.Evaluation?.Name}"
+                                Body = $"Se le ha reprogramado la evaluación: {personEvaluation.Evaluation?.Name}",
+                                CC = personEvaluation.Person.OthersEmail
                             };
 
                             await _mailService.SendEmailAsync(request);
