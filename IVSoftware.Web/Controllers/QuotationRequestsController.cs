@@ -426,6 +426,46 @@ namespace IVSoftware.Web.Controllers
                 Console.Write("Error on Edit.Quotation.Groups >> " + ex.ToString());
             }
 
+            if(quotationRequest.Services != null && quotationRequest.Services.Count > 0)
+            {
+                try
+                {
+                    ViewBag.AssignedServices = string.Empty;
+                    foreach(ServicesIntoQuotation service in quotationRequest.Services)
+                    {
+                        if(service != null && service.ServiceId != null)
+                        {
+                            ViewBag.AssignedServices += string.Format("{0};", service.ServiceId.Value);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.Write("Error on Edit.Quotation.AssignedServices >> " + ex.ToString());
+                }
+            }
+
+            if(quotationRequest.Incentives != null && quotationRequest.Incentives.Count > 0)
+            {
+                try
+                {
+                    ViewBag.AssignedIncentives = string.Empty;
+                    foreach(IncentivesIntoServiceQuotationRequest incentives in quotationRequest.Incentives)
+                    {
+                        if(incentives != null && incentives.IncentiveId != null)
+                        {
+                            ViewBag.AssignedIncentives += string.Format("{0};", incentives.IncentiveId);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.Write("Error on Edit.Quotation.AssignedIncentives >> " + ex.ToString());
+                }
+            }
+
+            quotationRequest.RequestedClientId = quotationRequest.ClientIdentification;
+
             quotationRequest.ManageQuotation = toManage;
 
             return View(quotationRequest);
@@ -803,6 +843,77 @@ namespace IVSoftware.Web.Controllers
             else
             {
                 return "Error: No hay información de la cotización";
+            }
+        }
+
+        public async Task<IActionResult> GetServicesOnLoad (string id, int quotationId)
+        {
+            if (id != null && !string.IsNullOrEmpty(id.Replace(" ", string.Empty)))
+            {
+                string[] ids = id.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                if(ids != null && ids.Length > 0)
+                {
+                    List<ServiceModel> services = new List<ServiceModel>();
+                    foreach(string _id in ids)
+                    {
+                        if(_id != null && !string.IsNullOrEmpty(_id.Replace(" ", string.Empty)))
+                        {
+                            int Serviceid = int.Parse(_id);
+                            ServiceModel service = await _context.ServiceModel.FirstOrDefaultAsync(x => x.Id == Serviceid);
+                            if(service != null)
+                            {
+                                ServicesIntoQuotation serviceInto = await _context.ServicesIntoQuotation.FirstOrDefaultAsync(x => x.ServiceId == service.Id && x.QuotationRequestId == quotationId);
+                                if (serviceInto != null)
+                                {
+                                    service.ServiceQuantity = serviceInto.Quantity;
+                                }
+
+                                services.Add(service);
+                            }
+                        }
+                    }
+
+                    return PartialView("ServiceRegister", services);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<IActionResult> GetIncentivesOnLoad(string id)
+        {
+            if (id != null && !string.IsNullOrEmpty(id.Replace(" ", string.Empty)))
+            {
+                string[] ids = id.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                if (ids != null && ids.Length > 0)
+                {
+                    List<IncentiveModel> incentives = new List<IncentiveModel>();
+                    foreach (string _id in ids)
+                    {
+                        if (_id != null && !string.IsNullOrEmpty(_id.Replace(" ", string.Empty)))
+                        {
+                            int IncentiveId = int.Parse(_id);
+                            IncentiveModel incentive = await _context.IncentiveModel.FirstOrDefaultAsync(x => x.Id == IncentiveId);
+                            if(incentive != null) incentives.Add(incentive);
+                        }
+                    }
+
+                    return PartialView("ServiceRegister", incentives);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
             }
         }
     }

@@ -309,6 +309,7 @@ namespace IVSoftware.Web.Models
 
         public DbSet<IncentivesIntoServiceQuotationRequest> IncentivesIntoServiceQuotationRequest { get; set; }
         public DbSet<TaxesIntoServiceQuotationRequest> TaxesIntoServiceQuotationRequest { get; set; }
+        public DbSet<ServicesIntoQuotation> ServicesIntoQuotation { get; set; }
 
         public DbSet<PersonJobRole> PersonJobRoles { get; set; }
 
