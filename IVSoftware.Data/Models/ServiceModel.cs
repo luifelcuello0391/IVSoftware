@@ -383,5 +383,8 @@ namespace IVSoftware.Data.Models
 
         [DisplayName("Límite de cuantificación")]
         public string QuantificationLimit { get; set; }
+
+        [NotMapped]
+        public int ServiceQuantity { get; set; }
     }
 }
