@@ -267,9 +267,9 @@
         </div>
     </div>
 
-    @if (ViewBag.HasUser != null && ViewBag.HasUser && User.IsInRole("Administrador"))
-    {
-        <div class="row">
+    <div class="row">
+        @if (ViewBag.HasUser != null && ViewBag.HasUser && User.IsInRole("Administrador"))
+        {
             <div class="col-sm-12 col-md-3">
                 <div class="form-group">
                     <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
@@ -281,8 +281,19 @@
                     <span asp-validation-for="Role" class="text-danger small"></span>
                 </div>
             </div>
+        }
+
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div style="background-color:yellowgreen;padding-top:5px;padding-left:5px;padding-bottom:2px">
+                    <label asp-for="OthersEmail" style="color:white"></label>
+                </div>
+                <input asp-for="OthersEmail" class="form-control" />
+                <small id="emailHelp" class="form-text text-muted">Los correos deben ir separados por punto y coma ";"</small>
+                <span asp-validation-for="OthersEmail" class="text-danger small"></span>
+            </div>
         </div>
-    }
+    </div>
 
     <div class="row">
         <div class="col">
