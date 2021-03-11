@@ -323,7 +323,24 @@
         <h1></h1>
         <form>
             <input type="hidden" asp-for="Id" />
-            <input type="button" value="Confirmar solicitud" class="btn btn-primary" style="background-color:yellowgreen; color:white" onclick="ManageQuotation(@Model.Id)" /> |
+            @if (Model.Status != null)
+            {
+                switch (Model.Status.Id)
+                {
+                    case 1: // Registrada
+                        <input type="button" value="Confirmar solicitud" class="btn btn-primary" style="background-color:yellowgreen; color:white" onclick="ManageQuotation(@Model.Id)" />
+                        break;
+
+                    case 2: // Generada
+                        <input type="button" value="Enviar correo de aceptación" class="btn btn-primary" style="background-color:yellowgreen; color:white" onclick="SendOnlyQuotationEmail(@Model.Id)" />
+                        break;
+                }
+            }
+            else
+            {
+                <input type="button" value="Confirmar solicitud" class="btn btn-primary" style="background-color:yellowgreen; color:white" onclick="ManageQuotation(@Model.Id)" />
+            }
+            |
             <a asp-action="Index">Regresar</a>
         </form>
     </div>
@@ -333,27 +350,51 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 <script>
-    function SendQuotationEmail(_id) {
+    function SendOnlyQuotationEmail(_id) {
         var url = "@Url.Action("SendQuotationConfirmationEmail")";
 
         $.get(url, { id: _id }, function (data) {
             if (data != null) {
                 if (data.includes("Error:"))
                 {
-                    alert("La cotización ha sido confirmada correctamente, pero ocurrió un error en el envío del correo: " + data.replace("Error: ", ""));
+                    alert("Ha ocurrido un error al intentar enviar el correo: " + data.replace("Error: ", ""));
                     location.href = '@Url.Action("Index", "QuotationRequests")';
                 }
                 else
                 {
-                    alert("La cotización ha sido confirmada correctamente, " + data.replace("OK: ", ""));
+                    alert("La solicitud de aceptación de la cotización ha sido enviada correctamente, " + data.replace("OK: ", ""));
                     location.href = '@Url.Action("Index", "QuotationRequests")';
                 }
             }
             else
             {
-                alert("La cotización ha sido confirmada correctamente, el correo de confirmación no fué enviado.");
+                alert("El correo de solicitud de aceptación para la cotización no fué enviado.");
                 location.href = '@Url.Action("Index", "QuotationRequests")';
             }
+        });
+    }
+
+    function SendQuotationEmail(_id) {
+        var url = "@Url.Action("SendQuotationConfirmationEmail")";
+
+        $.get(url, { id: _id }, function (data) {
+                    if (data != null) {
+                        if (data.includes("Error:"))
+                        {
+                            alert("La cotización ha sido confirmada correctamente, pero ocurrió un error en el envío del correo: " + data.replace("Error: ", ""));
+                            location.href = '@Url.Action("Index", "QuotationRequests")';
+                        }
+                        else
+                        {
+                            alert("La cotización ha sido confirmada correctamente, " + data.replace("OK: ", ""));
+                            location.href = '@Url.Action("Index", "QuotationRequests")';
+                        }
+                    }
+                    else
+                    {
+                        alert("La cotización ha sido confirmada correctamente, el correo de confirmación no fué enviado.");
+                        location.href = '@Url.Action("Index", "QuotationRequests")';
+                    }
         });
     }
 
