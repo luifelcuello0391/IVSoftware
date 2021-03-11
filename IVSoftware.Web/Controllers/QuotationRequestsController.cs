@@ -594,6 +594,7 @@ namespace IVSoftware.Web.Controllers
                 if(status != null)
                 {
                     quotationRequest.Status = status;
+                    quotationRequest.ModificationDatetime = DateTime.Now;
 
                     _context.Update(quotationRequest);
                     await _context.SaveChangesAsync();
@@ -966,6 +967,10 @@ namespace IVSoftware.Web.Controllers
             {
                 // Edition
                 request = await ObtainsQuotationForEdition(await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives), quotation_id);
+                if(request != null)
+                {
+                    request.ModificationDatetime = DateTime.Now;
+                }
             }
             else 
             {
@@ -976,7 +981,7 @@ namespace IVSoftware.Web.Controllers
             try
             {
                 User currentUser = await _userManager.GetUserAsync(User);
-                if (currentUser != null)
+                if (currentUser != null && request != null)
                 {
                     request.GenerationUsed = (await _personService.FindByConditionAsync(x => x.UserId != null && x.UserId.Equals(currentUser.Id))).FirstOrDefault();
                 }
@@ -1103,6 +1108,7 @@ namespace IVSoftware.Web.Controllers
                         if(status != null)
                         {
                             request.Status = status;
+                            request.ModificationDatetime = DateTime.Now;
 
                             _context.Update(request);
                             await _context.SaveChangesAsync();
@@ -1265,7 +1271,7 @@ namespace IVSoftware.Web.Controllers
 
                 builder += string.Format("Su solicitud de cotización ha sido confirmada con el siguiente código <b>{0}</b>, cualquier modificación, nos comunicaremos con usted {1} para aclarar o informar particularidades de su solicitud.<br><br>", 
                     request.Name.Replace("<consecutive>", request.Id.ToString()),
-                    !string.IsNullOrEmpty(phoneNumber) ? string.Format("a los siguientes números de teléfono ", phoneNumber) : "a través de este medio");
+                    !string.IsNullOrEmpty(phoneNumber) ? string.Format("a los siguientes números de teléfono {0}", phoneNumber) : "a través de este medio");
 
                 builder += string.Format("Para aceptar y continuar con el proceso de reserva de cupo para la toma de muestras, deberá enviarnos un mensaje al correo electrónico <b>XXXXXX@cornare.com</b> con el código de la cotización: <b>{0}</b><br><br>", request.Name.Replace("<consecutive>", request.Id.ToString()));
 
