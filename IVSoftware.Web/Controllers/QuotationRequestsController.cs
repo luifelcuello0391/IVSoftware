@@ -9,15 +9,24 @@ using IVSoftware.Models;
 using IVSoftware.Web.Models;
 using System.Net;
 using IVSoftware.Data.Models;
+using IVSoftware.Web.Data;
+using IVSoftware.Web.Service;
+using Microsoft.AspNetCore.Identity;
 
 namespace IVSoftware.Web.Controllers
 {
     public class QuotationRequestsController : Controller
     {
         private readonly IVSoftwareContext _context;
+        private readonly IMailService _mailService;
+        private readonly UserManager<User> _userManager;
+        private readonly IEntityService<Person, Guid> _personService;
 
-        public QuotationRequestsController(IVSoftwareContext context)
+        public QuotationRequestsController(IVSoftwareContext context, IMailService mailService, UserManager<User> userManager, IEntityService<Person, Guid> personService)
         {
+            _personService = personService;
+            _userManager = userManager;
+            _mailService = mailService;
             _context = context;
         }
 
@@ -414,12 +423,12 @@ namespace IVSoftware.Web.Controllers
                 return NotFound();
             }
 
-            var quotationRequest = await _context.QuotationRequest.FindAsync(id);
+            var quotationRequest = await _context.QuotationRequest.FirstOrDefaultAsync(x => x.Id == id.Value);
             if (quotationRequest == null)
             {
                 return NotFound();
             }
-            return RedirectToAction("Create", "QuotationModels", new { id = quotationRequest.Id });
+            return View("Manage", quotationRequest);
         }
 
         // GET: QuotationRequests/Edit/5
@@ -707,6 +716,9 @@ namespace IVSoftware.Web.Controllers
 
                 if (quotation != null && currentQuotation != null)
                 {
+                    currentQuotation.ContactId = quotation.ContactId;
+                    currentQuotation.Contact = quotation.Contact;
+
                     currentQuotation.RequestDateTime = quotation.RequestDateTime;
                     currentQuotation.ClientRequestDescription = quotation.ClientRequestDescription;
                     currentQuotation.QuotationTotalValue = quotation.QuotationTotalValue;
@@ -960,9 +972,22 @@ namespace IVSoftware.Web.Controllers
                 // Creation
                 request = await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives);
             }
-            
 
-            if(request != null)
+            try
+            {
+                User currentUser = await _userManager.GetUserAsync(User);
+                if (currentUser != null)
+                {
+                    request.GenerationUsed = (await _personService.FindByConditionAsync(x => x.UserId != null && x.UserId.Equals(currentUser.Id))).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on CaptureCheckListResponse.UserData >> " + ex.ToString());
+            }
+
+
+            if (request != null)
             {
                 try
                 {
@@ -1061,6 +1086,203 @@ namespace IVSoftware.Web.Controllers
             {
                 return null;
             }
+        }
+
+        public async Task<string> ConfirmQuotationManagement (int id)
+        {
+            if(id > 0)
+            {
+                QuotationRequest request = await _context.QuotationRequest.FirstOrDefaultAsync(x => x.Id == id);
+
+                if(request != null)
+                {
+                    try
+                    {
+                        // Assigns the status: 'Generado'
+                        QuotationStatus status = await _context.QuotationStatus.FirstOrDefaultAsync(x => x.Id == 2);
+                        if(status != null)
+                        {
+                            request.Status = status;
+
+                            _context.Update(request);
+                            await _context.SaveChangesAsync();
+
+                            return "OK";
+                        }
+                        else
+                        {
+                            return "Error: No fué posible asignar el estado 'Generado' porque no existe en la base de datos.";
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        return string.Format("Error: {0}", ex.ToString());
+                    }
+                }
+                else
+                {
+                    return "Error: No hay información de la solicitud de cotización.";
+                }
+            }
+            else
+            {
+                return "Error: No hay información de la solicitud de cotización.";
+            }
+        }
+
+        public async Task<string> SendQuotationConfirmationEmail(int id)
+        {
+            if(id > 0)
+            {
+                QuotationRequest request = await _context.QuotationRequest.FirstOrDefaultAsync(x => x.Id == id);
+
+                if(request != null)
+                {
+                    try
+                    {
+                        string contactEmail = null;
+                        string emailBody = null;
+
+                        if (request.Contact != null && !string.IsNullOrEmpty(request.Contact.ReportDeliveryEmail.Replace(" ", string.Empty)))
+                        {
+                            contactEmail = request.Contact.ReportDeliveryEmail;
+                        }
+                        else if (request.Client != null && !string.IsNullOrEmpty(request.Client.EmailAddress.Replace(" ", string.Empty)))
+                        {
+                            contactEmail = request.Client.EmailAddress;
+                        }
+
+                        if(contactEmail != null && !string.IsNullOrEmpty(contactEmail.Replace(" ", string.Empty)))
+                        {
+                            emailBody = OrganizeEmailBody(request);
+
+                            if (emailBody != null && !string.IsNullOrEmpty(emailBody.Replace(" ", string.Empty)))
+                            {
+                                MailRequest email = new MailRequest()
+                                {
+                                    ToEmail = contactEmail,
+                                    Subject = string.Format("Confirmación de cotización {0}", request.Name.Replace("<consecutive>", request.Id.ToString())),
+                                    Body = emailBody
+                                    // CC = personEvaluation.Person.OthersEmail
+                                };
+
+                                await _mailService.SendEmailAsync(email);
+
+                                return string.Format("OK: Correo enviado a {0}.", contactEmail);
+                            }
+                            else
+                            {
+                                return "Error: No fué posible crear el contenido del correo de confirmación.";
+                            }
+                        }
+                        else
+                        {
+                            return "Error: No hay un correo electrónico registrado para el cliente.";
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        return string.Format("Error: {0}", ex.ToString());
+                    }
+                }
+                else
+                {
+                    return "Error: No hay información de la cotización.";
+                }
+            }
+            else
+            {
+                return "Error: El id de la solicitud no es válida.";
+            }
+        }
+
+        private string OrganizeEmailBody (QuotationRequest request)
+        {
+            if(request != null)
+            {
+                string builder = string.Empty;
+
+                #region Greetings
+                // Company contact
+                if (request.Contact != null && request.Contact.Name != null && !string.IsNullOrEmpty(request.Contact.Name.Replace(" ", string.Empty)))
+                {
+                    builder += string.Format("{0}<br><br>Cordial saludo<br><br>", request.Contact.Name);
+                }
+                else if (request.Client != null && request.Client.ContactName != null && !string.IsNullOrEmpty(request.Client.ContactName.Replace(" ", string.Empty)))
+                {
+                    builder += string.Format("{0}<br><br>Cordial saludo<br><br>", request.Client.ContactName);
+                }
+                #endregion
+
+                #region Phone numbers information
+                string phoneNumber = null;
+
+                if(request.Contact != null && request.Contact.PhoneNumber != null && !string.IsNullOrEmpty(request.Contact.PhoneNumber.Replace(" ", string.Empty)))
+                {
+                    // Adds the contact phone number
+                    phoneNumber = request.Contact.PhoneNumber;
+
+                    if(request.Contact.Extension != null && !string.IsNullOrEmpty(request.Contact.Extension.Replace(" ", string.Empty)))
+                    {
+                        if(!string.IsNullOrEmpty(phoneNumber))
+                        {
+                            phoneNumber += string.Format(" EXT. {0}", request.Contact.Extension);
+                        }
+                    }
+                }
+                else if (request.Client != null)
+                {
+                    
+                    if(request.Client.PhoneNumber != null && !string.IsNullOrEmpty(request.Client.PhoneNumber.Replace(" ", string.Empty)))
+                    {
+                        // Adds the client main phone number
+                        phoneNumber = request.Client.PhoneNumber;
+
+                        if(request.Client.Extension != null && !string.IsNullOrEmpty(request.Client.Extension))
+                        {
+                            if(!string.IsNullOrEmpty(phoneNumber))
+                            {
+                                phoneNumber += string.Format(" EXT. {0}", request.Client.Extension);
+                            }
+                        }
+                    }
+                    
+                    if (request.Client.CellPhone != null && !string.IsNullOrEmpty(request.Client.CellPhone.Replace(" ", string.Empty)))
+                    {
+                        // Adds the client alternative phone number
+                        if(!string.IsNullOrEmpty(phoneNumber))
+                        {
+                            phoneNumber += string.Format(" - {0}", request.Client.CellPhone); 
+                        }
+                        else
+                        {
+                            // It is empty
+                            phoneNumber = request.Client.CellPhone;
+                        }
+                    }
+                }
+                #endregion
+
+                builder += string.Format("Su solicitud de cotización ha sido confirmada con el siguiente código <b>{0}</b>, cualquier modificación, nos comunicaremos con usted {1} para aclarar o informar particularidades de su solicitud.<br><br>", 
+                    request.Name.Replace("<consecutive>", request.Id.ToString()),
+                    !string.IsNullOrEmpty(phoneNumber) ? string.Format("a los siguientes números de teléfono ", phoneNumber) : "a través de este medio");
+
+                builder += string.Format("Para aceptar y continuar con el proceso de reserva de cupo para la toma de muestras, deberá enviarnos un mensaje al correo electrónico <b>XXXXXX@cornare.com</b> con el código de la cotización: <b>{0}</b><br><br>", request.Name.Replace("<consecutive>", request.Id.ToString()));
+
+                builder += "Los datos suministrados serán tratados de acuerdo a la política de protección de datos Resolución 112-4540 del 25 de octubre de 2018 \"Por medio de la cual se adopta la Política de Protección de Datos Personales en la Corporación Autónoma Regional de las Cuencas de los Ríos Negro y Nare -Cornare\": https://www.cornare.gov.co/politica-de-datos-personales/, en caso de no estar de acuerdo favor responder este correo solicitando el retiro de nuestra base de datos.<br><br>";
+
+                builder += "Cualquier inquietud no dude en comunicarse con nosotros.<br><br>";
+
+                if(request.GenerationUsed != null && request.GenerationUsed.FullName != null && !string.IsNullOrEmpty(request.GenerationUsed.FullName.Replace(" ", string.Empty)))
+                {
+                    builder += string.Format("Su solicitud fué recibida por {0}.<br><br>", request.GenerationUsed.FullName);
+                }
+
+                return builder;
+
+            }
+
+            return null;
         }
     }
 }

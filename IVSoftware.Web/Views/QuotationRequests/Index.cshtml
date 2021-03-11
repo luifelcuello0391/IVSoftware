@@ -91,9 +91,9 @@
                 @Html.DisplayNameFor(model => model.Client)
             </th>
             
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.ClientRequestDescription)
-            </th>
+            </th>*@
 
             <th>
                 @Html.Raw("Valor total")
@@ -103,56 +103,74 @@
                 @Html.DisplayNameFor(model => model.Status)
             </th>
 
+            <th style="white-space:nowrap">
+                @Html.Raw("Registrada por")
+            </th>
+
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RequestDateTime)
-                </td>
-                <td>
-                    @item.Name.Replace("<consecutive>", item.Id.ToString())
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientIdentification)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientName)
-                </td>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestDateTime)
+            </td>
+            <td>
+                @item.Name.Replace("<consecutive>", item.Id.ToString())
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientIdentification)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientName)
+            </td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientRequestDescription)
-                </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.ClientRequestDescription)
+            </td>*@
 
+            <td style="white-space:nowrap">
+                $ @Html.DisplayFor(modelItem => item.QuotationTotalValueAfterTaxes)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusName)
+            </td>
+
+            @if (item.GenerationUsed != null && !string.IsNullOrEmpty(item.GenerationUsed.FullName.Replace(" ", string.Empty)))
+            {
                 <td style="white-space:nowrap">
-                    $ @Html.DisplayFor(modelItem => item.QuotationTotalValueAfterTaxes)
+                    @Html.DisplayFor(modelItem => item.GenerationUsed.FullName)
                 </td>
+            }
+            else
+            {
+                <td style="white-space:nowrap">
+                    @Html.Raw("Sin datos")
+                </td>
+            }
 
+
+            @if (!item.HasBeenCanceled)
+            {
+                <td style="white-space:nowrap">
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>
+                    &nbsp;
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
+                    &nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                </td>
+            }
+            else
+            {
                 <td>
-                    @Html.DisplayFor(modelItem => item.StatusName)
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
+                    &nbsp;
                 </td>
-
-                @if (!item.HasBeenCanceled)
-                {
-                    <td style="white-space:nowrap">
-                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>
-                        &nbsp;
-                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
-                        &nbsp;
-                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
-                    </td>
-                }
-                else
-                {
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
-                        &nbsp;
-                    </td>
-                }
-            </tr>
+            }
+        </tr>
         }
     </tbody>
 </table>
