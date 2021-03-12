@@ -54,6 +54,9 @@
     <None Update="InitialScripts\CertificationTypeData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="InitialScripts\ConfirmedQuotationStatus.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="InitialScripts\InitialScriptData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

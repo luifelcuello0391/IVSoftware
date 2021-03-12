@@ -1,0 +1,1 @@
+INSERT INTO [QuotationStatus] ([Name], [RegisterStatus],[CreationDatetime],[ModificationDatetime]) VALUES ('Aceptada', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

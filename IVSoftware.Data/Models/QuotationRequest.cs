@@ -73,6 +73,6 @@ namespace IVSoftware.Data.Models
 
         public virtual ICollection<TaxesIntoServiceQuotationRequest> Taxes { get; set; }
         public float QuotationTotalValueAfterTaxes { get; set; }
-
+        public string CancelationResponse { get; set; }
     }
 }

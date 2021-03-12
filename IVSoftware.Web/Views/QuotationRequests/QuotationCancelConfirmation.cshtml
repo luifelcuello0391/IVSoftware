@@ -1,0 +1,20 @@
+﻿@model QuotationRequest
+
+    <div class="modal-header">
+        <h5 class="modal-title" style="float:left; color:yellowgreen">Ingrese el motivo de rechazo</h5>
+        <button id="btn_hide_client_modal" type="button" data-dismiss="modal" class="close" style="color:red; margin-right:5px">
+            X
+        </button>
+    </div> 
+
+<hr />
+
+<div class="row" style="margin:5px 5px 5px 5px">
+    <textarea id="txt_reject_message" style="width:100%" rows="4" maxlength="255"></textarea>
+    <p>Máximo 255 caracteres.</p>
+</div>
+
+
+<div>
+    <input id="btn_accept" class="btn btn-primary" value="Aceptar" style="background-color:yellowgreen; color:white; float:right; margin-right:10px; margin-bottom:5px; margin-top:10px" type="button" onclick="QuotationCancelConfirmed(@Model.Id)"/>
+</div>

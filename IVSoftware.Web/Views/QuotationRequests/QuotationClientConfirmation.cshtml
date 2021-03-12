@@ -1,0 +1,526 @@
+﻿@model QuotationRequest
+
+@{
+    ViewData["Title"] = "confirmación de cotización";
+}
+
+<h1>Respuesta a cotización @string.Format(Model.Name.Replace("<consecutive>", Model.Id.ToString()))</h1>
+
+<h6>A continuación, se presenta la información de la cotización, cualquier duda o inquietud no dude en comunicarse con nosotros.</h6>
+
+<dl class="row">
+    <dt class="col-sm-2" style="white-space:nowrap">
+        @Html.DisplayNameFor(model => model.RequestDateTime)
+    </dt>
+    <dd class="col-sm-10" style="margin-left:5px">
+        @Html.DisplayFor(model => model.RequestDateTime)
+    </dd>
+
+    <dt class="col-sm-2" style="white-space:nowrap">
+        @Html.DisplayNameFor(model => model.ClientRequestDescription)
+    </dt>
+    <dd class="col-sm-10" style="margin-left:5px">
+        @Html.DisplayFor(model => model.ClientRequestDescription)
+    </dd>
+
+    <dt class="col-sm-2" style="white-space:nowrap">
+        @Html.DisplayNameFor(model => model.Status)
+    </dt>
+    <dd class="col-sm-10" style="margin-left:5px">
+        @Html.DisplayFor(model => model.StatusName)
+    </dd>
+
+    @if (Model.HasBeenGenerated)
+    {
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.LastGenerationDate)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.LastGenerationDate)
+        </dd>
+    }
+</dl>
+
+<hr />
+<h5 style="color:yellowgreen">Información del cliente</h5>
+<hr />
+@if (Model.Client != null)
+{
+    <div class="row form-group" style="margin-left:5px">
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.PersonType)</b></div>
+            <div>
+                @if (@Model.Client.PersonType == 1)
+                {
+                    @Html.Raw("Persona natural")
+                }
+                else
+                {
+                    @Html.Raw("Persona jurídica")
+                }
+            </div>
+        </div>
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.ClientType)</b></div>
+            <div>@Html.DisplayFor(model => model.Client.ClientTypeName)</div>
+        </div>
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.IsRegular)</b></div>
+            <div>@Html.DisplayFor(model => model.Client.IsRegularText)</div>
+        </div>
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.DocumentType)</b></div>
+            <div>@Html.DisplayFor(model => model.Client.DocumentTypeName)</div>
+        </div>
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.Identification)</b></div>
+            <div>@Html.DisplayFor(model => model.Client.Identification)</div>
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-left:5px">
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.Name)</b></div>
+            <div>@Html.DisplayFor(model => model.Client.Name)</div>
+        </div>
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.Department)</b></div>
+            @if (Model.Client.Department != null && Model.Client.Department.Name != null)
+            {
+                <div>@Html.DisplayFor(model => model.Client.Department.Name)</div>
+            }
+            else
+            {
+                <div>@Html.Raw("No asignado")</div>
+            }
+        </div>
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.City)</b></div>
+            @if (Model.Client.Department != null && Model.Client.City.Name != null)
+            {
+                <div>@Html.DisplayFor(model => model.Client.City.Name)</div>
+            }
+            else
+            {
+                <div>@Html.Raw("No asignada")</div>
+            }
+        </div>
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.Address)</b></div>
+            <div>@Html.DisplayFor(model => model.Client.Address)</div>
+        </div>
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.PhoneNumber)</b></div>
+            @if (Model.Client.Extension != null && !string.IsNullOrEmpty(Model.Client.Extension.Replace(" ", string.Empty)))
+            {
+                <div>@Html.Raw(string.Format("{0} Ext. {1}", Model.Client.PhoneNumber, Model.Client.Extension))</div>
+            }
+            else
+            {
+                <div>@Html.DisplayFor(model => model.Client.PhoneNumber)</div>
+            }
+        </div>
+    </div>
+
+    <div class="row" style="margin-left:5px">
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.CellPhone)</b></div>
+            @if (Model.Client.CellPhone != null && string.IsNullOrEmpty(Model.Client.CellPhone.Replace(" ", string.Empty)))
+            {
+                <div>@Html.DisplayFor(model => model.Client.CellPhone)</div>
+            }
+            else
+            {
+                <div>@Html.Raw("No hay datos")</div>
+            }
+        </div>
+
+        <div class="form-group col-md-2">
+            <div><b>@Html.DisplayNameFor(model => model.Client.EmailAddress)</b></div>
+            <div>@Html.DisplayFor(model => model.Client.EmailAddress)</div>
+        </div>
+    </div>
+}
+
+<!--Listado de servicios-->
+<hr />
+<h5 style="color:yellowgreen;margin-left:5px">Servicios solicitados</h5>
+<hr />
+<div style="margin-left:5px; margin-right:5px">
+    <table class="table table-striped table-sm" style="display:inline-block; overflow:auto">
+        <thead style="background-color:yellowgreen; color:white">
+            <tr>
+                <th>
+                    @Html.Raw("Código")
+                </th>
+                <th style="white-space:nowrap">
+                    @Html.Raw("Parámetro (técnica de análisis)")
+                </th>
+
+                <th style="white-space:nowrap">
+                    @Html.Raw("Método de referencia (Acreditado)")
+                </th>
+
+                <th style="white-space:nowrap">
+                    @Html.Raw("Límite de cuantificación")
+                </th>
+
+                <th>
+                    @Html.Raw("Unidades")
+                </th>
+
+                <th style="white-space:nowrap">
+                    @Html.Raw("Tiempo de entrega de informe (días)")
+                </th>
+
+                <th style="white-space:nowrap">
+                    @Html.Raw("Valor unitario")
+                </th>
+
+                <th style="white-space:nowrap">
+                    @Html.Raw("Cantidad")
+                </th>
+
+                <th style="white-space:nowrap">
+                    @Html.Raw("Valor total antes de IVA")
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.Services != null && Model.Services.Count > 0)
+            {
+                foreach (var item in Model.Services)
+                {
+                    if (item.Service != null)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Service.Code)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.Service.Name)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.Service.ReferenceMethodName)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                @Html.DisplayFor(modelItem => item.Service.QuantificationLimit)
+                            </td>
+
+                            @if (item.Service != null && item.Service.MeasurementUnit != null)
+                            {
+                                <td style="white-space:nowrap">
+                                    @Html.DisplayFor(modelItem => item.Service.MeasurementUnit.Name)
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @Html.Raw("No definida")
+                                </td>
+                            }
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Service.ReportDeliveryTime)
+                            </td>
+
+                            <td style="white-space:nowrap">
+                                $ @Html.DisplayFor(modelItem => item.CurrentValue)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+
+                            <td>
+                                $ @Html.DisplayFor(modelItem => item.TotalValue)
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.Services != null && Model.Services.Count > 0)
+{
+    <!--Resumen de los servicios-->
+    <h6 style="margin-left:5px"><b>Tiempo para entrega de resultados: </b>@Html.DisplayFor(modelItem => Model.ServicesReportTime) día(s)</h6>
+}
+
+<hr />
+<h5 style="color:yellowgreen;margin-left:5px">Totales</h5>
+<hr />
+<table style="margin-left:5px;margin-right:5px">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th style="white-space:nowrap">
+                @Html.Raw("Descripción")
+            </th>
+
+            <th style="white-space:nowrap">
+                @Html.Raw("Total")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="white-space:nowrap">
+                @Html.Raw("Valor total por servicios (Subtotal)")
+            </td>
+
+            <td style="white-space:nowrap">
+                $ @Html.DisplayFor(modelItem => Model.ServicesTotal)
+            </td>
+        </tr>
+
+        @if (Model.Incentives != null && Model.Incentives.Count > 0)
+        {
+            foreach (var incentive in Model.Incentives)
+            {
+                if (incentive != null && incentive.Incentive != null)
+                {
+                    <tr>
+                        <td style="white-space:nowrap">
+                            @Html.Raw("Incentivo - ") @Html.DisplayFor(modelItem => incentive.Incentive.Name)
+
+                            @if (incentive.IsPercentage)
+                            {
+                                @Html.Raw(String.Format(" ({0}%)", incentive.IncentiveCurrentValue))
+                            }
+                        </td>
+
+                        <td style="white-space:nowrap">
+                            @if (incentive.IsPercentage)
+                            {
+                                @Html.Raw("- $ ") @Html.DisplayFor(modelItem => incentive.IncentiveValueFromTotal)
+                            }
+                            else
+                            {
+                                @Html.Raw("- $ ") @Html.DisplayFor(modelItem => incentive.IncentiveCurrentValue)
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+
+            <tr>
+                <td style="white-space:nowrap">
+                    <b>@Html.Raw("TOTAL, CON INCENTIVOS")</b>
+                </td>
+                <td>
+                    <b>$ @Html.DisplayFor(modelItem => modelItem.QuotationTotalValue)</b>
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td style="white-space:nowrap">
+                    <b>@Html.Raw("TOTAL, SIN INCENTIVOS")</b>
+                </td>
+                <td>
+                    <b>$ @Html.DisplayFor(modelItem => modelItem.QuotationTotalValue)</b>
+                </td>
+            </tr>
+        }
+
+        <!--Include quotation taxes-->
+        @if (Model.Taxes != null && Model.Taxes.Count > 0)
+        {
+            foreach (var tax in Model.Taxes)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => tax.Tax.Name) (@Html.DisplayFor(modelItem => tax.CurrentTaxValue))%
+                    </td>
+                    <td>
+                        $ @Html.DisplayFor(modelItem => tax.ValueFromQuotationTotal)
+                    </td>
+                </tr>
+            }
+        }
+
+        <tr>
+            <td style="white-space:nowrap">
+                <b>@Html.Raw("TOTAL COTIZACIÓN")</b>
+            </td>
+
+            <td>
+                <b>$ @Html.DisplayFor(modelItem => modelItem.QuotationTotalValueAfterTaxes)</b>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<hr />
+<h5 style="color:yellowgreen">Información adicional</h5>
+<hr />
+<div>
+    <dl class="row">
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.RegisterStatus)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.RegisterStatusName)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.CreationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.CreationDatetime)
+        </dd>
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.ModificationDatetime)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.ModificationDatetime)
+        </dd>
+    </dl>
+</div>
+
+<hr />
+<h5 style="color:yellowgreen">Respuesta a la cotización</h5>
+<hr />
+<table>
+    <tr>
+        <td>
+            <input type="button" value="Aceptar cotización" class="btn btn-primary" style="background-color:yellowgreen;color:white" onclick="OnQuotationAcceptance(@Model.Id)" />
+        </td>
+
+        <td>
+            <input type="button" value="Rechazar cotización" class="btn btn-danger" style="margin-left:10px" onclick="OnQuotationReject(@Model.Id)" />
+        </td>
+    </tr>
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<!--Modal -->
+<div class="form-group">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalMessage" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function OnQuotationAcceptance(_id) {
+        var result = confirm("¿Está seguro que desea ACEPTAR la cotización actual?");
+
+        if (result == true)
+        {
+            var url = "@Url.Action("AcceptQuotation")";
+
+            $.get(url, { id: _id }, function (data) {
+                if (data != null) {
+                    if (data.includes("Error:"))
+                    {
+                        if (data.includes("ACEPTADA"))
+                        {
+                            alert(data.replace("Error: ", ""));
+                        }
+                        else if (data.includes("CANCELADA"))
+                        {
+                            alert(data.replace("Error: ", ""));
+                        }
+                        else
+                        {
+                            alert("Ha ocurrido un error al intentar dar respuesta a la cotización: " + data.replace("Error: ", "") + " Por favor, comuníquese con nosotros lo más pronto posible.");
+                        }
+                    }
+                    else
+                    {
+                        location.href = '@Url.Action("QuotationResult", "QuotationRequests", new { id = Model.Id})';
+                    }
+                }
+                else
+                {
+                    alert("No fué posible responder a la cotización. Por favor, comuníquese con nosotros lo más pronto posible.");
+                }
+            });
+        }
+    }
+
+    function OnQuotationReject(_id) {
+        var url = "@Url.Action("QuotationCancelConfirmation")";
+
+        // Show modal for services groups
+        $.get(url, {id: _id}, function (data) {
+            $('.modal-content').html(data);
+            $("#modalMessage").modal('show');
+        });
+    }
+
+    function QuotationCancelConfirmed(_id) {
+        var txt_message = $("#txt_reject_message").val();
+
+        if (txt_message != null)
+        {
+            if (txt_message.replace(" ", "") == "")
+            {
+                alert("Debe ingresar el motivo de rechazo de la cotización. vacio");
+            }
+            else
+            {
+                hideModal();
+                var url = "@Url.Action("RejectQuotation")";
+
+                $.get(url, { id: _id, response: txt_message }, function (data) {
+                    if (data != null) {
+                        if (data.includes("Error:"))
+                        {
+                            if (data.includes("ACEPTADA"))
+                            {
+                                alert(data.replace("Error: ", ""));
+                            }
+                            else if (data.includes("CANCELADA"))
+                            {
+                                alert(data.replace("Error: ", ""));
+                            }
+                            else
+                            {
+                                alert("Ha ocurrido un error al intentar dar respuesta a la cotización: " + data.replace("Error: ", "") + " Por favor, comuníquese con nosotros lo más pronto posible.");
+                            }
+                        }
+                        else
+                        {
+                            location.href = '@Url.Action("QuotationResult", "QuotationRequests", new { id = Model.Id})';
+                        }
+                    }
+                    else
+                    {
+                        alert("No fué posible responder a la cotización. Por favor, comuníquese con nosotros lo más pronto posible.");
+                    }
+                });
+            }
+        }
+        else
+        {
+            alert("Debe ingresar el motivo de rechazo de la cotización. null");
+        }
+    }
+
+    function hideModal() {
+        $("#modalMessage").modal('hide');
+    }
+</script>

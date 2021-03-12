@@ -128,8 +128,8 @@
             </td>
 
             @*<td>
-                @Html.DisplayFor(modelItem => item.ClientRequestDescription)
-            </td>*@
+            @Html.DisplayFor(modelItem => item.ClientRequestDescription)
+        </td>*@
 
             <td style="white-space:nowrap">
                 $ @Html.DisplayFor(modelItem => item.QuotationTotalValueAfterTaxes)
@@ -155,13 +155,23 @@
 
             @if (!item.HasBeenCanceled)
             {
-                <td style="white-space:nowrap">
-                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>
-                    &nbsp;
-                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
-                    &nbsp;
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
-                </td>
+                if (item.Status != null && item.Status.Id == 5)
+                {
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
+                        &nbsp;
+                    </td>
+                }
+                else
+                {
+                    <td style="white-space:nowrap">
+                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>
+                        &nbsp;
+                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>
+                        &nbsp;
+                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                    </td>
+                }
             }
             else
             {

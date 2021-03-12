@@ -61,6 +61,46 @@ namespace IVSoftware.Web.Controllers
             }
         }
 
+        // GET: QuotationRequests/QuotationClientConfirmation
+        public async Task<IActionResult> QuotationClientConfirmation(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var quotationRequest = await _context.QuotationRequest
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (quotationRequest == null)
+            {
+                return NotFound();
+            }
+
+            if (quotationRequest.Incentives != null && quotationRequest.Incentives.Count > 0)
+            {
+                foreach (IncentivesIntoServiceQuotationRequest incentive in quotationRequest.Incentives)
+                {
+                    if (incentive != null)
+                    {
+                        incentive.ServiceTotalValue = quotationRequest.ServicesTotal;
+                    }
+                }
+            }
+
+            if (quotationRequest.Taxes != null && quotationRequest.Taxes.Count > 0)
+            {
+                foreach (TaxesIntoServiceQuotationRequest tax in quotationRequest.Taxes)
+                {
+                    if (tax != null)
+                    {
+                        tax.QuotationTotal = quotationRequest.QuotationTotalValue;
+                    }
+                }
+            }
+
+            return View(quotationRequest);
+        }
+
         // GET: QuotationRequests/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -428,6 +468,29 @@ namespace IVSoftware.Web.Controllers
             {
                 return NotFound();
             }
+
+            if (quotationRequest.Incentives != null && quotationRequest.Incentives.Count > 0)
+            {
+                foreach (IncentivesIntoServiceQuotationRequest incentive in quotationRequest.Incentives)
+                {
+                    if (incentive != null)
+                    {
+                        incentive.ServiceTotalValue = quotationRequest.ServicesTotal;
+                    }
+                }
+            }
+
+            if (quotationRequest.Taxes != null && quotationRequest.Taxes.Count > 0)
+            {
+                foreach (TaxesIntoServiceQuotationRequest tax in quotationRequest.Taxes)
+                {
+                    if (tax != null)
+                    {
+                        tax.QuotationTotal = quotationRequest.QuotationTotalValue;
+                    }
+                }
+            }
+
             return View("Manage", quotationRequest);
         }
 
@@ -584,7 +647,7 @@ namespace IVSoftware.Web.Controllers
         // POST: QuotationRequests/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string response = null)
         {
             var quotationRequest = await _context.QuotationRequest.FindAsync(id);
             if(quotationRequest != null)
@@ -593,6 +656,12 @@ namespace IVSoftware.Web.Controllers
 
                 if(status != null)
                 {
+                    if(response == null || string.IsNullOrEmpty(response.Replace(" ", string.Empty)))
+                    {
+                        response = "La cotización ha sido cancelada por el personal interno.";
+                    }
+
+                    quotationRequest.CancelationResponse = response;
                     quotationRequest.Status = status;
                     quotationRequest.ModificationDatetime = DateTime.Now;
 
@@ -1109,6 +1178,7 @@ namespace IVSoftware.Web.Controllers
                         {
                             request.Status = status;
                             request.ModificationDatetime = DateTime.Now;
+                            request.LastGenerationDate = DateTime.Now;
 
                             _context.Update(request);
                             await _context.SaveChangesAsync();
@@ -1208,6 +1278,8 @@ namespace IVSoftware.Web.Controllers
             {
                 string builder = string.Empty;
 
+                var fullUrl = this.Url.Action("QuotationClientConfirmation", "QuotationRequests", new { id = request.Id }, this.Request.Scheme);
+
                 #region Greetings
                 // Company contact
                 if (request.Contact != null && request.Contact.Name != null && !string.IsNullOrEmpty(request.Contact.Name.Replace(" ", string.Empty)))
@@ -1273,7 +1345,14 @@ namespace IVSoftware.Web.Controllers
                     request.Name.Replace("<consecutive>", request.Id.ToString()),
                     !string.IsNullOrEmpty(phoneNumber) ? string.Format("a los siguientes números de teléfono {0}", phoneNumber) : "a través de este medio");
 
-                builder += string.Format("Para aceptar y continuar con el proceso de reserva de cupo para la toma de muestras, deberá enviarnos un mensaje al correo electrónico <b>XXXXXX@cornare.com</b> con el código de la cotización: <b>{0}</b><br><br>", request.Name.Replace("<consecutive>", request.Id.ToString()));
+                if(!string.IsNullOrEmpty(fullUrl))
+                {
+                    builder += string.Format("Haga click <a href=\"{0}\">Aquí</a> para aceptar o cancelar la cotización.<br><br>", fullUrl);
+                }
+                else
+                {
+                    builder += string.Format("Para aceptar y continuar con el proceso de reserva de cupo para la toma de muestras, deberá enviarnos un mensaje al correo electrónico <b>XXXXXX@cornare.com</b> con el código de la cotización: <b>{0}</b><br><br>", request.Name.Replace("<consecutive>", request.Id.ToString()));
+                }
 
                 builder += "Los datos suministrados serán tratados de acuerdo a la política de protección de datos Resolución 112-4540 del 25 de octubre de 2018 \"Por medio de la cual se adopta la Política de Protección de Datos Personales en la Corporación Autónoma Regional de las Cuencas de los Ríos Negro y Nare -Cornare\": https://www.cornare.gov.co/politica-de-datos-personales/, en caso de no estar de acuerdo favor responder este correo solicitando el retiro de nuestra base de datos.<br><br>";
 
@@ -1289,6 +1368,150 @@ namespace IVSoftware.Web.Controllers
             }
 
             return null;
+        }
+
+        public async Task<IActionResult> QuotationResult(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var quotationRequest = await _context.QuotationRequest
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (quotationRequest == null)
+            {
+                return NotFound();
+            }
+
+            return View(quotationRequest);
+        }
+
+        public async Task<string> AcceptQuotation (int id)
+        {
+            try
+            {
+                QuotationRequest request = await _context.QuotationRequest.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (request != null)
+                {
+                    try
+                    {
+                        if (request.Status != null)
+                        {
+                            if (request.Status.Id == 4)
+                            {
+                                return "Error: La cotización ya ha sido CANCELADA, cualquier inquietud no dude en comunicarse con nosotros.";
+                            }
+                            else if (request.Status.Id == 5)
+                            {
+                                return "Error: La cotización ya ha sido ACEPTADA, cualquier inquietud no dude en comunicarse con nosotros.";
+                            }
+                        }
+
+                        QuotationStatus status = await _context.QuotationStatus.FirstOrDefaultAsync(x => x.Id == 5);
+
+                        if (status != null)
+                        {
+                            request.Status = status;
+                            request.ModificationDatetime = DateTime.Now;
+                            request.HasBeenGenerated = true;
+
+                            _context.Update(request);
+                            await _context.SaveChangesAsync();
+
+                            return "Ok";
+                        }
+                        else
+                        {
+                            return "Error: El estado 'Confirmado' no ha sido encontrado.";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return string.Format("Error: {0}", ex.ToString());
+                    }
+                }
+
+                return "Error: No hay información de la cotización.";
+            }
+            catch(Exception ex)
+            {
+                return string.Format("Error: {0}", ex.ToString());
+            }
+            
+        }
+
+        public async Task<IActionResult> QuotationCancelConfirmation(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var quotationRequest = await _context.QuotationRequest
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (quotationRequest == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView(quotationRequest);
+        }
+
+        public async Task<string> RejectQuotation(int id, string response)
+        {
+            try
+            {
+                QuotationRequest request = await _context.QuotationRequest.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (request != null)
+                {
+                    try
+                    {
+                        if (request.Status != null)
+                        {
+                            if (request.Status.Id == 4)
+                            {
+                                return "Error: La cotización ya ha sido CANCELADA, cualquier inquietud no dude en comunicarse con nosotros.";
+                            }
+                            else if (request.Status.Id == 5)
+                            {
+                                return "Error: La cotización ya ha sido ACEPTADA, cualquier inquietud no dude en comunicarse con nosotros.";
+                            }
+                        }
+
+                        QuotationStatus status = await _context.QuotationStatus.FirstOrDefaultAsync(x => x.Id == 4);
+
+                        if (status != null)
+                        {
+                            request.Status = status;
+                            request.ModificationDatetime = DateTime.Now;
+                            request.CancelationResponse = response;
+
+                            _context.Update(request);
+                            await _context.SaveChangesAsync();
+
+                            return "Ok";
+                        }
+                        else
+                        {
+                            return "Error: El estado 'Cancelado' no ha sido encontrado.";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return string.Format("Error: {0}", ex.ToString());
+                    }
+                }
+
+                return "Error: No hay información de la cotización.";
+            }
+            catch (Exception ex)
+            {
+                return string.Format("Error: {0}", ex.ToString());
+            }
+
         }
     }
 }

@@ -1,0 +1,25 @@
+﻿@model QuotationRequest
+
+<h1>Respuesta a cotización @Model.Name.Replace("<consecutive>", Model.Id.ToString())</h1>
+
+@if (Model.Status != null)
+{
+    if (Model.Status.Id == 5)
+    {
+        <div>
+            <h6>La cotización ha sido <b>ACEPTADA</b>, próximamente les notificaremos sobre la reserva de cupo para la toma de muestras.</h6>
+        </div>
+
+    }
+    else if (Model.Status.Id == 4)
+    {
+        <div>
+            <h6>La cotización ha sido <b>RECHAZADA</b>, lamentamos enormemente esta decisión, y queremos informarle que nos encontramos en total disposición de aclarar cualquier duda o inquietud.</h6>
+        </div>        
+
+        <div>
+            <h6>Esperamos poder atenderlos en una nueva oportunidad.</h6>
+        </div>
+    }
+}
+

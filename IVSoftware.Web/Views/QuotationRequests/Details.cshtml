@@ -428,14 +428,13 @@
 <div>
     @if (!Model.HasBeenGenerated && !Model.HasBeenCanceled)
     {
-        <a asp-action="Edit" asp-route-id="@Model.Id" asp-route-toManage="0">Editar</a>
-        <label> | </label>
-    }
-
-    @if (!Model.HasBeenCanceled)
-    {
-        <a asp-action="Manage" asp-route-id="@Model.Id" asp-route-toManage="1">Gestionar</a>
-        <label> | </label>
+        if (Model.Status == null || (Model.Status.Id != 5 && Model.Status.Id != 4))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" asp-route-toManage="0">Editar</a>
+            <label> | </label>
+            <a asp-action="Manage" asp-route-id="@Model.Id" asp-route-toManage="1">Gestionar</a>
+            <label> | </label>
+        }
     }
 
     <a asp-action="Index">Regresar</a>
