@@ -68,7 +68,7 @@
                 <span asp-validation-for="RequestDateTime" class="text-danger"></span>
             </div>
 
-            <div style="margin-left:10px">
+            <div style="margin-left:10px" hidden>
 
                 <table class="col-md-8">
                     <tr>
@@ -154,7 +154,7 @@
                             @Html.Raw("Método de referencia (Acreditado)")
                         </th>
 
-                        <th>
+                        <th style="white-space:nowrap">
                             @Html.Raw("Límite de cuantificación")
                         </th>
 
@@ -162,7 +162,7 @@
                             @Html.Raw("Unidades")
                         </th>
 
-                        <th>
+                        <th style="white-space:nowrap">
                             @Html.Raw("Valor unitario")
                         </th>
 
@@ -197,10 +197,10 @@
                 <thead style="background-color:yellowgreen; color:white">
                     <tr>
                         <th></th>
-                        <th>
+                        <th style="white-space:nowrap">
                             @Html.Raw("Nombre")
                         </th>
-                        <th>
+                        <th style="white-space:nowrap">
                             @Html.Raw("Valor")
                         </th>
 
@@ -222,7 +222,7 @@
 
             <div class="form-group" style="display:none">
                 <label asp-for="CreationDatetime" class="control-label"></label>
-                <input asp-for="CreationDatetime" class="form-control" value="@DateTime.Now" type="datetime" />
+                <input asp-for="CreationDatetime" class="form-control" type="datetime" />
                 <span asp-validation-for="CreationDatetime" class="text-danger"></span>
             </div>
 
@@ -268,7 +268,7 @@
     $(window).on('load', function () {
         loadServices();
         loadIncentives();
-        getClient(); 
+        getClientOnLoad(); 
     });
 
 </script>
@@ -313,8 +313,19 @@ else
     <input hidden id="txt_incentives_for_load" />
 }
 
+<input hidden id="txt_contact_id" value="@Model.ContactId"/>
 
 <script>
+    function getClientOnLoad() {
+        var url = "@Url.Action("GetClientInformation")";
+        var id = $("#txtId").val();
+        var contact_id = $("#txt_contact_id").val();
+
+        $.get(url, { id: id, selectedContactId: contact_id }, function (data) {
+            $("#div_client_info").html(data);
+        });
+    }
+
     function saveQuotation() {
             var requestDate = $("#txt_quotation_date").val();
             var clientRequest = $("#txt_client_request").val();
@@ -322,10 +333,11 @@ else
             var contactId = $("#cbx_contact").val();
             var services = obtainServices();
             var incentives = obtainIncentives();
+            var quotationId = $("#txt_quotation_id").val();
 
             var url = "@Url.Action("SaveQuotation")";
 
-            $.get(url, { date: requestDate, client_request : clientRequest, client_id : clientId, contact_id : contactId, _services : services, _incentives : incentives}, function (data) {
+            $.get(url, { date: requestDate, client_request: clientRequest, client_id: clientId, contact_id: contactId, _services: services, _incentives: incentives, quotation_id: quotationId}, function (data) {
                 if (data != null && data.includes("Error:")) {
                     alert(data);
                 }
@@ -353,7 +365,7 @@ else
         var url = "@Url.Action("GetIncentivesOnLoad")";
 
         $.get(url, { id: incentives_id }, function (data) {
-            $("#tbody_services").html($("#tbody_services").html() + data);
+            $("#tbody_incentives").html($("#tbody_incentives").html() + data);
         });
     }
 
@@ -364,15 +376,37 @@ else
         var contactId = $("#cbx_contact").val();
         var services = obtainServices();
         var incentives = obtainIncentives();
+        var quotationId = $("#txt_quotation_id").val();
 
-        var url = "@Url.Action("ConfirmQuotation")";
+        if (requestDate != null) {
+            if (clientId != null) {
+                if (services != null && services.includes(";quantity:"))
+                {
+                    var url = "@Url.Action("ConfirmQuotation")";
 
-        $.get(url, { date: requestDate, client_request : clientRequest, client_id : clientId, contact_id : contactId, _services : services, _incentives : incentives}, function (data) {
-            if (data != null) {
-                $('.modal-content').html(data);
-                $("#modalServices").modal('show');
+                    $.get(url, { date: requestDate, client_request: clientRequest, client_id: clientId, contact_id: contactId, _services: services, _incentives: incentives, quotation_id: quotationId}, function (data) {
+                        if (data != null) {
+                            $('.modal-content').html(data);
+                            $("#modalServices").modal('show');
+                        }
+                    });
+                }
+                else
+                {
+                    alert("Debe seleccionar por lo menos un servicio");
+                }
             }
-        });
+            else
+            {
+                alert("Debe seleccionar el cliente");
+            }
+        }
+        else
+        {
+            alert("Debe especificar la fecha de la solicitud");
+        }
+
+
     }
 
     function obtainIncentives() {

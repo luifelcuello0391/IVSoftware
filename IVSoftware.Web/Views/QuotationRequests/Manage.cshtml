@@ -1,37 +1,16 @@
-﻿@model QuotationRequest
+﻿@model IVSoftware.Data.Models.QuotationRequest
 
-<head>
-    <style>
-        .vertical-center {
-            margin: 0;
-            position: absolute;
-            top: 50%;
-            -ms-transform: translateY(-50%);
-            transform: translateY(-50%);
-        }
-    </style>
-</head>
+@{
+    ViewData["Title"] = "gestión de cotización";
+}
 
-<div class="modal-header">
-    @if (Model.Id > 0)
-    {
-        <h5 class="modal-title" style="float:left; color:yellowgreen">Resumen de la solicitud de cotización @Model.Name.Replace("<consecutive>", Model.Id.ToString())</h5>
-    }
-    else
-    {
-        <h5 class="modal-title" style="float:left; color:yellowgreen">Resumen de la solicitud de cotización</h5>
-    }
+<h1>Administrar solicitud de cotización</h1>
 
-    <button id="btn_hide_client_modal" type="button" data-dismiss="modal" class="close" style="color:red; margin-right:5px">
-        X
-    </button>
-</div>
-<hr />
+<div>
+    <h4 style="color:yellowgreen">Solicitud de cotización @Model.Name.Replace("<consecutive>", Model.Id.ToString())</h4>
+    <hr />
 
-@if (Model != null)
-{
-    <!--Información general de la solicitud-->
-    <dl class="row" style="margin-left:5px">
+    <dl class="row">
         <dt class="col-sm-2" style="white-space:nowrap">
             @Html.DisplayNameFor(model => model.RequestDateTime)
         </dt>
@@ -45,13 +24,30 @@
         <dd class="col-sm-10" style="margin-left:5px">
             @Html.DisplayFor(model => model.ClientRequestDescription)
         </dd>
+
+        <dt class="col-sm-2" style="white-space:nowrap">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10" style="margin-left:5px">
+            @Html.DisplayFor(model => model.StatusName)
+        </dd>
+
+        @if (Model.HasBeenGenerated)
+        {
+            <dt class="col-sm-2" style="white-space:nowrap">
+                @Html.DisplayNameFor(model => model.LastGenerationDate)
+            </dt>
+            <dd class="col-sm-10" style="margin-left:5px">
+                @Html.DisplayFor(model => model.LastGenerationDate)
+            </dd>
+        }
     </dl>
 
-    <!--Información del cliente-->
+    <hr />
+    <h5 style="color:yellowgreen">Información del cliente</h5>
+    <hr />
     @if (Model.Client != null)
     {
-        <h5 style="color:yellowgreen;margin-left:5px">Información del cliente</h5>
-
         <div class="row form-group" style="margin-left:5px">
             <div class="form-group col-md-2">
                 <div><b>@Html.DisplayNameFor(model => model.Client.PersonType)</b></div>
@@ -152,108 +148,65 @@
                 }
             </div>
 
-            <div class="form-group col-md-8">
+            <div class="form-group col-md-2">
                 <div><b>@Html.DisplayNameFor(model => model.Client.EmailAddress)</b></div>
                 <div>@Html.DisplayFor(model => model.Client.EmailAddress)</div>
             </div>
         </div>
     }
 
-    <!--Listado de servicios-->
-    <h5 style="color:yellowgreen;margin-left:5px">Servicios solicitados</h5>
-    <div style="margin-left:5px; margin-right:5px">
-        <table class="table table-striped table-sm" style="display:inline-block; overflow:auto">
-            <thead style="background-color:yellowgreen; color:white">
-                <tr>
-                    <th style="white-space:nowrap">
-                        @Html.Raw("Parámetro (técnica de análisis)")
-                    </th>
+    <hr />
+    <h5 style="color:yellowgreen">Información de contacto para envío de correo</h5>
+    <hr />
 
-                    <th style="white-space:nowrap">
-                        @Html.Raw("Método de referencia (Acreditado)")
-                    </th>
+    @if (Model.Contact != null)
+    {
+        <div class="row form-group" style="margin-left:5px">
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Contact.DocumentType)</b></div>
+                <div>@Html.DisplayFor(model => model.Client.DocumentTypeName)</div>
+            </div>
 
-                    <th style="white-space:nowrap">
-                        @Html.Raw("Límite de cuantificación")
-                    </th>
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Contact.Identification)</b></div>
+                <div>@Html.DisplayFor(model => model.Contact.Identification)</div>
+            </div>
 
-                    <th>
-                        @Html.Raw("Unidades")
-                    </th>
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Contact.Name)</b></div>
+                <div>@Html.DisplayFor(model => model.Contact.Name)</div>
+            </div>
 
-                    <th style="white-space:nowrap">
-                        @Html.Raw("Tiempo de entrega de informe (días)")
-                    </th>
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Contact.Position)</b></div>
+                <div>@Html.DisplayFor(model => model.Contact.Position)</div>
+            </div>
 
-                    <th style="white-space:nowrap">
-                        @Html.Raw("Valor unitario")
-                    </th>
+            <div class="form-group col-md-2">
+                <div><b>@Html.DisplayNameFor(model => model.Contact.ReportDeliveryEmail)</b></div>
+                <div>@Html.DisplayFor(model => model.Contact.ReportDeliveryEmail)</div>
+            </div>
+        </div>
 
-                    <th style="white-space:nowrap">
-                        @Html.Raw("Cantidad")
-                    </th>
+        <input hidden id="txt_email" value="@Model.Contact.ReportDeliveryEmail" />
+    }
+    else
+    {
+        @if (Model.Client != null && Model.Client.EmailAddress != null && !string.IsNullOrEmpty(Model.Client.EmailAddress.Replace(" ", string.Empty)))
+        {
+            <div class="form-group col-md-12">
+                <div>El correo de confirmación se enviará a: @Model.Client.EmailAddress</div>
+            </div>
 
-                    <th style="white-space:nowrap">
-                        @Html.Raw("Valor total antes de IVA")
-                    </th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @if (Model.Services != null && Model.Services.Count > 0)
-                {
-                    foreach (var item in Model.Services)
-                    {
-                        if (item.Service != null)
-                        {
-                            <tr>
-                                <td style="white-space:nowrap">
-                                    @Html.DisplayFor(modelItem => item.Service.Name)
-                                </td>
-
-                                <td style="white-space:nowrap">
-                                    @Html.DisplayFor(modelItem => item.Service.ReferenceMethodName)
-                                </td>
-
-                                <td style="white-space:nowrap">
-                                    @Html.DisplayFor(modelItem => item.Service.QuantificationLimit)
-                                </td>
-
-                                @if (item.Service != null && item.Service.MeasurementUnit != null)
-                                {
-                                    <td style="white-space:nowrap">
-                                        @Html.DisplayFor(modelItem => item.Service.MeasurementUnit.Name)
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td>
-                                        @Html.Raw("No definida")
-                                    </td>
-                                }
-
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Service.ReportDeliveryTime)
-                                </td>
-
-                                <td style="white-space:nowrap">
-                                    $ @Html.DisplayFor(modelItem => item.CurrentValue)
-                                </td>
-
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Quantity)
-                                </td>
-
-                                <td>
-                                    $ @Html.DisplayFor(modelItem => item.TotalValue)
-                                </td>
-                            </tr>
-                        }
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
+            <input hidden id="txt_email" value="@Model.Client.EmailAddress" />
+        }
+        else
+        {
+            <div class="form-group col-md-12">
+                <div style="color:red">No hay información de contacto, por lo cual el correo de confirmación no podrá ser enviado.</div>
+            </div>
+        }
+    }
 
     @if (Model.Services != null && Model.Services.Count > 0)
     {
@@ -261,7 +214,9 @@
         <h6 style="margin-left:5px"><b>Tiempo para entrega de resultados: </b>@Html.DisplayFor(modelItem => Model.ServicesReportTime) día(s)</h6>
     }
 
+    <hr />
     <h5 style="color:yellowgreen;margin-left:5px">Totales</h5>
+    <hr />
     <table style="margin-left:5px;margin-right:5px">
         <thead style="background-color:yellowgreen; color:white">
             <tr>
@@ -363,10 +318,131 @@
             </tr>
         </tbody>
     </table>
-    <hr />
-    <input type="button" value="Confirmar cotización" class="btn btn-primary" style="background-color:yellowgreen; color:white; margin:10px; float:right" onclick="saveQuotation()" />
-}
-else
-{
-    <div style="margin-left:5px"><label>No hay información de la cotización</label></div>
-}
+
+    <div>
+        <h1></h1>
+        <form>
+            <input type="hidden" asp-for="Id" />
+            @if (Model.Status != null)
+            {
+                switch (Model.Status.Id)
+                {
+                    case 1: // Registrada
+                        <input type="button" value="Confirmar solicitud" class="btn btn-primary" style="background-color:yellowgreen; color:white" onclick="ManageQuotation(@Model.Id)" />
+                        break;
+
+                    case 2: // Generada
+                        <input type="button" value="Enviar correo de aceptación" class="btn btn-primary" style="background-color:yellowgreen; color:white" onclick="SendOnlyQuotationEmail(@Model.Id)" />
+                        break;
+                }
+            }
+            else
+            {
+                <input type="button" value="Confirmar solicitud" class="btn btn-primary" style="background-color:yellowgreen; color:white" onclick="ManageQuotation(@Model.Id)" />
+            }
+            |
+            <a asp-action="Index">Regresar</a>
+        </form>
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+    function SendOnlyQuotationEmail(_id) {
+        var url = "@Url.Action("SendQuotationConfirmationEmail")";
+
+        $.get(url, { id: _id }, function (data) {
+            if (data != null) {
+                if (data.includes("Error:"))
+                {
+                    alert("Ha ocurrido un error al intentar enviar el correo: " + data.replace("Error: ", ""));
+                    location.href = '@Url.Action("Index", "QuotationRequests")';
+                }
+                else
+                {
+                    alert("La solicitud de aceptación de la cotización ha sido enviada correctamente, " + data.replace("OK: ", ""));
+                    location.href = '@Url.Action("Index", "QuotationRequests")';
+                }
+            }
+            else
+            {
+                alert("El correo de solicitud de aceptación para la cotización no fué enviado.");
+                location.href = '@Url.Action("Index", "QuotationRequests")';
+            }
+        });
+    }
+
+    function SendQuotationEmail(_id) {
+        var url = "@Url.Action("SendQuotationConfirmationEmail")";
+
+        $.get(url, { id: _id }, function (data) {
+                    if (data != null) {
+                        if (data.includes("Error:"))
+                        {
+                            alert("La cotización ha sido confirmada correctamente, pero ocurrió un error en el envío del correo: " + data.replace("Error: ", ""));
+                            location.href = '@Url.Action("Index", "QuotationRequests")';
+                        }
+                        else
+                        {
+                            alert("La cotización ha sido confirmada correctamente, " + data.replace("OK: ", ""));
+                            location.href = '@Url.Action("Index", "QuotationRequests")';
+                        }
+                    }
+                    else
+                    {
+                        alert("La cotización ha sido confirmada correctamente, el correo de confirmación no fué enviado.");
+                        location.href = '@Url.Action("Index", "QuotationRequests")';
+                    }
+        });
+    }
+
+    function ManageQuotation(_id) {
+        var result = confirm("¿Está seguro que desea generar la confirmación de la solicitud de cotización?");
+
+        if (result == true)
+        {
+            var url = "@Url.Action("ConfirmQuotationManagement")";
+
+            $.get(url, { id: _id}, function (data) {
+                if (data != null && data.includes("Error:")) {
+                    alert(data);
+                }
+                else
+                {
+                    var email = document.getElementById("txt_email");
+                    if (email != null)
+                    {
+                        var contact_email = email.value;
+
+                        if (contact_email != null)
+                        {
+                            result = confirm("¿Desea enviar el correo de confirmación a " + contact_email + "?");
+
+                            if (result == true)
+                            {
+                                SendQuotationEmail(_id);
+                            }
+                            else
+                            {
+                                alert("La cotización ha sido confirmada correctamente, el correo de confirmación no fué enviado.");
+                                location.href = '@Url.Action("Index", "QuotationRequests")';
+                            }
+                        }
+                        else
+                        {
+                            alert("La cotización ha sido confirmada correctamente, el correo de confirmación no fué enviado.");
+                            location.href = '@Url.Action("Index", "QuotationRequests")';
+                        }
+                    }
+                    else
+                    {
+                        alert("La cotización ha sido confirmada correctamente, el correo de confirmación no fué enviado.");
+                        location.href = '@Url.Action("Index", "QuotationRequests")';
+                    }
+                }
+            });
+        }
+    }
+</script>

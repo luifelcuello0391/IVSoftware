@@ -1,6 +1,7 @@
 ﻿using IVSoftware.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace IVSoftware.Data.Models
         public string PhoneNumber { get; set; }
         public string Extension { get; set; }
         public string CellPhone { get; set; }
+        [DisplayName("Correo para el envío de confirmación")]
         public string ReportDeliveryEmail { get; set; }
     }
 }

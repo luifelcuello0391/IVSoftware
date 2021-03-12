@@ -9,15 +9,24 @@ using IVSoftware.Models;
 using IVSoftware.Web.Models;
 using System.Net;
 using IVSoftware.Data.Models;
+using IVSoftware.Web.Data;
+using IVSoftware.Web.Service;
+using Microsoft.AspNetCore.Identity;
 
 namespace IVSoftware.Web.Controllers
 {
     public class QuotationRequestsController : Controller
     {
         private readonly IVSoftwareContext _context;
+        private readonly IMailService _mailService;
+        private readonly UserManager<User> _userManager;
+        private readonly IEntityService<Person, Guid> _personService;
 
-        public QuotationRequestsController(IVSoftwareContext context)
+        public QuotationRequestsController(IVSoftwareContext context, IMailService mailService, UserManager<User> userManager, IEntityService<Person, Guid> personService)
         {
+            _personService = personService;
+            _userManager = userManager;
+            _mailService = mailService;
             _context = context;
         }
 
@@ -36,19 +45,19 @@ namespace IVSoftware.Web.Controllers
             switch(filter)
             {
                 case "1": // Registered
-                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 1).ToListAsync());
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 1).OrderByDescending(x => x.RequestDateTime).ToListAsync());
 
                 case "2": // Generated
-                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 2).ToListAsync());
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 2).OrderByDescending(x => x.RequestDateTime).ToListAsync());
 
                 case "3": // Sent
-                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 3).ToListAsync());
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 3).OrderByDescending(x => x.RequestDateTime).ToListAsync());
 
                 case "4": // Cancelled
-                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 4).ToListAsync());
+                    return View(await _context.QuotationRequest.Where(x => x.Status != null && x.Status.Id == 4).OrderByDescending(x => x.RequestDateTime).ToListAsync());
 
                 default:
-                    return View(await _context.QuotationRequest.ToListAsync());
+                    return View(await _context.QuotationRequest.OrderByDescending(x => x.RequestDateTime).ToListAsync());
             }
         }
 
@@ -65,6 +74,28 @@ namespace IVSoftware.Web.Controllers
             if (quotationRequest == null)
             {
                 return NotFound();
+            }
+
+            if (quotationRequest.Incentives != null && quotationRequest.Incentives.Count > 0)
+            {
+                foreach (IncentivesIntoServiceQuotationRequest incentive in quotationRequest.Incentives)
+                {
+                    if (incentive != null)
+                    {
+                        incentive.ServiceTotalValue = quotationRequest.ServicesTotal;
+                    }
+                }
+            }
+
+            if (quotationRequest.Taxes != null && quotationRequest.Taxes.Count > 0)
+            {
+                foreach(TaxesIntoServiceQuotationRequest tax in quotationRequest.Taxes)
+                {
+                    if(tax != null)
+                    {
+                        tax.QuotationTotal = quotationRequest.QuotationTotalValue;
+                    }
+                }
             }
 
             return View(quotationRequest);
@@ -87,7 +118,7 @@ namespace IVSoftware.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult> GetClientInformation(string id)
+        public async Task<ActionResult> GetClientInformation(string id, int? selectedContactId = null)
         {
             if(id != null && !string.IsNullOrEmpty(id.Replace(" ", string.Empty)))
             {
@@ -99,6 +130,11 @@ namespace IVSoftware.Web.Controllers
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error GetClientInformation >> " + ex.ToString());
+                }
+
+                if(client != null)
+                {
+                    client.SelectedContactId = selectedContactId;
                 }
 
                 return PartialView("clientMainInfo", client);
@@ -387,12 +423,12 @@ namespace IVSoftware.Web.Controllers
                 return NotFound();
             }
 
-            var quotationRequest = await _context.QuotationRequest.FindAsync(id);
+            var quotationRequest = await _context.QuotationRequest.FirstOrDefaultAsync(x => x.Id == id.Value);
             if (quotationRequest == null)
             {
                 return NotFound();
             }
-            return RedirectToAction("Create", "QuotationModels", new { id = quotationRequest.Id });
+            return View("Manage", quotationRequest);
         }
 
         // GET: QuotationRequests/Edit/5
@@ -465,7 +501,6 @@ namespace IVSoftware.Web.Controllers
             }
 
             quotationRequest.RequestedClientId = quotationRequest.ClientIdentification;
-
             quotationRequest.ManageQuotation = toManage;
 
             return View(quotationRequest);
@@ -521,6 +556,28 @@ namespace IVSoftware.Web.Controllers
                 return NotFound();
             }
 
+            if (quotationRequest.Incentives != null && quotationRequest.Incentives.Count > 0)
+            {
+                foreach (IncentivesIntoServiceQuotationRequest incentive in quotationRequest.Incentives)
+                {
+                    if (incentive != null)
+                    {
+                        incentive.ServiceTotalValue = quotationRequest.ServicesTotal;
+                    }
+                }
+            }
+
+            if (quotationRequest.Taxes != null && quotationRequest.Taxes.Count > 0)
+            {
+                foreach (TaxesIntoServiceQuotationRequest tax in quotationRequest.Taxes)
+                {
+                    if (tax != null)
+                    {
+                        tax.QuotationTotal = quotationRequest.QuotationTotalValue;
+                    }
+                }
+            }
+
             return View(quotationRequest);
         }
 
@@ -537,6 +594,7 @@ namespace IVSoftware.Web.Controllers
                 if(status != null)
                 {
                     quotationRequest.Status = status;
+                    quotationRequest.ModificationDatetime = DateTime.Now;
 
                     _context.Update(quotationRequest);
                     await _context.SaveChangesAsync();
@@ -647,6 +705,78 @@ namespace IVSoftware.Web.Controllers
             }
         }
 
+        public async Task<QuotationRequest> ObtainsQuotationForEdition (QuotationRequest quotation, int? quotation_id)
+        {
+            // QuotationRequest quotation = await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives);
+
+            QuotationRequest currentQuotation = null;
+
+            if(quotation_id != null)
+            {
+                currentQuotation = await _context.QuotationRequest.FirstOrDefaultAsync(x => x.Id == quotation_id.Value);
+
+                if (quotation != null && currentQuotation != null)
+                {
+                    currentQuotation.ContactId = quotation.ContactId;
+                    currentQuotation.Contact = quotation.Contact;
+
+                    currentQuotation.RequestDateTime = quotation.RequestDateTime;
+                    currentQuotation.ClientRequestDescription = quotation.ClientRequestDescription;
+                    currentQuotation.QuotationTotalValue = quotation.QuotationTotalValue;
+                    currentQuotation.QuotationTotalValueAfterTaxes = quotation.QuotationTotalValueAfterTaxes;
+
+                    if (currentQuotation.Incentives != null) currentQuotation.Incentives.Clear();
+
+                    currentQuotation.Incentives = quotation.Incentives;
+                    if (currentQuotation.Incentives != null && currentQuotation.Incentives.Count > 0)
+                    {
+                        foreach (IncentivesIntoServiceQuotationRequest incentive in currentQuotation.Incentives)
+                        {
+                            if (incentive != null)
+                            {
+                                incentive.QuotationRequest = currentQuotation;
+                                incentive.QuotationRequestId = currentQuotation.Id;
+                            }
+                        }
+                    }
+
+                    if (currentQuotation.Services != null) currentQuotation.Services.Clear();
+
+                    currentQuotation.Services = quotation.Services;
+                    if (currentQuotation.Services != null)
+                    {
+                        foreach (ServicesIntoQuotation service in currentQuotation.Services)
+                        {
+                            if (service != null)
+                            {
+                                service.QuotationRequest = currentQuotation;
+                                service.QuotationRequestId = currentQuotation.Id;
+                            }
+                        }
+                    }
+
+                    currentQuotation.ServicesReportTime = quotation.ServicesReportTime;
+                    currentQuotation.ServicesTotal = quotation.ServicesTotal;
+
+                    if (currentQuotation.Taxes != null) currentQuotation.Taxes.Clear();
+                    currentQuotation.Taxes = quotation.Taxes;
+                    if (currentQuotation.Taxes != null && currentQuotation.Taxes.Count > 0)
+                    {
+                        foreach (TaxesIntoServiceQuotationRequest tax in currentQuotation.Taxes)
+                        {
+                            if (tax != null)
+                            {
+                                tax.QuotationRequest = currentQuotation;
+                                tax.QuotationRequestId = currentQuotation.Id;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return currentQuotation;
+        }
+
         public async Task<QuotationRequest> PrepareQuotation(DateTime date, string client_request, int client_id, int? contact_id, string _services, string _incentives)
         {
             QuotationRequest request = new QuotationRequest();
@@ -719,7 +849,7 @@ namespace IVSoftware.Web.Controllers
                 {
                     if (service != null)
                     {
-                        request.ServicesTotal += service.CurrentValue;
+                        request.ServicesTotal += service.TotalValue;
 
                         if (service.Service != null && service.Service.ReportDeliveryTime > request.ServicesReportTime)
                         {
@@ -817,20 +947,66 @@ namespace IVSoftware.Web.Controllers
             return request;
         }
 
-        public async Task<IActionResult> ConfirmQuotation (DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives)
+        public async Task<IActionResult> ConfirmQuotation (DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives, int? quotation_id)
         {
-            return PartialView("QuotationRequestResume", await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives));
+            if(quotation_id != null)
+            {
+                return PartialView("QuotationRequestResume", await ObtainsQuotationForEdition(await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives), quotation_id));
+            }
+            else
+            {
+                return PartialView("QuotationRequestResume", await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives));
+            }
         }
 
-        public async Task<string> SaveQuotation (DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives)
+        public async Task<string> SaveQuotation (DateTime date, string client_request, int client_id, int contact_id, string _services, string _incentives, int? quotation_id)
         {
-            QuotationRequest request = await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives);
+            QuotationRequest request = null;
 
-            if(request != null)
+            if(quotation_id != null)
+            {
+                // Edition
+                request = await ObtainsQuotationForEdition(await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives), quotation_id);
+                if(request != null)
+                {
+                    request.ModificationDatetime = DateTime.Now;
+                }
+            }
+            else 
+            {
+                // Creation
+                request = await PrepareQuotation(date, client_request, client_id, contact_id, _services, _incentives);
+            }
+
+            try
+            {
+                User currentUser = await _userManager.GetUserAsync(User);
+                if (currentUser != null && request != null)
+                {
+                    request.GenerationUsed = (await _personService.FindByConditionAsync(x => x.UserId != null && x.UserId.Equals(currentUser.Id))).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error on CaptureCheckListResponse.UserData >> " + ex.ToString());
+            }
+
+
+            if (request != null)
             {
                 try
                 {
-                    _context.Add(request);
+                    if(quotation_id != null)
+                    {
+                        // Edition
+                        _context.Update(request);
+                    }
+                    else
+                    {
+                        // Creation
+                        _context.Add(request);
+                    }
+                    
                     await _context.SaveChangesAsync();
 
                     return "OK";
@@ -904,7 +1080,7 @@ namespace IVSoftware.Web.Controllers
                         }
                     }
 
-                    return PartialView("ServiceRegister", incentives);
+                    return PartialView("IncentiveRegister", incentives);
                 }
                 else
                 {
@@ -915,6 +1091,204 @@ namespace IVSoftware.Web.Controllers
             {
                 return null;
             }
+        }
+
+        public async Task<string> ConfirmQuotationManagement (int id)
+        {
+            if(id > 0)
+            {
+                QuotationRequest request = await _context.QuotationRequest.FirstOrDefaultAsync(x => x.Id == id);
+
+                if(request != null)
+                {
+                    try
+                    {
+                        // Assigns the status: 'Generado'
+                        QuotationStatus status = await _context.QuotationStatus.FirstOrDefaultAsync(x => x.Id == 2);
+                        if(status != null)
+                        {
+                            request.Status = status;
+                            request.ModificationDatetime = DateTime.Now;
+
+                            _context.Update(request);
+                            await _context.SaveChangesAsync();
+
+                            return "OK";
+                        }
+                        else
+                        {
+                            return "Error: No fué posible asignar el estado 'Generado' porque no existe en la base de datos.";
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        return string.Format("Error: {0}", ex.ToString());
+                    }
+                }
+                else
+                {
+                    return "Error: No hay información de la solicitud de cotización.";
+                }
+            }
+            else
+            {
+                return "Error: No hay información de la solicitud de cotización.";
+            }
+        }
+
+        public async Task<string> SendQuotationConfirmationEmail(int id)
+        {
+            if(id > 0)
+            {
+                QuotationRequest request = await _context.QuotationRequest.FirstOrDefaultAsync(x => x.Id == id);
+
+                if(request != null)
+                {
+                    try
+                    {
+                        string contactEmail = null;
+                        string emailBody = null;
+
+                        if (request.Contact != null && !string.IsNullOrEmpty(request.Contact.ReportDeliveryEmail.Replace(" ", string.Empty)))
+                        {
+                            contactEmail = request.Contact.ReportDeliveryEmail;
+                        }
+                        else if (request.Client != null && !string.IsNullOrEmpty(request.Client.EmailAddress.Replace(" ", string.Empty)))
+                        {
+                            contactEmail = request.Client.EmailAddress;
+                        }
+
+                        if(contactEmail != null && !string.IsNullOrEmpty(contactEmail.Replace(" ", string.Empty)))
+                        {
+                            emailBody = OrganizeEmailBody(request);
+
+                            if (emailBody != null && !string.IsNullOrEmpty(emailBody.Replace(" ", string.Empty)))
+                            {
+                                MailRequest email = new MailRequest()
+                                {
+                                    ToEmail = contactEmail,
+                                    Subject = string.Format("Confirmación de cotización {0}", request.Name.Replace("<consecutive>", request.Id.ToString())),
+                                    Body = emailBody
+                                    // CC = personEvaluation.Person.OthersEmail
+                                };
+
+                                await _mailService.SendEmailAsync(email);
+
+                                return string.Format("OK: Correo enviado a {0}.", contactEmail);
+                            }
+                            else
+                            {
+                                return "Error: No fué posible crear el contenido del correo de confirmación.";
+                            }
+                        }
+                        else
+                        {
+                            return "Error: No hay un correo electrónico registrado para el cliente.";
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        return string.Format("Error: {0}", ex.ToString());
+                    }
+                }
+                else
+                {
+                    return "Error: No hay información de la cotización.";
+                }
+            }
+            else
+            {
+                return "Error: El id de la solicitud no es válida.";
+            }
+        }
+
+        private string OrganizeEmailBody (QuotationRequest request)
+        {
+            if(request != null)
+            {
+                string builder = string.Empty;
+
+                #region Greetings
+                // Company contact
+                if (request.Contact != null && request.Contact.Name != null && !string.IsNullOrEmpty(request.Contact.Name.Replace(" ", string.Empty)))
+                {
+                    builder += string.Format("{0}<br><br>Cordial saludo<br><br>", request.Contact.Name);
+                }
+                else if (request.Client != null && request.Client.ContactName != null && !string.IsNullOrEmpty(request.Client.ContactName.Replace(" ", string.Empty)))
+                {
+                    builder += string.Format("{0}<br><br>Cordial saludo<br><br>", request.Client.ContactName);
+                }
+                #endregion
+
+                #region Phone numbers information
+                string phoneNumber = null;
+
+                if(request.Contact != null && request.Contact.PhoneNumber != null && !string.IsNullOrEmpty(request.Contact.PhoneNumber.Replace(" ", string.Empty)))
+                {
+                    // Adds the contact phone number
+                    phoneNumber = request.Contact.PhoneNumber;
+
+                    if(request.Contact.Extension != null && !string.IsNullOrEmpty(request.Contact.Extension.Replace(" ", string.Empty)))
+                    {
+                        if(!string.IsNullOrEmpty(phoneNumber))
+                        {
+                            phoneNumber += string.Format(" EXT. {0}", request.Contact.Extension);
+                        }
+                    }
+                }
+                else if (request.Client != null)
+                {
+                    
+                    if(request.Client.PhoneNumber != null && !string.IsNullOrEmpty(request.Client.PhoneNumber.Replace(" ", string.Empty)))
+                    {
+                        // Adds the client main phone number
+                        phoneNumber = request.Client.PhoneNumber;
+
+                        if(request.Client.Extension != null && !string.IsNullOrEmpty(request.Client.Extension))
+                        {
+                            if(!string.IsNullOrEmpty(phoneNumber))
+                            {
+                                phoneNumber += string.Format(" EXT. {0}", request.Client.Extension);
+                            }
+                        }
+                    }
+                    
+                    if (request.Client.CellPhone != null && !string.IsNullOrEmpty(request.Client.CellPhone.Replace(" ", string.Empty)))
+                    {
+                        // Adds the client alternative phone number
+                        if(!string.IsNullOrEmpty(phoneNumber))
+                        {
+                            phoneNumber += string.Format(" - {0}", request.Client.CellPhone); 
+                        }
+                        else
+                        {
+                            // It is empty
+                            phoneNumber = request.Client.CellPhone;
+                        }
+                    }
+                }
+                #endregion
+
+                builder += string.Format("Su solicitud de cotización ha sido confirmada con el siguiente código <b>{0}</b>, cualquier modificación, nos comunicaremos con usted {1} para aclarar o informar particularidades de su solicitud.<br><br>", 
+                    request.Name.Replace("<consecutive>", request.Id.ToString()),
+                    !string.IsNullOrEmpty(phoneNumber) ? string.Format("a los siguientes números de teléfono {0}", phoneNumber) : "a través de este medio");
+
+                builder += string.Format("Para aceptar y continuar con el proceso de reserva de cupo para la toma de muestras, deberá enviarnos un mensaje al correo electrónico <b>XXXXXX@cornare.com</b> con el código de la cotización: <b>{0}</b><br><br>", request.Name.Replace("<consecutive>", request.Id.ToString()));
+
+                builder += "Los datos suministrados serán tratados de acuerdo a la política de protección de datos Resolución 112-4540 del 25 de octubre de 2018 \"Por medio de la cual se adopta la Política de Protección de Datos Personales en la Corporación Autónoma Regional de las Cuencas de los Ríos Negro y Nare -Cornare\": https://www.cornare.gov.co/politica-de-datos-personales/, en caso de no estar de acuerdo favor responder este correo solicitando el retiro de nuestra base de datos.<br><br>";
+
+                builder += "Cualquier inquietud no dude en comunicarse con nosotros.<br><br>";
+
+                if(request.GenerationUsed != null && request.GenerationUsed.FullName != null && !string.IsNullOrEmpty(request.GenerationUsed.FullName.Replace(" ", string.Empty)))
+                {
+                    builder += string.Format("Su solicitud fué recibida por {0}.<br><br>", request.GenerationUsed.FullName);
+                }
+
+                return builder;
+
+            }
+
+            return null;
         }
     }
 }
