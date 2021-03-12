@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Supervision>
+
+@{
+    ViewData["Title"] = "Supervisiones";
+}
+
+<h5 class="text-primary titulo">Lista de Supervisiones</h5>
+
+<div class="row">
+    <div class="col"><a asp-action="Create" class="float-right btn btn-primary mb-3">Nueva Supervisión</a></div>
+</div>
+
+<table class="table" id="supervisions">
+    <thead style="background-color:yellowgreen; color:white">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SupervisedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SupervisedPerson)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupervisedBy.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupervisedPerson.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td align="right">
+                    <a asp-controller="Supervisions" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit" style="font-size:larger"></i></a>&nbsp;
+                    <a asp-controller="Supervisions" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-stream" style="font-size:larger; color:green"></i></a>&nbsp;
+                    <a asp-controller="Supervisions" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-minus-circle" style="font-size:larger; color:red"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Styles {
+    <link href="~/lib/datatables.net/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/lib/datatables.net/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables.net/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#supervisions1').DataTable({
+                language: {
+                    url: '/lib/datatables.net/Spanish.json'
+                },
+                columnDefs: [{
+                    orderable: false,
+                    targets: 3
+                },]
+            });
+        });
+    </script>
+}

@@ -80,67 +80,73 @@
     <div class="row">
         <div class="col">
             <div class="form-group">
-                <a asp-action="DownloadExcelDocument" asp-route-id="@Model.Id" class="btn btn-primary">
-                    Descargar
-                </a>
+                @if (Model.Details?.Count > 0)
+                {
+                    <a asp-action="DownloadExcelDocument" asp-route-id="@Model.Id" class="btn btn-primary">
+                        Descargar
+                    </a>
+                }
                 <input type="submit" value="Guardar" class="btn btn-primary" />
-                <a asp-controller="People" asp-action="Edit" asp-route-id="@Model.SupervisedById" class="btn btn-primary"> Cancelar </a>
+                <a asp-action="Index" class="btn btn-primary"> Cancelar </a>
             </div>
         </div>
     </div>
 </form>
 <hr />
 
-@if (Model.Files?.Count < 2)
+@if (Model.Details?.Count > 0)
 {
-    <form asp-action="UploadSupervision" enctype="multipart/form-data"
-          method="post">
-        <input type="hidden" asp-for="Id" />
-        <div class="row">
-            <div class="col-6">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="supervisionFile"
-                           name="supervisionFile" lang="es" accept=".xlsx">
-                    <label class="custom-file-label" id="file-name" for="supervisionFile" data-browse="Elegir">Seleccionar Archivo</label>
+    @if (Model.Files?.Count < 2)
+    {
+        <form asp-action="UploadSupervision" enctype="multipart/form-data"
+              method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="row">
+                <div class="col-6">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="supervisionFile"
+                               name="supervisionFile" lang="es" accept=".xlsx">
+                        <label class="custom-file-label" id="file-name" for="supervisionFile" data-browse="Elegir">Seleccionar Archivo</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <input class="btn btn-primary" type="submit" value="Cargar" />
+                    </div>
                 </div>
             </div>
-            <div class="col-3">
-                <div class="form-group">
-                    <input class="btn btn-primary" type="submit" value="Cargar" />
-                </div>
-            </div>
-        </div>
-    </form>
-}
+        </form>
+    }
 
-<div class="row">
-    <div class="col">
-        <table class="table">
-            <thead style="background-color:yellowgreen; color:white">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Files.FirstOrDefault().Date)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Files.FirstOrDefault().UploadedBy)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var file in Model.Files)
-                {
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead style="background-color:yellowgreen; color:white">
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => file.Date)</td>
-                        <td>@Html.DisplayFor(modelItem => file.UploadedBy)</td>
-                        <td><a asp-controller="Supervisions" asp-action="DownloadFinalFile" asp-route-id="@file.Id"><i class="fas fa-cloud-download-alt" style="font-size:larger"></i></a></td>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Files.FirstOrDefault().Date)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Files.FirstOrDefault().UploadedBy)
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var file in Model.Files)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => file.Date)</td>
+                            <td>@Html.DisplayFor(modelItem => file.UploadedBy)</td>
+                            <td><a asp-controller="Supervisions" asp-action="DownloadFinalFile" asp-route-id="@file.Id"><i class="fas fa-cloud-download-alt" style="font-size:larger"></i></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-<hr />
+    <hr />
+}
 
 <div class="row">
     <div class="col">

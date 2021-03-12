@@ -32,19 +32,17 @@ namespace IVSoftware.Web.Controllers
             _personService = personService;
         }
 
-        // GET: SupervisionsController/Create
-        public async Task<ActionResult> Create(Guid personId)
+        // GET: Supervisions
+        public async Task<ActionResult> Index()
         {
-            var person = await _personService.GetByIdAsync(personId);
-            if (person == null)
-            {
-                return NotFound();
-            }
+            return View(await _supervisionService.GetAllAsync());
+        }
 
+        // GET: Supervisions/Create
+        public async Task<ActionResult> Create()
+        {
             Supervision supervision = new Supervision()
             {
-                SupervisedById = personId,
-                SupervisedBy = person,
                 Date = DateTime.Today,
                 Details = new List<SupervisionDetail>()
             };
@@ -53,7 +51,7 @@ namespace IVSoftware.Web.Controllers
             return View(supervision);
         }
 
-        // POST: SupervisionsController/Create
+        // POST: Supervisions/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Supervision model)
@@ -108,7 +106,7 @@ namespace IVSoftware.Web.Controllers
             return PartialView("_ModalDetail", model);
         }
 
-        //GET: SupervisionsController/Edit/5
+        //GET: Supervisions/Edit/5
         public async Task<ActionResult> Edit(Guid id)
         {
             var supervision = await _supervisionService.GetByIdAsync(id);
@@ -118,7 +116,7 @@ namespace IVSoftware.Web.Controllers
             return View(supervision);
         }
 
-        //GET: SupervisionsController/Details/5
+        //GET: Supervisions/Details/5
         public async Task<ActionResult> Details(Guid id)
         {
             var supervision = await _supervisionService.GetByIdAsync(id);
@@ -128,7 +126,7 @@ namespace IVSoftware.Web.Controllers
             return View(supervision);
         }
 
-        //POST: SupervisionsController/Edit/5
+        //POST: Supervisions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Guid id, Supervision model)
@@ -152,7 +150,7 @@ namespace IVSoftware.Web.Controllers
             return View(model);
         }
 
-        // GET: SupervisionsController/Delete/5
+        // GET: Supervisions/Delete/5
         public async Task<ActionResult> Delete(Guid id)
         {
             var supervision = await _supervisionService.GetByIdAsync(id);
@@ -162,7 +160,7 @@ namespace IVSoftware.Web.Controllers
             return View(supervision);
         }
 
-        // POST: SupervisionsController/Delete/5
+        // POST: Supervisions/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Guid id, Supervision model)
